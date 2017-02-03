@@ -1,24 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<thing:thing-descriptions bindingId="souliss"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
-        xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+<thing:thing-descriptions bindingId="souliss" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
-    <!-- Sample Thing Type -->
-    <thing-type id="sample">
-        <label>Souliss Binding Thing</label>
-        <description>Sample thing for Souliss Binding</description>
+	<bridge-type id="bridge">
+		<label>Souliss Gateway</label>
+		<description>This bridge represents a Souliss Gateway.</description>
 
-        <channels>
-            <channel id="channel1" typeId="sample-channel"/>
-        </channels>
-    </thing-type>
+		<config-description>
+			<parameter name="ADDR" type="text" required="true">
+				<label>IP or Host Name</label>
+				<description>Will be resolved by discovery if auto configured
+                </description>
+			</parameter>
+			<parameter name="PORT" type="integer" required="true">
+				<label>Bridge port</label>
+				<description>Default is 230 UDP.
+                </description>
+				<default>230</default>
+			</parameter>
+			<parameter name="ID" type="text" required="false">
+				<label>Bridge ID</label>
+				<description>Sicuramente non servirà - The mac address in upper case letters without delimiter for Version 3+ bridges. Leave empty for Version 1/2 devices.
+                This is used to check if the given IP corresponds to the right device. The bridge is set offline if the device
+                does not respond with the correct Bride ID and a re-detection is started. Useful for DHCP environments where
+                IPs may change over time, after power outage etc.
+                </description>
+				<advanced>true</advanced>
+			</parameter>
+			<parameter name="REFRESH" type="integer" min="1" max="60">
+				<label>Refresh interval</label>
+				<description>Interval in minutes to check for device presence.
+                </description>
+				<default>2</default>
+				<advanced>true</advanced>
+			</parameter>
+		</config-description>
+	</bridge-type>
 
-    <!-- Sample Channel Type -->
-    <channel-type id="sample-channel">
-        <item-type>soulissItem</item-type>
-        <label>Souliss Binding Channel</label>
-        <description>Sample channel for Souliss Binding</description>
-    </channel-type>
+	<thing-type id="t11">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge" />
+		</supported-bridge-type-refs>
+		<label>T11</label>
+		<description>Simple Light</description>
+
+		<channels>
+			<channel id="onoff" typeId="onoff" />
+		</channels>
+	</thing-type>
+
+	<thing-type id="t12">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge" />
+		</supported-bridge-type-refs>
+		<label>T12</label>
+		<description>Simple Light with Auto Mode</description>
+
+		<channels>
+			<channel id="onoff" typeId="onoff" />
+			<channel id="automode" typeId="automode" />
+		</channels>
+	</thing-type>
+
+	<thing-type id="t13">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge" />
+		</supported-bridge-type-refs>
+		<label>T13</label>
+		<description>Digital Input</description>
+
+		<channels>
+			<channel id="stateOnOff" typeId="stateOnOff" />
+		</channels>
+	</thing-type>
+
+	<channel-type id="onoff">
+		<item-type>Switch</item-type>
+		<label>On/Off</label>
+		<description>Switch on/off</description>
+	</channel-type>
+
+	<channel-type id="automode">
+		<item-type>Switch</item-type>
+		<label>On/Off Auto Mode</label>
+		<description>Switch on/off</description>
+	</channel-type>
+
+	<channel-type id="stateOnOff">
+		<item-type>Contact</item-type>
+		<label>State On/Off</label>
+		<description>Light on/off</description>
+	</channel-type>
+
 
 </thing:thing-descriptions>

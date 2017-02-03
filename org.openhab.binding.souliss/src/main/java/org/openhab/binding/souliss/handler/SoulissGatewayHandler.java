@@ -7,7 +7,7 @@
  */
 package org.openhab.binding.souliss.handler;
 
-import static org.openhab.binding.souliss.SoulissBindingConstants.*;
+import static org.openhab.binding.souliss.SoulissBindingConstants.CHANNEL_1;
 
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
@@ -18,22 +18,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link SoulissHandler} is responsible for handling commands, which are
+ * The {@link SoulissGatewayHandler} is responsible for handling commands, which are
  * sent to one of the channels.
- * 
+ *
  * @author Tonino Fazio - Initial contribution
  */
-public class SoulissHandler extends BaseThingHandler {
+public class SoulissGatewayHandler extends BaseThingHandler {
 
-    private Logger logger = LoggerFactory.getLogger(SoulissHandler.class);
+    private Logger logger = LoggerFactory.getLogger(SoulissGatewayHandler.class);
 
-	public SoulissHandler(Thing thing) {
-		super(thing);
-	}
+    public SoulissGatewayHandler(Thing thing) {
+        super(thing);
+    }
 
-	@Override
-	public void handleCommand(ChannelUID channelUID, Command command) {
-        if(channelUID.getId().equals(CHANNEL_1)) {
+    @Override
+    public void handleCommand(ChannelUID channelUID, Command command) {
+        if (channelUID.getId().equals(CHANNEL_1)) {
             // TODO: handle command
 
             // Note: if communication with thing fails for some reason,
@@ -41,13 +41,13 @@ public class SoulissHandler extends BaseThingHandler {
             // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
             // "Could not control device at IP address x.x.x.x");
         }
-	}
+    }
 
     @Override
     public void initialize() {
         // TODO: Initialize the thing. If done set status to ONLINE to indicate proper working.
         // Long running initialization should be done asynchronously in background.
-        updateStatus(ThingStatus.ONLINE);
+        updateStatus(ThingStatus.UNINITIALIZED);
 
         // Note: When initialization can NOT be done set the status with more details for further
         // analysis. See also class ThingStatusDetail for all available status details.

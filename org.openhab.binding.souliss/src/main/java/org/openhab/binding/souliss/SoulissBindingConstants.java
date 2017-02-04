@@ -23,6 +23,9 @@ public class SoulissBindingConstants {
 
     public static final String BINDING_ID = "souliss";
 
+    public static final int DISCOVERY_resendTimeoutInMillis = 1000;
+    public static final int DISCOVERY_resendAttempts = 10;
+
     // List of all Thing Type UIDs
     // public final static ThingTypeUID THING_TYPE_SAMPLE = new ThingTypeUID(BINDING_ID, "sample");
     public final static ThingTypeUID GATEWAY_THING_TYPE = new ThingTypeUID(BINDING_ID, "gateway");

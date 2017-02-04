@@ -123,9 +123,10 @@ public class SoulissDiscover extends Thread {
 
         // Do nothing if there is already a discovery running
         if (resendTimer != null) {
-
             return;
         }
+        // datagramSocket.send(discoverPacket);
+        // logger.debug("Sent discovery packet");
         SoulissCommonCommands.sendBroadcastGatewayDiscover(datagramSocket);
         logger.debug("Sent discovery packet");
 
@@ -142,8 +143,8 @@ public class SoulissDiscover extends Thread {
             // Now loop forever, waiting to receive packets and printing them.
             while (!willbeclosed) {
                 datagramReceiverSocket.receive(packet);
-                decoder.decodeVNetDatagram(packet);
-
+                decoder.decodeVNetDatagram(packet, discoverResult);
+if(discoverResult;) qui cercare il modo di capire quando il discovery è finito
                 // if (msg.length >= 2 && msg[1].length() == 12) {
                 // Stop resend timer if we got a packet.
                 if (resendTimer != null) {
@@ -156,11 +157,9 @@ public class SoulissDiscover extends Thread {
                 // }
 
                 // Reset the length of the packet before reusing it.
-                packet.setLength(buffer.length);
+                 packet.setLength(buffer.length);
             }
-        } catch (
-
-        IOException e) {
+        } catch (IOException e) {
             if (willbeclosed) {
                 return;
             }

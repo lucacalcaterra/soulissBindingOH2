@@ -49,7 +49,10 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
     private void startDiscoveryService() {
         if (receiveThread == null) {
             try {
-                receiveThread = new SoulissDiscover(broadcast, this, 50, 2000 / 50);
+                // receiveThread = new SoulissDiscover(broadcast, this, 50, 2000 / 50);
+                receiveThread = new SoulissDiscover(broadcast, this,
+                        SoulissBindingConstants.DISCOVERY_resendTimeoutInMillis,
+                        SoulissBindingConstants.DISCOVERY_resendAttempts);
             } catch (SocketException e) {
                 logger.error("Opening a socket for the souliss discovery service failed. " + e.getLocalizedMessage());
                 return;

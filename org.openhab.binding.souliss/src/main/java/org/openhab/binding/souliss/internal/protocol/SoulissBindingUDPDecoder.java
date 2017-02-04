@@ -9,9 +9,12 @@
 package org.openhab.binding.souliss.internal.protocol;
 
 import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import org.openhab.binding.souliss.SoulissBindingUDPConstants;
+import org.openhab.binding.souliss.internal.protocol.SoulissDiscover.DiscoverResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +29,7 @@ public class SoulissBindingUDPDecoder {
 
     // private SoulissTypicals soulissTypicalsRecipients;
     private static Logger logger = LoggerFactory.getLogger(SoulissBindingUDPDecoder.class);
+    private DiscoverResult discoverResult = null;
 
     // public SoulissBindingUDPDecoder(SoulissTypicals typicals) {
     // soulissTypicalsRecipients = typicals;
@@ -47,6 +51,19 @@ public class SoulissBindingUDPDecoder {
     }
 
     /**
+     * Get packet from VNET Frame
+     *
+     * @param packet
+     *            incoming datagram
+     * @param discoverResult
+     *            only for discovery packet
+     */
+    public void decodeVNetDatagram(DatagramPacket packet, DiscoverResult discoverResult) {
+        this.discoverResult = discoverResult;
+        decodeVNetDatagram(packet);
+    }
+
+    /**
      * Decodes lower level MaCaCo packet
      *
      * @param macacoPck
@@ -62,7 +79,12 @@ public class SoulissBindingUDPDecoder {
                 break;
             case SoulissBindingUDPConstants.Souliss_UDP_function_discover_GW_node_bcas_resp:
                 logger.debug("function_ping_broadcast_resp");
-                decodePingBroadcast(macacoPck);
+                try {
+                    discoverResult = decodePingBroadcast(macacoPck);
+                } catch (UnknownHostException e) {
+                    logger.debug("Error: {}", e.getLocalizedMessage());
+                    e.printStackTrace();
+                }
                 break;
 
             // case (byte) SoulissBindingUDPConstants.Souliss_UDP_function_subscribe_resp:
@@ -112,12 +134,13 @@ public class SoulissBindingUDPDecoder {
         logger.debug("decodePing: putIn code: {}, {}", putIn_1, putIn_2);
     }
 
-    private void decodePingBroadcast(ArrayList<Short> mac) {
-        int putIn_1 = mac.get(1);
-        int putIn_2 = mac.get(2);
+    private DiscoverResult decodePingBroadcast(ArrayList<Short> mac) throws UnknownHostException {
         String IP = mac.get(5) + "." + mac.get(6) + "." + mac.get(7) + "." + mac.get(8);
-studiare il modo di rendere disponibile il numero IP
+        byte[] addr = { new Short(mac.get(5)).byteValue(), new Short(mac.get(6)).byteValue(),
+                new Short(mac.get(7)).byteValue(), new Short(mac.get(8)).byteValue() };
         logger.debug("decodePingBroadcast. Gateway Discovery. IP: {}", IP);
+        discoverResult.gatewayDetected(InetAddress.getByAddress(addr), "0");
+        return discoverResult;
     }
 
     /**
@@ -157,4 +180,5 @@ studiare il modo di rendere disponibile il numero IP
             logger.error("decodeDBStructRequest: SoulissNetworkParameter update ERROR");
         }
     }
+
 }

@@ -209,19 +209,22 @@ public class SoulissCommonCommands {
             return frame;
         }
         byte[] dude = ip.getAddress();
-        frame.add((byte) 23);// PUTIN
+
+        frame.add((byte) 23);// Port
 
         frame.add(dude[3]);// es 192.168.1.XX BOARD
+
         // n broadcast : La comunicazione avviene utilizzando l'indirizzo IP
         // 255.255.255.255 a cui associare l'indirizzo vNet 0xFFFF.
-        frame.add((byte) soulissNodeIPAddress.compareTo(SoulissBindingUDPConstants.BROADCASTADDR) == 0 ? dude[2] : 0);
+        frame.add(soulissNodeIPAddress.compareTo(SoulissBindingUDPConstants.BROADCASTADDR) == 0 ? dude[2] : 0);
         // 192.168.XX.0
-        frame.add((byte) iNodeIndex); // NODE INDEX
-        frame.add((byte) iUserIndex);// USER IDX
+
+        frame.add((byte) iNodeIndex); // NODE INDEX - source vNet address User Interface
+        frame.add((byte) iUserIndex);// USER INDEX - source vNet address User Interface
 
         // aggiunge in testa il calcolo
-        frame.add(0, (byte) (frame.size() + MACACOframe2.size() + 1));
-        frame.add(0, (byte) (frame.size() + MACACOframe2.size() + 1));// Check 2
+        frame.add(0, (byte) (frame.size() + MACACOframe2.size() + 1)); // Length
+        frame.add(0, (byte) (frame.size() + MACACOframe2.size() + 1));// Length Check 2
 
         frame.addAll(MACACOframe2);
         return frame;

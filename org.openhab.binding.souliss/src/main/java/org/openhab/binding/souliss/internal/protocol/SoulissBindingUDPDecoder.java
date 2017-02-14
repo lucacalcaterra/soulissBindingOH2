@@ -57,6 +57,7 @@ public class SoulissBindingUDPDecoder {
      *            incoming datagram
      * @param discoverResult
      *            only for discovery packet
+     * @param bGateway_Detected
      */
     public void decodeVNetDatagram(DatagramPacket packet, DiscoverResult discoverResult) {
         this.discoverResult = discoverResult;
@@ -140,6 +141,7 @@ public class SoulissBindingUDPDecoder {
                 new Short(mac.get(7)).byteValue(), new Short(mac.get(8)).byteValue() };
         logger.debug("decodePingBroadcast. Gateway Discovery. IP: {}", IP);
         discoverResult.gatewayDetected(InetAddress.getByAddress(addr), "0");
+        discoverResult.setGatewayDetected();
         return discoverResult;
     }
 

@@ -23,8 +23,9 @@ public class SoulissBindingConstants {
 
     public static final String BINDING_ID = "souliss";
 
-    public static final int DISCOVERY_resendTimeoutInMillis = 1000;
+    public static final int DISCOVERY_resendTimeoutInMillis = 1;
     public static final int DISCOVERY_resendAttempts = 10;
+    public static final int DISCOVERY_TimeoutInSeconds = 15;
 
     // List of all Thing Type UIDs
     // public final static ThingTypeUID THING_TYPE_SAMPLE = new ThingTypeUID(BINDING_ID, "sample");
@@ -42,6 +43,9 @@ public class SoulissBindingConstants {
 
     public static final String CONFIG_HOST_NAME = "ADDR";
     public static final String CONFIG_PORT = "PORT";
+    public static final int CONFIG_USER_INDEX = 70;
+    public static final int CONFIG_NODE_INDEX = 120; // 0..127
     public static final String CONFIG_ID = "ID";
     public static final String CONFIG_REFRESH = "REFRESH";
+
 }

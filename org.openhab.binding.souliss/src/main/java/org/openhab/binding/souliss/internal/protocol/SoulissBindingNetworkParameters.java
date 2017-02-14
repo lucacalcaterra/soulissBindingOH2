@@ -14,6 +14,8 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.Properties;
 
+import org.openhab.binding.souliss.SoulissBindingConstants;
+import org.openhab.binding.souliss.SoulissBindingUDPConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,8 +47,8 @@ public class SoulissBindingNetworkParameters {
     public static long SECURE_SEND_TIMEOUT_TO_REQUEUE = presetTime;
     public static long SECURE_SEND_TIMEOUT_TO_REMOVE_PACKET = presetTime;
     private static Logger logger = LoggerFactory.getLogger(SoulissBindingNetworkParameters.class);
-    public static int NodeIndex = 70;
-    public static int UserIndex = 133;
+    public static int NodeIndex = SoulissBindingConstants.CONFIG_NODE_INDEX;
+    public static int UserIndex = SoulissBindingConstants.CONFIG_USER_INDEX;
     public static Integer serverPort;
     public static DatagramSocket datagramsocket;
 
@@ -79,6 +81,10 @@ public class SoulissBindingNetworkParameters {
             datagramsocket = new DatagramSocket();
         }
         return datagramsocket;
+    }
 
+    public static DatagramSocket initDatagramSocket_for_broadcast() throws SocketException {
+        datagramsocket = new DatagramSocket(SoulissBindingUDPConstants.SOULISS_PORT);
+        return datagramsocket;
     }
 }

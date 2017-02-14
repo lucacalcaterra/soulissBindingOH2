@@ -14,8 +14,6 @@ import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.TimerTask;
 import java.util.TreeMap;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import org.eclipse.smarthome.config.discovery.AbstractDiscoveryService;
 import org.eclipse.smarthome.config.discovery.DiscoveryResult;
@@ -34,62 +32,59 @@ import org.slf4j.LoggerFactory;
  * @author David Graeff - Initial contribution
  */
 public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements DiscoverResult {
-    private ScheduledFuture<?> backgroundFuture;
-    private final InetAddress broadcast;
+    // private ScheduledFuture<?> backgroundFuture;
     private Logger logger = LoggerFactory.getLogger(SoulissGatewayDiscovery.class);
-    private SoulissDiscover receiveThread;
+    private SoulissDiscover soulissDiscoverThread;
+    private boolean bGatewayDetected = false;
+    // private ScheduledFuture<?> schedulerFuture;
 
     class DetectTask extends TimerTask {
         @Override
         public void run() {
-            receiveThread.sendDiscover(scheduler);
+            soulissDiscoverThread.sendDiscover(scheduler);
         }
     }
 
     private void startDiscoveryService() {
-        if (receiveThread == null) {
+        if (soulissDiscoverThread == null) {
             try {
                 // receiveThread = new SoulissDiscover(broadcast, this, 50, 2000 / 50);
-                receiveThread = new SoulissDiscover(broadcast, this,
+                soulissDiscoverThread = new SoulissDiscover(this,
                         SoulissBindingConstants.DISCOVERY_resendTimeoutInMillis,
                         SoulissBindingConstants.DISCOVERY_resendAttempts);
             } catch (SocketException e) {
                 logger.error("Opening a socket for the souliss discovery service failed. " + e.getLocalizedMessage());
                 return;
             }
-            receiveThread.start();
+            soulissDiscoverThread.start();
         }
     }
 
     public SoulissGatewayDiscovery() throws IllegalArgumentException, UnknownHostException {
-        super(SoulissBindingConstants.SUPPORTED_THING_TYPES_UIDS, 2, true);
-        byte[] addr = { (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff };
-        broadcast = InetAddress.getByAddress(addr);
-        startDiscoveryService();
+        super(SoulissBindingConstants.SUPPORTED_THING_TYPES_UIDS, SoulissBindingConstants.DISCOVERY_TimeoutInSeconds,
+                false);
+        // startDiscoveryService();
     }
 
     @Override
     protected void startBackgroundDiscovery() {
-        if (backgroundFuture != null) {
-            return;
-        }
-
-        startDiscoveryService();
-
-        backgroundFuture = scheduler.scheduleAtFixedRate(new DetectTask(), 50, 60000 * 30, TimeUnit.MILLISECONDS);
+        // if (backgroundFuture != null) {
+        // return;
+        // }
+        // // per adesso non mi serve il discovery in background
+        // // startDiscoveryService();
+        //
+        // backgroundFuture = scheduler.scheduleAtFixedRate(new DetectTask(), 50, 60000 * 30, TimeUnit.MILLISECONDS);
     }
 
     @Override
     protected void stopBackgroundDiscovery() {
-        stopScan();
-        if (backgroundFuture != null) {
-            backgroundFuture.cancel(false);
-            backgroundFuture = null;
-        }
-        if (receiveThread != null) {
-            receiveThread.stopReceiving();
-        }
-        receiveThread = null;
+        // stopScan();
+        // if (backgroundFuture != null) {
+        // backgroundFuture.cancel(false);
+        // backgroundFuture = null;
+        // }
+
     }
 
     @Override
@@ -107,20 +102,40 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
 
     @Override
     protected void startScan() {
+        // schedulerFuture = scheduler.scheduleAtFixedRate(new DetectTask(), 50,
+        // SoulissBindingConstants.DISCOVERY_TimeoutInMillis, TimeUnit.MILLISECONDS);
         startDiscoveryService();
-        receiveThread.sendDiscover(scheduler);
+        soulissDiscoverThread.sendDiscover(scheduler);
     }
 
     @Override
     protected synchronized void stopScan() {
-        if (receiveThread != null) {
-            receiveThread.stopResend();
+        if (soulissDiscoverThread != null) {
+            soulissDiscoverThread.stopResend();
+            soulissDiscoverThread.stopReceiving();
+            soulissDiscoverThread = null;
         }
         super.stopScan();
     }
 
     @Override
     public void noBridgeDetected() {
+        // stopScan();
+    }
+
+    @Override
+    public boolean isGatewayDetected() {
+        return bGatewayDetected;
+    }
+
+    @Override
+    public void setGatewayDetected() {
+        bGatewayDetected = true;
+    }
+
+    @Override
+    public void setGatewayUndetected() {
+        bGatewayDetected = false;
 
     }
 }

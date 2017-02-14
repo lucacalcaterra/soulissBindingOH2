@@ -17,7 +17,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.openhab.binding.souliss.SoulissBindingUDPConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,9 +32,17 @@ public class SoulissDiscover extends Thread {
      * Result callback interface.
      */
     public interface DiscoverResult {
+        static boolean isGatewayDetected = false;
+
         void gatewayDetected(InetAddress addr, String id);
 
         void noBridgeDetected();
+
+        boolean isGatewayDetected();
+
+        void setGatewayDetected();
+
+        void setGatewayUndetected();
     }
 
     ///// Network
@@ -43,7 +50,6 @@ public class SoulissDiscover extends Thread {
     // final private DatagramPacket discoverPacket;
     private boolean willbeclosed = false;
     private DatagramSocket datagramSocket;
-    private DatagramSocket datagramReceiverSocket;
     private byte[] buffer = new byte[1024];
     private DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
     private SoulissBindingUDPDecoder decoder = new SoulissBindingUDPDecoder();
@@ -58,22 +64,20 @@ public class SoulissDiscover extends Thread {
     final private int resendTimeoutInMillis;
     final private int resendAttempts;
 
-    public SoulissDiscover(InetAddress broadcast, DiscoverResult discoverResult, int resendTimeoutInMillis,
-            int resendAttempts) throws SocketException {
+    public SoulissDiscover(DiscoverResult discoverResult, int resendTimeoutInMillis, int resendAttempts)
+            throws SocketException {
         this.resendAttempts = resendAttempts;
         this.resendTimeoutInMillis = resendTimeoutInMillis;
 
         // costruire pacchetto
-        datagramSocket = SoulissBindingNetworkParameters.initDatagramSocket();
+        datagramSocket = SoulissBindingNetworkParameters.initDatagramSocket_for_broadcast();
         datagramSocket.setBroadcast(true);
 
-        datagramReceiverSocket = new DatagramSocket(SoulissBindingUDPConstants.SOULISS_PORT);
         this.discoverResult = discoverResult;
     }
 
     public void stopReceiving() {
         willbeclosed = true;
-        datagramSocket.close();
         try {
             join(500);
         } catch (InterruptedException e) {
@@ -85,13 +89,33 @@ public class SoulissDiscover extends Thread {
         }
     }
 
+    public void stopResend() {
+        if (resendTimer != null) {
+            resendTimer.cancel(false);
+            resendTimer = null;
+        }
+        if (datagramSocket != null) {
+            datagramSocket.close();
+            datagramSocket = null;
+        }
+    }
+
     /**
      * Used by the scheduler to resend discover messages. Stops after 3 attempts.
      */
     private class SendDiscoverRunnable implements Runnable {
+        DatagramSocket datagramSocket;
+
+        public SendDiscoverRunnable(DatagramSocket datagramSocket) {
+            this.datagramSocket = datagramSocket;
+        }
+
         @Override
         public void run() {
             try {
+                SoulissCommonCommands.sendBroadcastGatewayDiscover(datagramSocket);
+                logger.debug("Sent discovery packet");
+
                 if (++resendCounter > resendAttempts) {
                     if (resendTimer != null) {
                         resendTimer.cancel(false);
@@ -103,13 +127,6 @@ public class SoulissDiscover extends Thread {
             } catch (Exception e) {
                 logger.error("Sending a discovery packet failed. " + e.getLocalizedMessage());
             }
-        }
-    }
-
-    public void stopResend() {
-        if (resendTimer != null) {
-            resendTimer.cancel(false);
-            resendTimer = null;
         }
     }
 
@@ -125,15 +142,12 @@ public class SoulissDiscover extends Thread {
         if (resendTimer != null) {
             return;
         }
-        // datagramSocket.send(discoverPacket);
-        // logger.debug("Sent discovery packet");
-        SoulissCommonCommands.sendBroadcastGatewayDiscover(datagramSocket);
-        logger.debug("Sent discovery packet");
-
         resendCounter = 0;
-        resendTimer = scheduler.scheduleWithFixedDelay(new SendDiscoverRunnable(), 0, resendTimeoutInMillis,
-                TimeUnit.MILLISECONDS);
+        resendTimer = scheduler.scheduleWithFixedDelay(new SendDiscoverRunnable(datagramSocket), 0,
+                resendTimeoutInMillis, TimeUnit.SECONDS);
     }
+
+    boolean bGateway_Detected = false;
 
     @Override
     public void run() {
@@ -142,22 +156,21 @@ public class SoulissDiscover extends Thread {
 
             // Now loop forever, waiting to receive packets and printing them.
             while (!willbeclosed) {
-                datagramReceiverSocket.receive(packet);
+                discoverResult.setGatewayUndetected();
+                datagramSocket.receive(packet);
+                // return bGateway_Detected TRUE if gateway detected
                 decoder.decodeVNetDatagram(packet, discoverResult);
-if(discoverResult;) qui cercare il modo di capire quando il discovery è finito
-                // if (msg.length >= 2 && msg[1].length() == 12) {
-                // Stop resend timer if we got a packet.
-                if (resendTimer != null) {
-                    resendTimer.cancel(true);
-                    resendTimer = null;
+
+                if (discoverResult.isGatewayDetected()) {
+                    // Stop resend timer if we got a packet.
+                    if (resendTimer != null) {
+                        resendTimer.cancel(true);
+                        resendTimer = null;
+                    }
                 }
-                // discoverResult.gatewayDetected(((InetSocketAddress) packet.getSocketAddress()).getAddress(), msg[1]);
-                // } else {
-                // logger.error("Unexpected data received " + msg[0]);
-                // }
 
                 // Reset the length of the packet before reusing it.
-                 packet.setLength(buffer.length);
+                packet.setLength(buffer.length);
             }
         } catch (IOException e) {
             if (willbeclosed) {

@@ -12,6 +12,7 @@ import static org.openhab.binding.souliss.SoulissBindingConstants.*;
 import java.util.Collections;
 import java.util.Set;
 
+import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
@@ -40,7 +41,7 @@ public class SoulissHandlerFactory extends BaseThingHandlerFactory {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
         if (thingTypeUID.equals(GATEWAY_THING_TYPE)) {
-            return new SoulissGatewayHandler(thing);
+            return new SoulissGatewayHandler((Bridge) thing);
         } else if (thingTypeUID.equals(T11_THING_TYPE)) {
             return new SoulissT11Handler(thing);
         }

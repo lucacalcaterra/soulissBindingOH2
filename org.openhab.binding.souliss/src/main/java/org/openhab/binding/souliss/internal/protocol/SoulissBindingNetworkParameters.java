@@ -10,12 +10,9 @@ package org.openhab.binding.souliss.internal.protocol;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.DatagramSocket;
-import java.net.SocketException;
+import java.math.BigDecimal;
 import java.util.Properties;
 
-import org.openhab.binding.souliss.SoulissBindingConstants;
-import org.openhab.binding.souliss.SoulissBindingUDPConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +26,11 @@ import org.slf4j.LoggerFactory;
  */
 public class SoulissBindingNetworkParameters {
     public static String IPAddressOnLAN = "";
+    public static BigDecimal preferred_local_port = 23000;
+    public static BigDecimal souliss_gateway_port = 230;
+    public static BigDecimal NodeIndex = 70;
+    public static BigDecimal UserIndex = 120;
+
     public static int nodes;
     public static int maxnodes;
     public static int maxTypicalXnode;
@@ -47,10 +49,8 @@ public class SoulissBindingNetworkParameters {
     public static long SECURE_SEND_TIMEOUT_TO_REQUEUE = presetTime;
     public static long SECURE_SEND_TIMEOUT_TO_REMOVE_PACKET = presetTime;
     private static Logger logger = LoggerFactory.getLogger(SoulissBindingNetworkParameters.class);
-    public static int NodeIndex = SoulissBindingConstants.CONFIG_NODE_INDEX;
-    public static int UserIndex = SoulissBindingConstants.CONFIG_USER_INDEX;
-    public static Integer serverPort;
-    public static DatagramSocket datagramsocket;
+
+    // public static DatagramSocket datagramsocket;
 
     /**
      * @return sPar value format to string 0x+sPar
@@ -74,17 +74,4 @@ public class SoulissBindingNetworkParameters {
         }
     }
 
-    public static DatagramSocket initDatagramSocket() throws SocketException {
-        if (serverPort != null) {
-            datagramsocket = new DatagramSocket(serverPort);
-        } else {
-            datagramsocket = new DatagramSocket();
-        }
-        return datagramsocket;
-    }
-
-    public static DatagramSocket initDatagramSocket_for_broadcast() throws SocketException {
-        datagramsocket = new DatagramSocket(SoulissBindingUDPConstants.SOULISS_PORT);
-        return datagramsocket;
-    }
 }

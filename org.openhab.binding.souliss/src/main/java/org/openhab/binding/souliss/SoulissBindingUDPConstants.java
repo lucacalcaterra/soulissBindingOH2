@@ -19,8 +19,11 @@ public class SoulissBindingUDPConstants {
 
     public static final String TAG = "SoulissApp";
 
-    public static final int SERVERPORT = 23000;
-    public static final int SOULISS_PORT = 230;
+    public static final int SOULISS_BINDING_LOCAL_PORT = 0;
+    public static final int SOULISS_GATEWAY_DEFAULT_PORT = 230;
+    public static final int SOULISS_DEFAULT_GATEWAY_PORT = 230;
+    public static final Object SOULISS_DEFAULT_NODE_INDEX = 70;
+    public static final Object SOULISS_DEFAULT_USER_INDEX = 120;
 
     public static final String BROADCASTADDR = "255.255.255.255";
 

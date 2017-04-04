@@ -94,7 +94,7 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
         String label = "Souliss Gateway " + id;
         Map<String, Object> properties = new TreeMap<>();
         properties.put(SoulissBindingConstants.CONFIG_ID, id);
-        properties.put(SoulissBindingConstants.CONFIG_HOST_NAME, addr.getHostAddress());
+        properties.put(SoulissBindingConstants.CONFIG_IP_ADDRESS, addr.getHostAddress());
         DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label)
                 .withProperties(properties).build();
         thingDiscovered(discoveryResult);

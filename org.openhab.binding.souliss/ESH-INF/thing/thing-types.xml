@@ -8,17 +8,23 @@
 		<description>This bridge represents a Souliss Gateway.</description>
 
 		<config-description>
-			<parameter name="ADDR" type="text" required="true">
+			<parameter name="GATEWAY_IP_ADDRESS" type="text" required="true">
 				<label>IP or Host Name</label>
 				<description>Will be resolved by discovery if auto configured
                 </description>
 			</parameter>
-			<parameter name="PORT" type="integer" required="true">
+			<parameter name="GATEWAY_PORT_NUMBER" type="integer" required="true">
 				<label>Bridge port</label>
 				<description>Default is 230 UDP.
                 </description>
 				<default>230</default>
 			</parameter>
+			         <parameter name="PREFERRED_LOCAL_PORT_NUMBER" type="integer" required="true">
+                <label>Preferred local port number</label>
+                <description>Default port is 0. It means that it is random.
+                </description>
+                <default>0</default>
+            </parameter>
 			<parameter name="ID" type="text" required="false">
 				<label>Bridge ID</label>
 				<description>Sicuramente non servirà - The mac address in upper case letters without delimiter for Version 3+ bridges. Leave empty for Version 1/2 devices.
@@ -35,6 +41,20 @@
 				<default>2</default>
 				<advanced>true</advanced>
 			</parameter>
+			<parameter name="CONFIG_USER_INDEX" type="integer" required="true">
+                <label>User Index</label>
+                <description>Generally the default value work good. It must is different from other user interfaces (ex: SoulissApp)
+                </description>
+                <default>70</default>
+                <advanced>true</advanced>
+            </parameter>
+            <parameter name="CONFIG_NODE_INDEX" type="integer" required="true">
+                <label>Node Index</label>
+                <description>Generally the default value work good. It must is different from other user interfaces (ex: SoulissApp)
+                </description>
+                <default>120</default>
+                <advanced>true</advanced>
+            </parameter>
 		</config-description>
 	</bridge-type>
 

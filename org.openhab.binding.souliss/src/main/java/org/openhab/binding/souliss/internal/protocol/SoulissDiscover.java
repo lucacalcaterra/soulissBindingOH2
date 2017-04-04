@@ -8,8 +8,6 @@
  */
 package org.openhab.binding.souliss.internal.protocol;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -17,6 +15,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.openhab.binding.souliss.internal.SoulissDatagramSocketFactory;
+import org.openhab.binding.souliss.internal.network.typicals.SoulissTypicals;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,8 +50,8 @@ public class SoulissDiscover extends Thread {
     // final private DatagramPacket discoverPacket;
     private boolean willbeclosed = false;
     private DatagramSocket datagramSocket;
-    private byte[] buffer = new byte[1024];
-    private DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+    // private byte[] buffer = new byte[1024];
+    // private DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
     private SoulissBindingUDPDecoder decoder = new SoulissBindingUDPDecoder();
 
     ///// Debug
@@ -64,29 +64,25 @@ public class SoulissDiscover extends Thread {
     final private int resendTimeoutInMillis;
     final private int resendAttempts;
 
+    SoulissBindingUDPServerThread UDP_Server = null;
+
     public SoulissDiscover(DiscoverResult discoverResult, int resendTimeoutInMillis, int resendAttempts)
             throws SocketException {
         this.resendAttempts = resendAttempts;
         this.resendTimeoutInMillis = resendTimeoutInMillis;
-
-        // costruire pacchetto
-        datagramSocket = SoulissBindingNetworkParameters.initDatagramSocket_for_broadcast();
-        datagramSocket.setBroadcast(true);
 
         this.discoverResult = discoverResult;
     }
 
     public void stopReceiving() {
         willbeclosed = true;
+        UDP_Server = null;
+
         try {
             join(500);
         } catch (InterruptedException e) {
         }
         interrupt();
-        if (datagramSocket != null) {
-            datagramSocket.close();
-            datagramSocket = null;
-        }
     }
 
     public void stopResend() {
@@ -106,8 +102,9 @@ public class SoulissDiscover extends Thread {
     private class SendDiscoverRunnable implements Runnable {
         DatagramSocket datagramSocket;
 
-        public SendDiscoverRunnable(DatagramSocket datagramSocket) {
-            this.datagramSocket = datagramSocket;
+        public SendDiscoverRunnable() {
+            // costruire pacchetto
+            datagramSocket = SoulissDatagramSocketFactory.getDatagram_for_broadcast();
         }
 
         @Override
@@ -143,40 +140,42 @@ public class SoulissDiscover extends Thread {
             return;
         }
         resendCounter = 0;
-        resendTimer = scheduler.scheduleWithFixedDelay(new SendDiscoverRunnable(datagramSocket), 0,
-                resendTimeoutInMillis, TimeUnit.SECONDS);
+        resendTimer = scheduler.scheduleWithFixedDelay(new SendDiscoverRunnable(), 0, resendTimeoutInMillis,
+                TimeUnit.SECONDS);
     }
 
     boolean bGateway_Detected = false;
 
     @Override
     public void run() {
-        try {
-            logger.debug("Discovery receive thread ready");
+        logger.debug("Discovery receive thread ready");
 
-            // Now loop forever, waiting to receive packets and printing them.
-            while (!willbeclosed) {
-                discoverResult.setGatewayUndetected();
-                datagramSocket.receive(packet);
-                // return bGateway_Detected TRUE if gateway detected
-                decoder.decodeVNetDatagram(packet, discoverResult);
+        // Now loop forever, waiting to receive packets and printing them.
+        while (!willbeclosed) {
+            discoverResult.setGatewayUndetected();
 
-                if (discoverResult.isGatewayDetected()) {
-                    // Stop resend timer if we got a packet.
-                    if (resendTimer != null) {
-                        resendTimer.cancel(true);
-                        resendTimer = null;
-                    }
+            if (UDP_Server == null) {
+                logger.info("UDP_Server start");
+                SoulissTypicals SoulissTypicalsRecipients = new SoulissTypicals();
+                UDP_Server = new SoulissBindingUDPServerThread(SoulissTypicalsRecipients, discoverResult);
+                UDP_Server.start();
+
+            }
+
+            // datagramSocket.receive(packet);
+            // return bGateway_Detected TRUE if gateway detected
+            // decoder.decodeVNetDatagram(packet,discoverResult);
+
+            if (discoverResult.isGatewayDetected()) {
+                // Stop resend timer if we got a packet.
+                if (resendTimer != null) {
+                    resendTimer.cancel(true);
+                    resendTimer = null;
                 }
+            }
 
-                // Reset the length of the packet before reusing it.
-                packet.setLength(buffer.length);
-            }
-        } catch (IOException e) {
-            if (willbeclosed) {
-                return;
-            }
-            logger.error(e.getLocalizedMessage());
+            // Reset the length of the packet before reusing it.
+            // packet.setLength(buffer.length);
         }
     }
 }

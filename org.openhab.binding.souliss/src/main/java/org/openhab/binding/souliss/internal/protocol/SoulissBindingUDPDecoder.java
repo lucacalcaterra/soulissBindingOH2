@@ -135,12 +135,13 @@ public class SoulissBindingUDPDecoder {
         logger.debug("decodePing: putIn code: {}, {}", putIn_1, putIn_2);
     }
 
-    private DiscoverResult decodePingBroadcast(ArrayList<Short> mac) throws UnknownHostException {
-        String IP = mac.get(5) + "." + mac.get(6) + "." + mac.get(7) + "." + mac.get(8);
-        byte[] addr = { new Short(mac.get(5)).byteValue(), new Short(mac.get(6)).byteValue(),
-                new Short(mac.get(7)).byteValue(), new Short(mac.get(8)).byteValue() };
+    private DiscoverResult decodePingBroadcast(ArrayList<Short> macaco) throws UnknownHostException {
+        String IP = macaco.get(5) + "." + macaco.get(6) + "." + macaco.get(7) + "." + macaco.get(8);
+        byte[] addr = { new Short(macaco.get(5)).byteValue(), new Short(macaco.get(6)).byteValue(),
+                new Short(macaco.get(7)).byteValue(), new Short(macaco.get(8)).byteValue() };
         logger.debug("decodePingBroadcast. Gateway Discovery. IP: {}", IP);
-        discoverResult.gatewayDetected(InetAddress.getByAddress(addr), "0");
+
+        discoverResult.gatewayDetected(InetAddress.getByAddress(addr), macaco.get(8).toString());
         discoverResult.setGatewayDetected();
         return discoverResult;
     }

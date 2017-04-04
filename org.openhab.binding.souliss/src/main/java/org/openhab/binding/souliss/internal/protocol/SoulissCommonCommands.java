@@ -160,7 +160,7 @@ public class SoulissCommonCommands {
         try {
             serverAddr = InetAddress.getByName(sSoulissNodeIPAddressOnLAN);
             DatagramPacket packet = new DatagramPacket(merd, merd.length, serverAddr,
-                    SoulissBindingUDPConstants.SOULISS_PORT);
+                    SoulissBindingUDPConstants.SOULISS_GATEWAY_DEFAULT_PORT);
             SoulissBindingSendDispatcher.put(socket, packet);
         } catch (IOException e) {
             e.printStackTrace();
@@ -183,7 +183,7 @@ public class SoulissCommonCommands {
             byte[] merd = toByteArray(buf);
             serverAddr = InetAddress.getByName("255.255.255.255");
             DatagramPacket packet = new DatagramPacket(merd, merd.length, serverAddr,
-                    SoulissBindingUDPConstants.SOULISS_PORT);
+                    SoulissBindingUDPConstants.SOULISS_GATEWAY_DEFAULT_PORT);
             socket.send(packet);
             // SoulissBindingSendDispatcher.put(socket, packet);
         } catch (UnknownHostException e) {

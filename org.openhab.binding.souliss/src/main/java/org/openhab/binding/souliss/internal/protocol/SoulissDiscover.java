@@ -21,11 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Milight bridges can be discovered by sending specially formated UDP packets.
- * This class sends UDP packets on port PORT_SEND_DISCOVER up to three times in a row
- * and listens for the response and will call discoverResult.bridgeDetected() eventually.
- *
- * @author David Graeff - Initial contribution
+ * @author Tonino Fazio - Initial contribution
  */
 public class SoulissDiscover extends Thread {
     /**
@@ -50,9 +46,6 @@ public class SoulissDiscover extends Thread {
     // final private DatagramPacket discoverPacket;
     private boolean willbeclosed = false;
     private DatagramSocket datagramSocket;
-    // private byte[] buffer = new byte[1024];
-    // private DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-    private SoulissBindingUDPDecoder decoder = new SoulissBindingUDPDecoder();
 
     ///// Debug
     private Logger logger = LoggerFactory.getLogger(SoulissDiscover.class);
@@ -76,6 +69,8 @@ public class SoulissDiscover extends Thread {
 
     public void stopReceiving() {
         willbeclosed = true;
+
+        UDP_Server.closeSocket();
         UDP_Server = null;
 
         try {
@@ -143,8 +138,6 @@ public class SoulissDiscover extends Thread {
         resendTimer = scheduler.scheduleWithFixedDelay(new SendDiscoverRunnable(), 0, resendTimeoutInMillis,
                 TimeUnit.SECONDS);
     }
-
-    boolean bGateway_Detected = false;
 
     @Override
     public void run() {

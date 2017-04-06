@@ -35,6 +35,10 @@ public class SoulissBindingUDPDecoder {
     // soulissTypicalsRecipients = typicals;
     // }
 
+    public SoulissBindingUDPDecoder(DiscoverResult discoverResult2) {
+        discoverResult = discoverResult2;
+    }
+
     /**
      * Get packet from VNET Frame
      *
@@ -48,20 +52,6 @@ public class SoulissBindingUDPDecoder {
             mac.add((short) (packet.getData()[ig] & 0xFF));
         }
         decodeMacaco(mac);
-    }
-
-    /**
-     * Get packet from VNET Frame
-     *
-     * @param packet
-     *            incoming datagram
-     * @param discoverResult
-     *            only for discovery packet
-     * @param bGateway_Detected
-     */
-    public void decodeVNetDatagram(DatagramPacket packet, DiscoverResult discoverResult) {
-        this.discoverResult = discoverResult;
-        decodeVNetDatagram(packet);
     }
 
     /**

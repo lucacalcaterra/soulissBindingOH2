@@ -26,7 +26,7 @@ public class SoulissDatagramSocketFactory {
     public static Integer serverPort;
     private static Logger logger = LoggerFactory.getLogger(SoulissDatagramSocketFactory.class);
 
-    public static DatagramSocket getTrasmissionDatagram() {
+    public static DatagramSocket getSocketDatagram() {
         // return DatagramSocket for packet trasmission
 
         if (soulissDatagramSocket == null) {

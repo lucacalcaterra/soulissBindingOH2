@@ -10,7 +10,6 @@ package org.openhab.binding.souliss.internal.protocol;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -26,10 +25,10 @@ import org.slf4j.LoggerFactory;
  */
 public class SoulissBindingNetworkParameters {
     public static String IPAddressOnLAN = "";
-    public static BigDecimal preferred_local_port = 23000;
-    public static BigDecimal souliss_gateway_port = 230;
-    public static BigDecimal NodeIndex = 70;
-    public static BigDecimal UserIndex = 120;
+    public static int preferred_local_port = 23000;
+    public static int souliss_gateway_port = 230;
+    public static int NodeIndex = 70;
+    public static int UserIndex = 120;
 
     public static int nodes;
     public static int maxnodes;

@@ -98,6 +98,7 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
         DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label)
                 .withProperties(properties).build();
         thingDiscovered(discoveryResult);
+
     }
 
     @Override

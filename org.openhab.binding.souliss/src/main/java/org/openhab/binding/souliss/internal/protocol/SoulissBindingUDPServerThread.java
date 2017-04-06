@@ -41,34 +41,28 @@ public class SoulissBindingUDPServerThread extends Thread {
 
         soulissDatagramSocket = SoulissDatagramSocketFactory.getDatagram_for_broadcast();
 
-        // if (SoulissBindingNetworkParameters.serverPort != null) {
-        // SoulissBindingNetworkParameters.datagramsocket = new DatagramSocket(
-        // SoulissBindingNetworkParameters.serverPort);
-        // } else {
-        // SoulissBindingNetworkParameters.datagramsocket = new DatagramSocket();
-        // }
-        // discoverResult = discoverResultLoc;
-        decoder = new SoulissBindingUDPDecoder();
+        discoverResult = discoverResultLoc;
+        decoder = new SoulissBindingUDPDecoder(discoverResult);
         logger.info("Start UDPServerThread - Server in ascolto sulla porta "
-                + SoulissDatagramSocketFactory.getTrasmissionDatagram().getLocalPort());
+                + SoulissDatagramSocketFactory.getSocketDatagram().getLocalPort());
     }
 
     @Override
     public void run() {
 
-        while (true) {
+        while (!bExit) {
             try {
                 byte[] buf = new byte[256];
 
                 // receive request
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
-                SoulissDatagramSocketFactory.getTrasmissionDatagram().receive(packet);
+                SoulissDatagramSocketFactory.getSocketDatagram().receive(packet);
                 buf = packet.getData();
 
                 // **************** DECODER ********************
                 logger.debug("Packet received");
                 logger.debug(MaCacoToString(buf));
-                decoder.decodeVNetDatagram(packet, discoverResult);
+                decoder.decodeVNetDatagram(packet);
 
             } catch (IOException e) {
                 e.printStackTrace();

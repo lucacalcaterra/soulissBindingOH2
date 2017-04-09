@@ -26,7 +26,7 @@ public class SoulissBindingConstants {
     public static final int DISCOVERY_resendTimeoutInMillis = 1;
     public static final int DISCOVERY_resendAttempts = 10;
     public static final int DISCOVERY_TimeoutInSeconds = 15;
-    public static final int PING_resendTimeoutInSeconds = 5;
+    // public static final int PING_resendTimeoutInSeconds = 5;
 
     // List of all Thing Type UIDs
     // public final static ThingTypeUID THING_TYPE_SAMPLE = new ThingTypeUID(BINDING_ID, "sample");

@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SoulissDatagramSocketFactory {
     static DatagramSocket soulissDatagramSocket;
+    static DatagramSocket soulissDatagramSocket_port230;
 
     public static Integer serverPort;
     private static Logger logger = LoggerFactory.getLogger(SoulissDatagramSocketFactory.class);
@@ -36,9 +37,9 @@ public class SoulissDatagramSocketFactory {
                 } else {
                     soulissDatagramSocket = new DatagramSocket();
                 }
-                logger.debug("Trasmission Socket Created on port " + soulissDatagramSocket.getLocalPort());
+                logger.debug("Datagram Socket Created on port " + soulissDatagramSocket.getLocalPort());
             } catch (SocketException e) {
-                logger.error("Error on creation of Trasmission Socket");
+                logger.error("Error on creation of Socket");
                 logger.error(e.getMessage());
             }
         }
@@ -46,22 +47,28 @@ public class SoulissDatagramSocketFactory {
     }
 
     public static DatagramSocket getDatagram_for_broadcast() {
-        if (soulissDatagramSocket == null) {
+        if (soulissDatagramSocket_port230 == null) {
             try {
-                soulissDatagramSocket = new DatagramSocket(SoulissBindingUDPConstants.SOULISS_GATEWAY_DEFAULT_PORT);
-                soulissDatagramSocket.setBroadcast(true);
-                logger.debug("Trasmission Socket Created on port (Souliss Default Port) "
-                        + soulissDatagramSocket.getLocalPort());
+                soulissDatagramSocket_port230 = new DatagramSocket(
+                        SoulissBindingUDPConstants.SOULISS_GATEWAY_DEFAULT_PORT);
+                soulissDatagramSocket_port230.setBroadcast(true);
+                logger.debug("Datagram Socket Created on port (Souliss Default Port) "
+                        + soulissDatagramSocket_port230.getLocalPort());
             } catch (SocketException e) {
-                logger.error("Error on creation of Trasmission Socket");
+                logger.error("Error on creation of Socket on port 230");
                 logger.error(e.getMessage());
             }
         }
-        return soulissDatagramSocket;
+        return soulissDatagramSocket_port230;
     }
 
     public static void doClose() {
         soulissDatagramSocket.close();
         soulissDatagramSocket = null;
+    }
+
+    public static void doClose_port230() {
+        soulissDatagramSocket_port230.close();
+        soulissDatagramSocket_port230 = null;
     }
 }

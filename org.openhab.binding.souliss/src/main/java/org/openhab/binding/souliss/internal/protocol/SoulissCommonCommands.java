@@ -161,7 +161,8 @@ public class SoulissCommonCommands {
             serverAddr = InetAddress.getByName(sSoulissNodeIPAddressOnLAN);
             DatagramPacket packet = new DatagramPacket(merd, merd.length, serverAddr,
                     SoulissBindingUDPConstants.SOULISS_GATEWAY_DEFAULT_PORT);
-            SoulissBindingSendDispatcher.put(socket, packet);
+            // SoulissBindingSendDispatcher.put(socket, packet);
+            socket.send(packet);
         } catch (IOException e) {
             e.printStackTrace();
             logger.error(e.getMessage());
@@ -281,8 +282,8 @@ public class SoulissCommonCommands {
 
         MACACOframe.add((byte) 0x00);// Start Offset
         MACACOframe.add((byte) 0x00); // Number Of
-        logger.debug("sendPing - {}, soulissNodeIPAddressOnLAN: {}", MaCacoToString(MACACOframe),
-                soulissNodeIPAddressOnLAN);
+        logger.debug("sendPing - {}, soulissNodeIPAddressOnLAN: {} to port {}", MaCacoToString(MACACOframe),
+                soulissNodeIPAddressOnLAN, datagramSocket.getLocalPort());
         send(datagramSocket, MACACOframe, soulissNodeIPAddressOnLAN);
     }
 
@@ -347,8 +348,7 @@ public class SoulissCommonCommands {
     /**
      * Build TYPICAL REQUEST Frame
      */
-    public static void sendTYPICAL_REQUESTframe(DatagramSocket datagramSocket, String soulissNodeIPAddressOnLAN,
-            int iNodes) {
+    public static void sendTYPICAL_REQUESTframe(DatagramSocket datagramSocket, String soulissNodeIPAddressOnLAN) {
 
         ArrayList<Byte> MACACOframe = new ArrayList<Byte>();
         MACACOframe.add(SoulissBindingUDPConstants.Souliss_UDP_function_typreq);
@@ -356,8 +356,10 @@ public class SoulissCommonCommands {
         MACACOframe.add((byte) 0x00);// PUTIN
         MACACOframe.add((byte) 0x00);// PUTIN
         MACACOframe.add((byte) 0x00); // startOffset
-        MACACOframe.add((byte) iNodes);
-        logger.debug("sendHEALTY_REQUESTframe - {}, soulissNodeIPAddressOnLAN: {}", MaCacoToString(MACACOframe),
+
+        // MACACOframe.add((byte) iNodes); // iNodes
+        MACACOframe.add((byte) 0x00); // iNodes
+        logger.debug("sendTYPICAL_REQUESTframe - {}, soulissNodeIPAddressOnLAN: {}", MaCacoToString(MACACOframe),
                 soulissNodeIPAddressOnLAN);
         send(datagramSocket, MACACOframe, soulissNodeIPAddressOnLAN);
     }

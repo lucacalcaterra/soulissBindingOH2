@@ -20,6 +20,8 @@ import org.eclipse.smarthome.config.discovery.DiscoveryResult;
 import org.eclipse.smarthome.config.discovery.DiscoveryResultBuilder;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.souliss.SoulissBindingConstants;
+import org.openhab.binding.souliss.internal.SoulissDatagramSocketFactory;
+import org.openhab.binding.souliss.internal.protocol.SoulissCommonCommands;
 import org.openhab.binding.souliss.internal.protocol.SoulissDiscover;
 import org.openhab.binding.souliss.internal.protocol.SoulissDiscover.DiscoverResult;
 import org.slf4j.Logger;
@@ -98,6 +100,15 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
         DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label)
                 .withProperties(properties).build();
         thingDiscovered(discoveryResult);
+        setGatewayDetected();
+
+        SoulissCommonCommands.sendTYPICAL_REQUESTframe(SoulissDatagramSocketFactory.getDatagram_for_broadcast(),
+                addr.getHostAddress());
+    }
+
+    @Override
+    public void gatewayDetected() {
+        // TODO Auto-generated method stub
 
     }
 
@@ -117,11 +128,6 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
             soulissDiscoverThread = null;
         }
         super.stopScan();
-    }
-
-    @Override
-    public void noBridgeDetected() {
-        // stopScan();
     }
 
     @Override

@@ -13,6 +13,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
 import org.openhab.binding.souliss.SoulissBindingUDPConstants;
 import org.openhab.binding.souliss.internal.protocol.SoulissDiscover.DiscoverResult;
 import org.slf4j.Logger;
@@ -71,7 +72,7 @@ public class SoulissBindingUDPDecoder {
             case SoulissBindingUDPConstants.Souliss_UDP_function_discover_GW_node_bcas_resp:
                 logger.debug("function_ping_broadcast_resp");
                 try {
-                    discoverResult = decodePingBroadcast(macacoPck);
+                    decodePingBroadcast(macacoPck);
                 } catch (UnknownHostException e) {
                     logger.debug("Error: {}", e.getLocalizedMessage());
                     e.printStackTrace();
@@ -84,12 +85,11 @@ public class SoulissBindingUDPDecoder {
             // decodeStateRequest(macacoPck);
             // break;
 
-            // case SoulissBindingUDPConstants.Souliss_UDP_function_typreq_resp:// Answer for
-            // assigned
-            // // typical logic
-            // logger.debug("** TypReq answer");
-            // decodeTypRequest(macacoPck);
-            // break;
+            case SoulissBindingUDPConstants.Souliss_UDP_function_typreq_resp:// Answer for assigned typical logic
+                logger.debug("** TypReq answer");
+                decodeTypRequest(macacoPck);
+                break;
+
             // case (byte) ConstantsUDP.Souliss_UDP_function_health_resp:// Answer
             // // nodes
             // // healty
@@ -116,24 +116,47 @@ public class SoulissBindingUDPDecoder {
         }
     }
 
-    // /**
-    // * @param mac
-    // */
+    /**
+     * @param mac
+     */
     private void decodePing(ArrayList<Short> mac) {
-        int putIn_1 = mac.get(1);
-        int putIn_2 = mac.get(2);
+        int putIn_1 = mac.get(1); // not used
+        int putIn_2 = mac.get(2); // not used
         logger.debug("decodePing: putIn code: {}, {}", putIn_1, putIn_2);
+        discoverResult.gatewayDetected();
     }
 
-    private DiscoverResult decodePingBroadcast(ArrayList<Short> macaco) throws UnknownHostException {
+    private void decodePingBroadcast(ArrayList<Short> macaco) throws UnknownHostException {
         String IP = macaco.get(5) + "." + macaco.get(6) + "." + macaco.get(7) + "." + macaco.get(8);
         byte[] addr = { new Short(macaco.get(5)).byteValue(), new Short(macaco.get(6)).byteValue(),
                 new Short(macaco.get(7)).byteValue(), new Short(macaco.get(8)).byteValue() };
         logger.debug("decodePingBroadcast. Gateway Discovery. IP: {}", IP);
 
         discoverResult.gatewayDetected(InetAddress.getByAddress(addr), macaco.get(8).toString());
-        discoverResult.setGatewayDetected();
-        return discoverResult;
+    }
+
+    private void decodeTypRequest(ArrayList<Short> mac) {
+        try {
+            short tgtnode = mac.get(3);
+            int numberOf = mac.get(4);
+bisogna prima conoscere il numero di tipici per nodo, quindi ci serve una DBrequest
+
+            // int typXnodo = SoulissNetworkParameter.maxnodes;
+            // logger.debug("--DECODE MACACO OFFSET: {} NUMOF: {} TYPICALSXNODE: {}",
+            // tgtnode, numberOf, typXnodo);
+            // // creates Souliss nodes
+            for (int j = 0; j < numberOf; j++) {
+                if (mac.get(5 + j) != 0) {// create only not-empty typicals
+                    if (!(mac.get(5 + j) == SoulissBindingProtocolConstants.Souliss_T_related)) {
+                        String hTyp = Integer.toHexString(mac.get(5 + j));
+                        short slot = (short) (j % typXnodo);
+                        short node = (short) (j / typXnodo + tgtnode);
+                    }
+                }
+            }
+        } catch (Exception uy) {
+            logger.error("decodeTypRequest ERROR");
+        }
     }
 
     /**

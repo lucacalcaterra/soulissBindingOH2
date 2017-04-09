@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
-import org.openhab.binding.souliss.internal.SoulissDatagramSocketFactory;
-import org.openhab.binding.souliss.internal.network.typicals.SoulissTypicals;
 import org.openhab.binding.souliss.internal.protocol.SoulissDiscover.DiscoverResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,18 +31,27 @@ public class SoulissBindingUDPServerThread extends Thread {
     protected boolean bExit = false;
     SoulissBindingUDPDecoder decoder = null;
     DiscoverResult discoverResult;
-    static DatagramSocket soulissDatagramSocket;
+    DatagramSocket soulissDatagramSocket;
     private static Logger logger = LoggerFactory.getLogger(SoulissBindingUDPServerThread.class);
 
-    public SoulissBindingUDPServerThread(SoulissTypicals typicals, DiscoverResult discoverResultLoc) {
+    // public SoulissBindingUDPServerThread(SoulissTypicals typicals, DiscoverResult discoverResultLoc) {
+    // super();
+    //
+    // soulissDatagramSocket = SoulissDatagramSocketFactory.getDatagram_for_broadcast();
+    //
+    // discoverResult = discoverResultLoc;
+    // decoder = new SoulissBindingUDPDecoder(discoverResult);
+    // logger.info("Start UDPServerThread - Server in ascolto sulla porta "
+    // + SoulissDatagramSocketFactory.getDatagram_for_broadcast().getLocalPort());
+    // }
+
+    public SoulissBindingUDPServerThread(DatagramSocket soulissDatagramSocketLocale, DiscoverResult discoverResultLoc) {
         super();
-
-        soulissDatagramSocket = SoulissDatagramSocketFactory.getDatagram_for_broadcast();
-
+        soulissDatagramSocket = soulissDatagramSocketLocale;
         discoverResult = discoverResultLoc;
         decoder = new SoulissBindingUDPDecoder(discoverResult);
-        logger.info("Start UDPServerThread - Server in ascolto sulla porta "
-                + SoulissDatagramSocketFactory.getSocketDatagram().getLocalPort());
+        logger.info("Start UDPServerThread - Server in ascolto sulla porta " + soulissDatagramSocket.getLocalPort());
+
     }
 
     @Override
@@ -53,10 +60,9 @@ public class SoulissBindingUDPServerThread extends Thread {
         while (!bExit) {
             try {
                 byte[] buf = new byte[256];
-
                 // receive request
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
-                SoulissDatagramSocketFactory.getSocketDatagram().receive(packet);
+                soulissDatagramSocket.receive(packet);
                 buf = packet.getData();
 
                 // **************** DECODER ********************
@@ -74,11 +80,11 @@ public class SoulissBindingUDPServerThread extends Thread {
     // public DatagramSocket getSocket() {
     // return SoulissBindingNetworkParameters.datagramsocket;
     // }
-
-    public void closeSocket() {
-        SoulissDatagramSocketFactory.doClose();
-        bExit = true;
-    }
+    //
+    // public void closeSocket() {
+    // SoulissDatagramSocketFactory.doClose();
+    // bExit = true;
+    // }
 
     private String MaCacoToString(byte[] frame) {
         StringBuilder sb = new StringBuilder();

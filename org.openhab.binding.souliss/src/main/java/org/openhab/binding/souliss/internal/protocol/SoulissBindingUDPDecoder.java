@@ -96,11 +96,12 @@ public class SoulissBindingUDPDecoder {
             // logger.debug("function_health_resp");
             // decodeHealthRequest(macacoPck);
             // break;
-            // case (byte) ConstantsUDP.Souliss_UDP_function_db_struct_resp:// Answer
-            // // nodes
-            // logger.debug("function_db_struct_resp");
-            // decodeDBStructRequest(macacoPck);
-            // break;
+
+            case (byte) SoulissBindingUDPConstants.Souliss_UDP_function_db_struct_resp:// Answer
+                // nodes
+                logger.debug("function_db_struct_resp");
+                decodeDBStructRequest(macacoPck);
+                break;
             // case 0x83:
             // logger.debug("Functional code not supported");
             // break;
@@ -139,18 +140,19 @@ public class SoulissBindingUDPDecoder {
         try {
             short tgtnode = mac.get(3);
             int numberOf = mac.get(4);
-bisogna prima conoscere il numero di tipici per nodo, quindi ci serve una DBrequest
 
-            // int typXnodo = SoulissNetworkParameter.maxnodes;
-            // logger.debug("--DECODE MACACO OFFSET: {} NUMOF: {} TYPICALSXNODE: {}",
-            // tgtnode, numberOf, typXnodo);
+            int typXnodo = SoulissBindingNetworkParameters.maxnodes;
+            logger.debug("--DECODE MACACO OFFSET: {} NUMOF: {} TYPICALSXNODE: {}", tgtnode, numberOf, typXnodo);
             // // creates Souliss nodes
             for (int j = 0; j < numberOf; j++) {
                 if (mac.get(5 + j) != 0) {// create only not-empty typicals
                     if (!(mac.get(5 + j) == SoulissBindingProtocolConstants.Souliss_T_related)) {
-                        String hTyp = Integer.toHexString(mac.get(5 + j));
+                        // String hTyp = Integer.toHexString(mac.get(5 + j));
+                        short typical = mac.get(5 + j);
                         short slot = (short) (j % typXnodo);
                         short node = (short) (j / typXnodo + tgtnode);
+
+                        discoverResult.thingDetected(typical, node, slot);
                     }
                 }
             }
@@ -171,26 +173,28 @@ bisogna prima conoscere il numero di tipici per nodo, quindi ci serve una DBrequ
             int maxnodes = mac.get(6);
             int maxTypicalXnode = mac.get(7);
             int maxrequests = mac.get(8);
-            int MaCaco_IN_S = mac.get(9);
-            int MaCaco_TYP_S = mac.get(10);
-            int MaCaco_OUT_S = mac.get(11);
+            // int MaCaco_IN_S = mac.get(9);
+            // int MaCaco_TYP_S = mac.get(10);
+            // int MaCaco_OUT_S = mac.get(11);
 
             SoulissBindingNetworkParameters.nodes = nodes;
             SoulissBindingNetworkParameters.maxnodes = maxnodes;
             SoulissBindingNetworkParameters.maxTypicalXnode = maxTypicalXnode;
             SoulissBindingNetworkParameters.maxrequests = maxrequests;
-            SoulissBindingNetworkParameters.MaCacoIN_s = MaCaco_IN_S;
-            SoulissBindingNetworkParameters.MaCacoTYP_s = MaCaco_TYP_S;
-            SoulissBindingNetworkParameters.MaCacoOUT_s = MaCaco_OUT_S;
+            // SoulissBindingNetworkParameters.MaCacoIN_s = MaCaco_IN_S;
+            // SoulissBindingNetworkParameters.MaCacoTYP_s = MaCaco_TYP_S;
+            // SoulissBindingNetworkParameters.MaCacoOUT_s = MaCaco_OUT_S;
 
             logger.debug("decodeDBStructRequest");
             logger.debug("Nodes: " + nodes);
             logger.debug("maxnodes: " + maxnodes);
             logger.debug("maxTypicalXnode: " + maxTypicalXnode);
             logger.debug("maxrequests: " + maxrequests);
-            logger.debug("MaCaco_IN_S: " + MaCaco_IN_S);
-            logger.debug("MaCaco_TYP_S: " + MaCaco_TYP_S);
-            logger.debug("MaCaco_OUT_S: " + MaCaco_OUT_S);
+            // logger.debug("MaCaco_IN_S: " + MaCaco_IN_S);
+            // logger.debug("MaCaco_TYP_S: " + MaCaco_TYP_S);
+            // logger.debug("MaCaco_OUT_S: " + MaCaco_OUT_S);
+
+            discoverResult.dbStructAnswerReceived();
 
         } catch (Exception e) {
             logger.error("decodeDBStructRequest: SoulissNetworkParameter update ERROR");

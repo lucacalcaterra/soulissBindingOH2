@@ -20,7 +20,9 @@ import org.eclipse.smarthome.config.discovery.DiscoveryResult;
 import org.eclipse.smarthome.config.discovery.DiscoveryResultBuilder;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.souliss.SoulissBindingConstants;
+import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
 import org.openhab.binding.souliss.internal.SoulissDatagramSocketFactory;
+import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
 import org.openhab.binding.souliss.internal.protocol.SoulissCommonCommands;
 import org.openhab.binding.souliss.internal.protocol.SoulissDiscover;
 import org.openhab.binding.souliss.internal.protocol.SoulissDiscover.DiscoverResult;
@@ -92,23 +94,55 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
     @Override
     public void gatewayDetected(InetAddress addr, String id) {
         logger.debug("souliss gateway found " + addr.getHostName() + " " + id);
-        ThingUID thingUID = new ThingUID(SoulissBindingConstants.BINDING_ID, "bridge", id);
+        ThingUID thingUID = new ThingUID(SoulissBindingConstants.BINDING_ID, "gateway", id);
         String label = "Souliss Gateway " + id;
         Map<String, Object> properties = new TreeMap<>();
         properties.put(SoulissBindingConstants.CONFIG_ID, id);
         properties.put(SoulissBindingConstants.CONFIG_IP_ADDRESS, addr.getHostAddress());
+        SoulissBindingNetworkParameters.IPAddressOnLAN = addr.getHostAddress();
+
         DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label)
                 .withProperties(properties).build();
         thingDiscovered(discoveryResult);
         setGatewayDetected();
-
-        SoulissCommonCommands.sendTYPICAL_REQUESTframe(SoulissDatagramSocketFactory.getDatagram_for_broadcast(),
+        SoulissCommonCommands.sendDBStructFrame(SoulissDatagramSocketFactory.getDatagram_for_broadcast(),
                 addr.getHostAddress());
+
+    }
+
+    @Override
+    public void thingDetected(short typical, short node, short slot) {
+        ThingUID thingUID;
+        String label;
+        DiscoveryResult discoveryResult;
+
+        switch (typical) {
+            case SoulissBindingProtocolConstants.Souliss_T11:
+                thingUID = new ThingUID(SoulissBindingConstants.BINDING_ID, "t11");
+                label = "T11: node " + node + ", slot " + slot;
+                discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label).build();
+                thingDiscovered(discoveryResult);
+                break;
+            case SoulissBindingProtocolConstants.Souliss_T14:
+                thingUID = new ThingUID(SoulissBindingConstants.BINDING_ID, "t14");
+                label = "T14: node " + node + ", slot " + slot;
+                discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label).build();
+                thingDiscovered(discoveryResult);
+                break;
+        }
+
     }
 
     @Override
     public void gatewayDetected() {
         // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void dbStructAnswerReceived() {
+        SoulissCommonCommands.sendTYPICAL_REQUESTframe(SoulissDatagramSocketFactory.getDatagram_for_broadcast(),
+                SoulissBindingNetworkParameters.IPAddressOnLAN);
 
     }
 

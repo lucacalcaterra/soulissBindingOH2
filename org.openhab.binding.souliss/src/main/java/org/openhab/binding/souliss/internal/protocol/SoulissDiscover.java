@@ -38,11 +38,12 @@ public class SoulissDiscover extends Thread {
         void setGatewayDetected();
 
         void setGatewayUndetected();
+
+        void dbStructAnswerReceived();
+
+        void thingDetected(short typical, short node, short slot);
     }
 
-    ///// Network
-    // private byte[] discoverbuffer = "Link_Wi-Fi".getBytes();
-    // final private DatagramPacket discoverPacket;
     private boolean willbeclosed = false;
     private DatagramSocket datagramSocket_port230;
     SoulissBindingUDPServerThread UDP_Server_port230 = null;

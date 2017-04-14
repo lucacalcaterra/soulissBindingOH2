@@ -127,7 +127,7 @@ public class SoulissCommonCommands {
         MACACOframe.add((byte) 0x0);// PUTIN
         MACACOframe.add((byte) 0x0);// PUTIN
         MACACOframe.add((byte) 0x0);// Start Offset
-        MACACOframe.add((byte) 0x07); // Number Of
+        MACACOframe.add((byte) 0x0); // Number Of
 
         logger.debug("sendDBStructFrame - {}, soulissNodeIPAddressOnLAN: {}", MaCacoToString(MACACOframe),
                 soulissNodeIPAddressOnLAN);
@@ -357,8 +357,8 @@ public class SoulissCommonCommands {
         MACACOframe.add((byte) 0x00);// PUTIN
         MACACOframe.add((byte) 0x00); // startOffset
 
-        // MACACOframe.add((byte) iNodes); // iNodes
-        MACACOframe.add((byte) 0x00); // iNodes
+        MACACOframe.add((byte) SoulissBindingNetworkParameters.nodes); // iNodes
+        // MACACOframe.add((byte) 0x00); // iNodes
         logger.debug("sendTYPICAL_REQUESTframe - {}, soulissNodeIPAddressOnLAN: {}", MaCacoToString(MACACOframe),
                 soulissNodeIPAddressOnLAN);
         send(datagramSocket, MACACOframe, soulissNodeIPAddressOnLAN);

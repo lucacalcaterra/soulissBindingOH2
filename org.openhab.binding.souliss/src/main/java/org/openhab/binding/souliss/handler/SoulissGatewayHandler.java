@@ -211,6 +211,12 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
     }
 
     @Override
+    public void dbStructAnswerReceived() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
     public boolean isGatewayDetected() {
         return bGatewayDetected;
     }
@@ -264,6 +270,12 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
 
             }
         }, refreshInterval, refreshInterval, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public void thingDetected(short typical, short node, short slot) {
+        // TODO Auto-generated method stub
+
     }
 
 }

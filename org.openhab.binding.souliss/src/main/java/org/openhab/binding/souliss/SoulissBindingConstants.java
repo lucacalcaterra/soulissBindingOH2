@@ -30,7 +30,7 @@ public class SoulissBindingConstants {
 
     // List of all Thing Type UIDs
     // public final static ThingTypeUID THING_TYPE_SAMPLE = new ThingTypeUID(BINDING_ID, "sample");
-    public final static ThingTypeUID GATEWAY_THING_TYPE = new ThingTypeUID(BINDING_ID, "bridge");
+    public final static ThingTypeUID GATEWAY_THING_TYPE = new ThingTypeUID(BINDING_ID, "gateway");
     public final static ThingTypeUID T11_THING_TYPE = new ThingTypeUID(BINDING_ID, "t11");
     public final static ThingTypeUID T12_THING_TYPE = new ThingTypeUID(BINDING_ID, "t12");
     public final static ThingTypeUID T13_THING_TYPE = new ThingTypeUID(BINDING_ID, "t13");

@@ -3,9 +3,9 @@
 	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
-	<bridge-type id="bridge">
+	<bridge-type id="gateway">
 		<label>Souliss Gateway</label>
-		<description>This bridge represents a Souliss Gateway.</description>
+		<description>Represents a Souliss Gateway.</description>
 
 		<config-description>
 			<parameter name="GATEWAY_IP_ADDRESS" type="text" required="true">
@@ -14,7 +14,7 @@
                 </description>
 			</parameter>
 			<parameter name="GATEWAY_PORT_NUMBER" type="integer" required="true">
-				<label>Bridge port</label>
+				<label>Gateway port</label>
 				<description>Default is 230 UDP.
                 </description>
 				<default>230</default>
@@ -28,7 +28,7 @@
 			<parameter name="ID" type="text" required="false">
 				<label>Bridge ID</label>
 				<description>Sicuramente non servirà - The mac address in upper case letters without delimiter for Version 3+ bridges. Leave empty for Version 1/2 devices.
-                This is used to check if the given IP corresponds to the right device. The bridge is set offline if the device
+                This is used to check if the given IP corresponds to the right device. The gateway is set offline if the device
                 does not respond with the correct Bride ID and a re-detection is started. Useful for DHCP environments where
                 IPs may change over time, after power outage etc.
                 </description>
@@ -60,7 +60,7 @@
 
 	<thing-type id="t11">
 		<supported-bridge-type-refs>
-			<bridge-type-ref id="bridge" />
+			<bridge-type-ref id="gateway" />
 		</supported-bridge-type-refs>
 		<label>T11</label>
 		<description>Simple Light</description>
@@ -72,7 +72,7 @@
 
 	<thing-type id="t12">
 		<supported-bridge-type-refs>
-			<bridge-type-ref id="bridge" />
+			<bridge-type-ref id="gateway" />
 		</supported-bridge-type-refs>
 		<label>T12</label>
 		<description>Simple Light with Auto Mode</description>
@@ -85,7 +85,7 @@
 
 	<thing-type id="t13">
 		<supported-bridge-type-refs>
-			<bridge-type-ref id="bridge" />
+			<bridge-type-ref id="gateway" />
 		</supported-bridge-type-refs>
 		<label>T13</label>
 		<description>Digital Input</description>

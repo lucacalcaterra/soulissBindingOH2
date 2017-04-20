@@ -9,9 +9,6 @@ package org.openhab.binding.souliss.internal;
 
 import static org.openhab.binding.souliss.SoulissBindingConstants.*;
 
-import java.util.Collections;
-import java.util.Set;
-
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
@@ -19,6 +16,15 @@ import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.openhab.binding.souliss.handler.SoulissGatewayHandler;
 import org.openhab.binding.souliss.handler.SoulissT11Handler;
+import org.openhab.binding.souliss.handler.SoulissT12Handler;
+import org.openhab.binding.souliss.handler.SoulissT13Handler;
+import org.openhab.binding.souliss.handler.SoulissT14Handler;
+import org.openhab.binding.souliss.handler.SoulissT52Handler;
+import org.openhab.binding.souliss.handler.SoulissT53Handler;
+import org.openhab.binding.souliss.handler.SoulissT55Handler;
+import org.openhab.binding.souliss.handler.SoulissT56Handler;
+import org.openhab.binding.souliss.handler.SoulissT57Handler;
+import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
 
 /**
  * The {@link SoulissHandlerFactory} is responsible for creating things and thing
@@ -27,8 +33,6 @@ import org.openhab.binding.souliss.handler.SoulissT11Handler;
  * @author Tonino Fazio - Initial contribution
  */
 public class SoulissHandlerFactory extends BaseThingHandlerFactory {
-
-    private final static Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Collections.singleton(GATEWAY_THING_TYPE);
 
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
@@ -41,9 +45,26 @@ public class SoulissHandlerFactory extends BaseThingHandlerFactory {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
         if (thingTypeUID.equals(GATEWAY_THING_TYPE)) {
+            SoulissBindingNetworkParameters.setGateway((Bridge) thing);
             return new SoulissGatewayHandler((Bridge) thing);
         } else if (thingTypeUID.equals(T11_THING_TYPE)) {
             return new SoulissT11Handler(thing);
+        } else if (thingTypeUID.equals(T12_THING_TYPE)) {
+            return new SoulissT12Handler(thing);
+        } else if (thingTypeUID.equals(T13_THING_TYPE)) {
+            return new SoulissT13Handler(thing);
+        } else if (thingTypeUID.equals(T14_THING_TYPE)) {
+            return new SoulissT14Handler(thing);
+        } else if (thingTypeUID.equals(T52_THING_TYPE)) {
+            return new SoulissT52Handler(thing);
+        } else if (thingTypeUID.equals(T53_THING_TYPE)) {
+            return new SoulissT53Handler(thing);
+        } else if (thingTypeUID.equals(T55_THING_TYPE)) {
+            return new SoulissT55Handler(thing);
+        } else if (thingTypeUID.equals(T56_THING_TYPE)) {
+            return new SoulissT56Handler(thing);
+        } else if (thingTypeUID.equals(T57_THING_TYPE)) {
+            return new SoulissT57Handler(thing);
         }
 
         return null;

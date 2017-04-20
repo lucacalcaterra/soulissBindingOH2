@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.eclipse.smarthome.core.thing.Bridge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,6 +49,7 @@ public class SoulissBindingNetworkParameters {
     public static long SECURE_SEND_TIMEOUT_TO_REQUEUE = presetTime;
     public static long SECURE_SEND_TIMEOUT_TO_REMOVE_PACKET = presetTime;
     private static Logger logger = LoggerFactory.getLogger(SoulissBindingNetworkParameters.class);
+    private static Bridge gateway;
 
     // public static DatagramSocket datagramsocket;
 
@@ -71,6 +73,14 @@ public class SoulissBindingNetworkParameters {
         } catch (IOException e) {
             logger.warn(e.getMessage());
         }
+    }
+
+    public static void setGateway(Bridge thing) {
+        gateway = thing;
+    }
+
+    public static Bridge getGateway() {
+        return gateway;
     }
 
 }

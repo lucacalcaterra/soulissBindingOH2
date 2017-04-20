@@ -31,14 +31,43 @@ public class SoulissBindingConstants {
     // List of all Thing Type UIDs
     // public final static ThingTypeUID THING_TYPE_SAMPLE = new ThingTypeUID(BINDING_ID, "sample");
     public final static ThingTypeUID GATEWAY_THING_TYPE = new ThingTypeUID(BINDING_ID, "gateway");
-    public final static ThingTypeUID T11_THING_TYPE = new ThingTypeUID(BINDING_ID, "t11");
-    public final static ThingTypeUID T12_THING_TYPE = new ThingTypeUID(BINDING_ID, "t12");
-    public final static ThingTypeUID T13_THING_TYPE = new ThingTypeUID(BINDING_ID, "t13");
 
-    public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Sets.newHashSet(T11_THING_TYPE, T12_THING_TYPE,
-            T13_THING_TYPE);
+    public final static String T11 = "t11";
+    public final static String T12 = "t12";
+    public final static String T13 = "t13";
+    public final static String T14 = "t14";
+    public final static String T52 = "t52";
+    public final static String T53 = "t53";
+    public final static String T55 = "t55";
+    public final static String T56 = "t56";
+    public final static String T57 = "t57";
+
+    public final static ThingTypeUID T11_THING_TYPE = new ThingTypeUID(BINDING_ID, T11);
+    public final static ThingTypeUID T12_THING_TYPE = new ThingTypeUID(BINDING_ID, T12);
+    public final static ThingTypeUID T13_THING_TYPE = new ThingTypeUID(BINDING_ID, T13);
+    public final static ThingTypeUID T14_THING_TYPE = new ThingTypeUID(BINDING_ID, T14);
+    public final static ThingTypeUID T52_THING_TYPE = new ThingTypeUID(BINDING_ID, T52);
+    public final static ThingTypeUID T53_THING_TYPE = new ThingTypeUID(BINDING_ID, T53);
+    public final static ThingTypeUID T55_THING_TYPE = new ThingTypeUID(BINDING_ID, T55);
+    public final static ThingTypeUID T56_THING_TYPE = new ThingTypeUID(BINDING_ID, T56);
+    public final static ThingTypeUID T57_THING_TYPE = new ThingTypeUID(BINDING_ID, T57);
+
+    public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Sets.newHashSet(GATEWAY_THING_TYPE,
+            T11_THING_TYPE, T12_THING_TYPE, T13_THING_TYPE, T14_THING_TYPE, T52_THING_TYPE, T53_THING_TYPE,
+            T55_THING_TYPE, T56_THING_TYPE, T57_THING_TYPE);
+
     // List of all Channel ids
-    public final static String CHANNEL_1 = "channel1";
+    public final static String ONOFF_CHANNEL = "onoff";
+
+    public final static String AUTOMODE_CHANNEL = "automode";
+    public final static String STATEONOFF_CHANNEL = "stateOnOff";
+    public final static String LASTMESSAGE_CHANNEL = "lastMessage";
+    public final static String LASTSTATUSSTORED_CHANNEL = "lastStatusStored";
+    public final static String HUMIDITY_CHANNEL = "humidity";
+    public final static String TEMPERATURE_CHANNEL = "temperature";
+    public final static String AMPERE_CHANNEL = "ampere";
+    public final static String VOLTAGE_CHANNEL = "voltage";
+    public final static String POWER_CHANNEL = "power";
 
     public static final String CONFIG_IP_ADDRESS = "GATEWAY_IP_ADDRESS";
     public static final String CONFIG_PORT = "GATEWAY_PORT_NUMBER";
@@ -46,6 +75,9 @@ public class SoulissBindingConstants {
     public static final String CONFIG_USER_INDEX = "USER_INDEX"; // DEFAULT 70;
     public static final String CONFIG_NODE_INDEX = "NODE_INDEX"; // DEFAULT 120; // 0..127
     public static final String CONFIG_ID = "ID";
-    public static final String CONFIG_REFRESH = "REFRESH";
+    public static final String CONFIG_PING_REFRESH = "PING_INTERVAL";
+    public static final String CONFIG_SUBSCRIPTION_REFRESH = "SUBSCRIBTION_INTERVAL";
+
+    public static final String UUID_NODE_SLOT_SEPARATOR = "-";
 
 }

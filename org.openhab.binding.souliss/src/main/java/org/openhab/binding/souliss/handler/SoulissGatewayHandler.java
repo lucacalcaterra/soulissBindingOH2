@@ -55,13 +55,14 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
     // private ScheduledFuture<?> discoverTimer;
     // private SoulissDiscover discover;
     // private ThingDiscoveryService thingDiscoveryService;
-    private int refreshInterval;
+    private int pingRefreshInterval;
     private ScheduledFuture<?> pingTimer;
+    private ScheduledFuture<?> subscriptionTimer;
+    private int subscriptionRefreshInterval;
 
     public SoulissGatewayHandler(Bridge bridge) {
         super(bridge);
         gwConfigurationMap = bridge.getConfiguration();
-
         SoulissBindingNetworkParameters.IPAddressOnLAN = (String) gwConfigurationMap
                 .get(SoulissBindingConstants.CONFIG_IP_ADDRESS);
 
@@ -143,6 +144,14 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
         }
     }
 
+    private void sendSubscription() {
+        if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_IP_ADDRESS).toString().length() > 0) {
+            SoulissCommonCommands.sendSUBSCRIPTIONframe(datagramSocket,
+                    gwConfigurationMap.get(SoulissBindingConstants.CONFIG_IP_ADDRESS).toString(),
+                    SoulissBindingNetworkParameters.nodes);
+        }
+    }
+
     // @Override
     // public void handleCommand(ChannelUID channelUID, Command command) {
     // if (channelUID.getId().equals(CHANNEL_1)) {
@@ -208,6 +217,7 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
     public void gatewayDetected() {
         updateStatus(ThingStatus.ONLINE);
         setGatewayDetected();
+
     }
 
     @Override
@@ -238,27 +248,33 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
      */
     private void setupRefreshTimer() {
 
-        // if (discoverTimer != null) {
-        // discoverTimer.cancel(true);
-        // }
-        //
-        BigDecimal interval_config = (BigDecimal) thing.getConfiguration().get(SoulissBindingConstants.CONFIG_REFRESH);
-        if (interval_config == null || interval_config.intValue() == 0) {
-            refreshInterval = 0;
+        BigDecimal ping_interval_config = (BigDecimal) thing.getConfiguration()
+                .get(SoulissBindingConstants.CONFIG_PING_REFRESH);
+        BigDecimal subscription_interval_config = (BigDecimal) thing.getConfiguration()
+                .get(SoulissBindingConstants.CONFIG_SUBSCRIPTION_REFRESH);
+        if (ping_interval_config == null || ping_interval_config.intValue() == 0) {
+            pingRefreshInterval = 0;
             return;
         }
 
-        refreshInterval = interval_config.intValue();
+        if (subscription_interval_config == null || subscription_interval_config.intValue() == 0) {
+            subscriptionRefreshInterval = 0;
+            return;
+        }
+
+        pingRefreshInterval = ping_interval_config.intValue();
+        subscriptionRefreshInterval = subscription_interval_config.intValue();
         if (pingTimer != null) {
             pingTimer.cancel(true);
+        }
+        if (subscriptionTimer != null) {
+            subscriptionTimer.cancel(true);
         }
         // This timer will do the state update periodically.
         pingTimer = scheduler.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                // pingTimer.sendDiscover(scheduler);
                 sendPing();
-                // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE, "Gateway wait for ping reply");
 
                 if (++countPING_KO > 3) {
                     setGatewayUndetected();
@@ -269,13 +285,26 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
                 }
 
             }
-        }, refreshInterval, refreshInterval, TimeUnit.SECONDS);
+        }, pingRefreshInterval, pingRefreshInterval, TimeUnit.SECONDS);
+
+        subscriptionTimer = scheduler.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                sendSubscription();
+            }
+        }, subscriptionRefreshInterval, subscriptionRefreshInterval, TimeUnit.MINUTES);
     }
 
     @Override
     public void thingDetected(short typical, short node, short slot) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public Bridge getGateway() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

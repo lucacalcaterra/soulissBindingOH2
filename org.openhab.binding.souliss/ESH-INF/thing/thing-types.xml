@@ -19,12 +19,13 @@
                 </description>
 				<default>230</default>
 			</parameter>
-			         <parameter name="PREFERRED_LOCAL_PORT_NUMBER" type="integer" required="true">
-                <label>Preferred local port number</label>
-                <description>Default port is 0. It means that it is random.
+			<parameter name="PREFERRED_LOCAL_PORT_NUMBER" type="integer" required="true">
+				<label>Preferred local port number</label>
+				<description>Default port is 0. It means that it is random.
                 </description>
-                <default>0</default>
-            </parameter>
+				<default>0</default>
+				<advanced>true</advanced>
+			</parameter>
 			<parameter name="ID" type="text" required="false">
 				<label>Bridge ID</label>
 				<description>Sicuramente non servirà - The mac address in upper case letters without delimiter for Version 3+ bridges. Leave empty for Version 1/2 devices.
@@ -34,27 +35,35 @@
                 </description>
 				<advanced>true</advanced>
 			</parameter>
-			<parameter name="REFRESH" type="integer" min="1" max="60">
-				<label>Refresh interval</label>
+			<parameter name="PING_INTERVAL" type="integer" min="1" max="300">
+				<label>Ping interval</label>
+				<description>Interval in seconds to check for device presence.
+                </description>
+				<default>30</default>
+				<advanced>true</advanced>
+			</parameter>
+			<parameter name="SUBSCRIBTION_INTERVAL" type="integer" min="1" max="60">
+				<label>Subscription interval</label>
 				<description>Interval in minutes to check for device presence.
                 </description>
 				<default>2</default>
 				<advanced>true</advanced>
 			</parameter>
+
 			<parameter name="CONFIG_USER_INDEX" type="integer" required="true">
-                <label>User Index</label>
-                <description>Generally the default value work good. It must is different from other user interfaces (ex: SoulissApp)
+				<label>User Index</label>
+				<description>Generally the default value work good. It must is different from other user interfaces (ex: SoulissApp)
                 </description>
-                <default>70</default>
-                <advanced>true</advanced>
-            </parameter>
-            <parameter name="CONFIG_NODE_INDEX" type="integer" required="true">
-                <label>Node Index</label>
-                <description>Generally the default value work good. It must is different from other user interfaces (ex: SoulissApp)
+				<default>70</default>
+				<advanced>true</advanced>
+			</parameter>
+			<parameter name="CONFIG_NODE_INDEX" type="integer" required="true">
+				<label>Node Index</label>
+				<description>Generally the default value work good. It must is different from other user interfaces (ex: SoulissApp)
                 </description>
-                <default>120</default>
-                <advanced>true</advanced>
-            </parameter>
+				<default>120</default>
+				<advanced>true</advanced>
+			</parameter>
 		</config-description>
 	</bridge-type>
 
@@ -95,11 +104,77 @@
 		</channels>
 	</thing-type>
 
+	<thing-type id="t14">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="gateway" />
+		</supported-bridge-type-refs>
+		<label>T14</label>
+		<description>Pulse Digital Output</description>
+
+		<channels>
+			<channel id="stateOnOff" typeId="stateOnOff" />
+		</channels>
+	</thing-type>
+    
+    <thing-type id="t52">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway" />
+        </supported-bridge-type-refs>
+        <label>T52</label>
+        <description>Temperature measure (-20, +50) °C</description>
+
+    </thing-type>
+
+    <thing-type id="t53">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway" />
+        </supported-bridge-type-refs>
+        <label>T53</label>
+        <description>Humidity measure (0, 100) %</description>
+
+    </thing-type>
+    
+      <thing-type id="t55">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway" />
+        </supported-bridge-type-refs>
+        <label>T55</label>
+        <description>Voltage (0, 400) V</description>
+
+    </thing-type>
+    
+     <thing-type id="t56">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway" />
+        </supported-bridge-type-refs>
+        <label>T56</label>
+        <description>Current (0, 25) A</description>
+
+    </thing-type>
+    
+         <thing-type id="t57">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway" />
+        </supported-bridge-type-refs>
+        <label>T57</label>
+        <description>Power (0, 6500) W</description>
+
+    </thing-type>
+    
+    
+	<channel-type id="pulse" advanced="true">
+		<item-type>Switch</item-type>
+		<label>Set</label>
+		<description>Set</description>
+
+	</channel-type>
+
 	<channel-type id="onoff">
 		<item-type>Switch</item-type>
 		<label>On/Off</label>
 		<description>Switch on/off</description>
 	</channel-type>
+
 
 	<channel-type id="automode">
 		<item-type>Switch</item-type>
@@ -111,7 +186,66 @@
 		<item-type>Contact</item-type>
 		<label>State On/Off</label>
 		<description>Light on/off</description>
+		<state readOnly="true" />
 	</channel-type>
 
+	<channel-type id="lastMessage" advanced="true">
+		<item-type>DateTime</item-type>
+		<label>Last Message</label>
+		<description>Last Message emitted by the module</description>
+		<state readOnly="true" />
+	</channel-type>
 
+	<channel-type id="lastStatusStored" advanced="true">
+		<item-type>DateTime</item-type>
+		<label>Last Status Store</label>
+		<description>Last Status Store</description>
+		<state readOnly="true" />
+	</channel-type>
+
+	<channel-type id="humidity">
+		<item-type>Number</item-type>
+		<label>Humidity</label>
+		<description>Current humidity in %</description>
+		<category>Temperature</category>
+		<state readOnly="true" pattern="%d %%">
+		</state>
+	</channel-type>
+	<channel-type id="temperature">
+		<item-type>Number</item-type>
+		<label>Temperature</label>
+		<description>Current temperature</description>
+		<category>Temperature</category>
+		<state readOnly="true" pattern="%.0f">
+		</state>
+	</channel-type>
+	
+	<channel-type id="voltage">
+        <item-type>Number</item-type>
+        <label>V</label>
+        <description>Current Voltage</description>
+        <category>Energy</category>
+        <state readOnly="true" pattern="%.0f">
+        </state>
+    </channel-type>
+	<channel-type id="ampere">
+        <item-type>Number</item-type>
+        <label>A</label>
+        <description>Current Ampere</description>
+        <category>Energy</category>
+        <state readOnly="true" pattern="%.0f">
+        </state>
+    </channel-type>
+    
+    <channel-type id="power">
+        <item-type>Number</item-type>
+        <label>W</label>
+        <description>Current Power</description>
+        <category>Energy</category>
+        <state readOnly="true" pattern="%.0f">
+        </state>
+    </channel-type>
+    
+    
+	
 </thing:thing-descriptions>

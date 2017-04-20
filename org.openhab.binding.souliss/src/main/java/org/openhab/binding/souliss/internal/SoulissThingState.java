@@ -35,7 +35,12 @@ import org.slf4j.LoggerFactory;
  */
 public class SoulissThingState {
     static final Logger logger = LoggerFactory.getLogger(SoulissThingState.class);
-
+    // cercare di
+    // capire come
+    // recuperare la
+    // lista dei
+    // things ed
+    // inviargli gli aggiornamenti
     /**
      * The channel number under which the bulb is filed in the Mi-Light bridge.
      */

@@ -8,6 +8,10 @@
  */
 package org.openhab.binding.souliss.handler;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.eclipse.smarthome.core.library.types.DateTimeType;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.types.PrimitiveType;
@@ -41,13 +45,25 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
 
         void setState(PrimitiveType state);
 
-        PrimitiveType getState();
+        // PrimitiveType getState();
 
+        // DateTimeType getLastUpdateTime();
+
+        // void setLastUpdateTime(String string);
     }
+
+    Thing thing;
+
+    private int iSlot;
+    private int iNode;
+
+    private String timestamp;
+    private static Logger logger = LoggerFactory.getLogger(SoulissGenericTypical.class);
 
     public SoulissGenericTypical(Thing _thing) {
         super(_thing);
         thing = _thing;
+
         try {
             iNode = Integer.parseInt(_thing.getUID().toString().split(":")[2]
                     .split(SoulissBindingConstants.UUID_NODE_SLOT_SEPARATOR)[0]);
@@ -58,12 +74,6 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
             logger.debug("Item Definition Error. Use ex:'souliss:t11:nodeNumber-slotNumber'");
         }
     }
-
-    Thing thing;
-
-    private int iSlot;
-    private int iNode;
-    private static Logger logger = LoggerFactory.getLogger(SoulissGenericTypical.class);
 
     /**
      * @return the iSlot
@@ -91,4 +101,28 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
                 SoulissBindingNetworkParameters.IPAddressOnLAN, this.getNode(), this.getSlot(), command);
     }
 
+    public DateTimeType getLastUpdateTime() {
+        if (timestamp != null) {
+            return DateTimeType.valueOf(timestamp);
+        } else {
+            return null;
+        }
+    }
+
+    public void setUpdateTimeNow() {
+        timestamp = getTimestamp();
+
+    }
+
+    /**
+     * Create a time stamp as "yyyy-MM-dd'T'HH:mm:ssz"
+     *
+     * @return String timestamp
+     */
+    private static String getTimestamp() {
+        // Pattern : yyyy-MM-dd'T'HH:mm:ssz
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSz");
+        Date n = new Date();
+        return sdf.format(n.getTime());
+    }
 }

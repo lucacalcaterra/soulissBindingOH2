@@ -113,7 +113,6 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
         setGatewayDetected();
         SoulissCommonCommands.sendDBStructFrame(SoulissDatagramSocketFactory.getDatagram_for_broadcast(),
                 addr.getHostAddress());
-
     }
 
     /**

@@ -76,7 +76,17 @@
 
 		<channels>
 			<channel id="onoff" typeId="onoff" />
+			<channel id="lastStatusStored" typeId="lastStatusStored" />
 		</channels>
+
+		<config-description>
+			<parameter name="sleep" type="integer" min="13" max="1000">
+				<label>Sleep</label>
+				<description>Set sleep timer in cicles</description>
+				<required>false</required>
+				<default>20</default>
+			</parameter>
+		</config-description>
 	</thing-type>
 
 	<thing-type id="t12">
@@ -115,53 +125,53 @@
 			<channel id="stateOnOff" typeId="stateOnOff" />
 		</channels>
 	</thing-type>
-    
-    <thing-type id="t52">
-        <supported-bridge-type-refs>
-            <bridge-type-ref id="gateway" />
-        </supported-bridge-type-refs>
-        <label>T52</label>
-        <description>Temperature measure (-20, +50) °C</description>
 
-    </thing-type>
+	<thing-type id="t52">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="gateway" />
+		</supported-bridge-type-refs>
+		<label>T52</label>
+		<description>Temperature measure (-20, +50) °C</description>
 
-    <thing-type id="t53">
-        <supported-bridge-type-refs>
-            <bridge-type-ref id="gateway" />
-        </supported-bridge-type-refs>
-        <label>T53</label>
-        <description>Humidity measure (0, 100) %</description>
+	</thing-type>
 
-    </thing-type>
-    
-      <thing-type id="t55">
-        <supported-bridge-type-refs>
-            <bridge-type-ref id="gateway" />
-        </supported-bridge-type-refs>
-        <label>T55</label>
-        <description>Voltage (0, 400) V</description>
+	<thing-type id="t53">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="gateway" />
+		</supported-bridge-type-refs>
+		<label>T53</label>
+		<description>Humidity measure (0, 100) %</description>
 
-    </thing-type>
-    
-     <thing-type id="t56">
-        <supported-bridge-type-refs>
-            <bridge-type-ref id="gateway" />
-        </supported-bridge-type-refs>
-        <label>T56</label>
-        <description>Current (0, 25) A</description>
+	</thing-type>
 
-    </thing-type>
-    
-         <thing-type id="t57">
-        <supported-bridge-type-refs>
-            <bridge-type-ref id="gateway" />
-        </supported-bridge-type-refs>
-        <label>T57</label>
-        <description>Power (0, 6500) W</description>
+	<thing-type id="t55">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="gateway" />
+		</supported-bridge-type-refs>
+		<label>T55</label>
+		<description>Voltage (0, 400) V</description>
 
-    </thing-type>
-    
-    
+	</thing-type>
+
+	<thing-type id="t56">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="gateway" />
+		</supported-bridge-type-refs>
+		<label>T56</label>
+		<description>Current (0, 25) A</description>
+
+	</thing-type>
+
+	<thing-type id="t57">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="gateway" />
+		</supported-bridge-type-refs>
+		<label>T57</label>
+		<description>Power (0, 6500) W</description>
+
+	</thing-type>
+
+
 	<channel-type id="pulse" advanced="true">
 		<item-type>Switch</item-type>
 		<label>Set</label>
@@ -196,9 +206,9 @@
 		<state readOnly="true" />
 	</channel-type>
 
-	<channel-type id="lastStatusStored" advanced="true">
+	<channel-type id="lastStatusStored" advanced="false">
 		<item-type>DateTime</item-type>
-		<label>Last Status Store</label>
+		<label>Last Status Stored</label>
 		<description>Last Status Store</description>
 		<state readOnly="true" />
 	</channel-type>
@@ -216,36 +226,36 @@
 		<label>Temperature</label>
 		<description>Current temperature</description>
 		<category>Temperature</category>
-		<state readOnly="true" pattern="%.0f">
+		<state readOnly="true" pattern="%.1f °C">
 		</state>
 	</channel-type>
-	
+
 	<channel-type id="voltage">
-        <item-type>Number</item-type>
-        <label>V</label>
-        <description>Current Voltage</description>
-        <category>Energy</category>
-        <state readOnly="true" pattern="%.0f">
-        </state>
-    </channel-type>
+		<item-type>Number</item-type>
+		<label>V</label>
+		<description>Current Voltage</description>
+		<category>Energy</category>
+		<state readOnly="true" pattern="%.1f V">
+		</state>
+	</channel-type>
 	<channel-type id="ampere">
-        <item-type>Number</item-type>
-        <label>A</label>
-        <description>Current Ampere</description>
-        <category>Energy</category>
-        <state readOnly="true" pattern="%.0f">
-        </state>
-    </channel-type>
-    
-    <channel-type id="power">
-        <item-type>Number</item-type>
-        <label>W</label>
-        <description>Current Power</description>
-        <category>Energy</category>
-        <state readOnly="true" pattern="%.0f">
-        </state>
-    </channel-type>
-    
-    
-	
+		<item-type>Number</item-type>
+		<label>A</label>
+		<description>Current Ampere</description>
+		<category>Energy</category>
+		<state readOnly="true" pattern="%.1f A">
+		</state>
+	</channel-type>
+
+	<channel-type id="power">
+		<item-type>Number</item-type>
+		<label>W</label>
+		<description>Current Power</description>
+		<category>Energy</category>
+		<state readOnly="true" pattern="%d W">
+		</state>
+	</channel-type>
+
+
+
 </thing:thing-descriptions>

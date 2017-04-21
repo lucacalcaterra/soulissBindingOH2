@@ -62,10 +62,4 @@ public class SoulissT55Handler extends SoulissGenericTypical implements typicalC
         // TODO Auto-generated method stub
 
     }
-
-    @Override
-    public PrimitiveType getState() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }

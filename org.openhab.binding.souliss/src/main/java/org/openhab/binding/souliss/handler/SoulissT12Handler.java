@@ -63,9 +63,4 @@ public class SoulissT12Handler extends SoulissGenericTypical implements typicalC
 
     }
 
-    @Override
-    public PrimitiveType getState() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }

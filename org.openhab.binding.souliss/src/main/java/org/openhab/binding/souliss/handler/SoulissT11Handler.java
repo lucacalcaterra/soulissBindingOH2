@@ -42,6 +42,10 @@ public class SoulissT11Handler extends SoulissGenericTypical implements typicalC
             switch (channelUID.getId()) {
                 case SoulissBindingConstants.ONOFF_CHANNEL:
                     updateState(channelUID, T11State);
+                    break;
+                case SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL:
+                    updateState(channelUID, this.getLastUpdateTime());
+                    break;
             }
         } else {
             switch (channelUID.getId()) {
@@ -69,7 +73,8 @@ public class SoulissT11Handler extends SoulissGenericTypical implements typicalC
     public void initialize() {
         // TODO: Initialize the thing. If done set status to ONLINE to indicate proper working.
         // Long running initialization should be done asynchronously in background.
-        updateStatus(ThingStatus.UNKNOWN);
+
+        updateStatus(ThingStatus.ONLINE);
 
         // Note: When initialization can NOT be done set the status with more details for further
         // analysis. See also class ThingStatusDetail for all available status details.
@@ -80,16 +85,18 @@ public class SoulissT11Handler extends SoulissGenericTypical implements typicalC
     }
 
     @Override
-    public PrimitiveType getState() {
-        return this.T11State;
-    }
-
-    @Override
     public void setState(PrimitiveType _state) {
+
+        this.setUpdateTimeNow();
+        this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
+
         if (((OnOffType) _state) != this.T11State) {
+            updateStatus(ThingStatus.ONLINE);
             this.updateState(SoulissBindingConstants.ONOFF_CHANNEL, (OnOffType) _state);
+            this.updateThing(this.thing);
             this.T11State = (OnOffType) _state;
         }
 
     }
+
 }

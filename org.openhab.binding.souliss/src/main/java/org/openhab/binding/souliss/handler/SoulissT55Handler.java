@@ -10,9 +10,10 @@ package org.openhab.binding.souliss.handler;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
-import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.types.Command;
+import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
+import org.openhab.binding.souliss.handler.SoulissGenericTypical.typicalCommonMethods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +23,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Tonino Fazio - Initial contribution
  */
-public class SoulissT55Handler extends BaseThingHandler {
+public class SoulissT55Handler extends SoulissGenericTypical implements typicalCommonMethods {
 
     private Logger logger = LoggerFactory.getLogger(SoulissT55Handler.class);
 
@@ -54,5 +55,17 @@ public class SoulissT55Handler extends BaseThingHandler {
         // as expected. E.g.
         // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
         // "Can not access device as username and/or password are invalid");
+    }
+
+    @Override
+    public void setState(PrimitiveType state) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public PrimitiveType getState() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

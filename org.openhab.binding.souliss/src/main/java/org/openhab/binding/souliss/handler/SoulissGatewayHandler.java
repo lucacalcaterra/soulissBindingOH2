@@ -19,6 +19,7 @@ import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
+import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.souliss.SoulissBindingConstants;
@@ -208,11 +209,21 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
         // }
     }
 
+    /**
+     * The {@link gatewayDetected} not used here
+     *
+     * @author Tonino Fazio - Initial contribution
+     */
     @Override
     public void gatewayDetected(InetAddress addr, String id) {
 
     }
 
+    /**
+     * The {@link gatewayDetected} is used to notify that UDPServer decoded a Ping Response from gateway
+     *
+     * @author Tonino Fazio - Initial contribution
+     */
     @Override
     public void gatewayDetected() {
         updateStatus(ThingStatus.ONLINE);
@@ -302,7 +313,7 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
     }
 
     @Override
-    public Bridge getGateway() {
+    public ThingUID getGateway() {
         // TODO Auto-generated method stub
         return null;
     }

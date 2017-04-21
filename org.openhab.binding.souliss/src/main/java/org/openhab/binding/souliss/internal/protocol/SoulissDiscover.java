@@ -16,6 +16,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.souliss.internal.SoulissDatagramSocketFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,7 @@ public class SoulissDiscover extends Thread {
 
         void thingDetected(short typical, short node, short slot);
 
-        Bridge getGateway();
+        ThingUID getGateway();
     }
 
     private boolean willbeclosed = false;

@@ -244,7 +244,7 @@ public class SoulissBindingUDPDecoder {
                                     typicalState = OnOffType.OFF;
                                 }
                                 ((SoulissT11Handler) typ.getHandler()).setState(typicalState);
-                                cercare di capire come forzare un update
+                                 cercare di capire come forzare un update
                                 break;
                             case SoulissBindingConstants.T12:
                                 break;

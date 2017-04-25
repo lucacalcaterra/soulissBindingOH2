@@ -7,6 +7,9 @@
  */
 package org.openhab.binding.souliss.handler;
 
+import java.math.BigDecimal;
+
+import org.eclipse.smarthome.config.core.Configuration;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
@@ -27,12 +30,15 @@ import org.slf4j.LoggerFactory;
  * @author Tonino Fazio - Initial contribution
  */
 public class SoulissT11Handler extends SoulissGenericTypical implements typicalCommonMethods {
-
+    Configuration gwConfigurationMap;
     private Logger logger = LoggerFactory.getLogger(SoulissT11Handler.class);
-    OnOffType T11State = OnOffType.OFF;
+    OnOffType T1nState = OnOffType.OFF;
+    short xSleepTime = 0;
+    Thing thing;
 
-    public SoulissT11Handler(Thing thing) {
-        super(thing);
+    public SoulissT11Handler(Thing _thing) {
+        super(_thing);
+        thing = _thing;
     }
 
     @Override
@@ -41,7 +47,7 @@ public class SoulissT11Handler extends SoulissGenericTypical implements typicalC
         if (command instanceof RefreshType) {
             switch (channelUID.getId()) {
                 case SoulissBindingConstants.ONOFF_CHANNEL:
-                    updateState(channelUID, T11State);
+                    updateState(channelUID, T1nState);
                     break;
                 case SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL:
                     updateState(channelUID, this.getLastUpdateTime());
@@ -59,14 +65,18 @@ public class SoulissT11Handler extends SoulissGenericTypical implements typicalC
                     }
                     break;
 
+                case SoulissBindingConstants.SLEEP_CHANNEL:
+                    if (command instanceof OnOffType) {
+                        if (command.equals(OnOffType.ON)) {
+                            commandSEND((short) (SoulissBindingProtocolConstants.Souliss_T1n_Timed + xSleepTime));
+                            // set Off
+                            updateState(channelUID, OnOffType.OFF);
+                        }
+                    }
+                    break;
+
             }
         }
-        // TODO: handle command
-
-        // Note: if communication with thing fails for some reason,
-        // indicate that by setting the status with detail information
-        // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
-        // "Could not control device at IP address x.x.x.x");
     }
 
     @Override
@@ -76,6 +86,11 @@ public class SoulissT11Handler extends SoulissGenericTypical implements typicalC
 
         updateStatus(ThingStatus.ONLINE);
 
+        gwConfigurationMap = thing.getConfiguration();
+
+        if (gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL) != null) {
+            xSleepTime = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL)).shortValue();
+        }
         // Note: When initialization can NOT be done set the status with more details for further
         // analysis. See also class ThingStatusDetail for all available status details.
         // Add a description to give user information to understand why thing does not work
@@ -90,11 +105,14 @@ public class SoulissT11Handler extends SoulissGenericTypical implements typicalC
         this.setUpdateTimeNow();
         this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
 
-        if (((OnOffType) _state) != this.T11State) {
-            updateStatus(ThingStatus.ONLINE);
+        // if (thing.getThingTypeUID().equals(SoulissBindingConstants.T11_THING_TYPE)) {
+        updateState(SoulissBindingConstants.SLEEP_CHANNEL, OnOffType.OFF);
+        // }
+
+        if (((OnOffType) _state) != this.T1nState) {
             this.updateState(SoulissBindingConstants.ONOFF_CHANNEL, (OnOffType) _state);
             this.updateThing(this.thing);
-            this.T11State = (OnOffType) _state;
+            this.T1nState = (OnOffType) _state;
         }
 
     }

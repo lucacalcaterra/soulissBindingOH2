@@ -43,7 +43,7 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
      */
     public interface typicalCommonMethods {
 
-        void setState(PrimitiveType state);
+        void setState(PrimitiveType _state);
 
         // PrimitiveType getState();
 

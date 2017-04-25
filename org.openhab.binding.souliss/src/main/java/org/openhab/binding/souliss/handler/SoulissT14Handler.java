@@ -7,12 +7,14 @@
  */
 package org.openhab.binding.souliss.handler;
 
+import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.PrimitiveType;
+import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
+import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
 import org.openhab.binding.souliss.handler.SoulissGenericTypical.typicalCommonMethods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +28,7 @@ import org.slf4j.LoggerFactory;
 public class SoulissT14Handler extends SoulissGenericTypical implements typicalCommonMethods {
 
     private Logger logger = LoggerFactory.getLogger(SoulissT14Handler.class);
+    OnOffType T1nState = OnOffType.OFF;
 
     public SoulissT14Handler(Thing thing) {
         super(thing);
@@ -33,33 +36,43 @@ public class SoulissT14Handler extends SoulissGenericTypical implements typicalC
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-        if (channelUID.getId().equals(SoulissBindingConstants.ONOFF_CHANNEL)) {
-            // TODO: handle command
 
-            // Note: if communication with thing fails for some reason,
-            // indicate that by setting the status with detail information
-            // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
-            // "Could not control device at IP address x.x.x.x");
+        if (command instanceof RefreshType) {
+            switch (channelUID.getId()) {
+                case SoulissBindingConstants.PULSE_CHANNEL:
+                    updateState(channelUID, T1nState);
+                    break;
+                case SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL:
+                    updateState(channelUID, this.getLastUpdateTime());
+                    // set Off
+                    updateState(channelUID, OnOffType.OFF);
+                    break;
+            }
+        } else {
+            switch (channelUID.getId()) {
+                case SoulissBindingConstants.PULSE_CHANNEL:
+                    if (command instanceof OnOffType) {
+                        if (command.equals(OnOffType.ON)) {
+                            commandSEND(SoulissBindingProtocolConstants.Souliss_T1n_OnCmd);
+                        } else if (command.equals(OnOffType.OFF)) {
+                            commandSEND(SoulissBindingProtocolConstants.Souliss_T1n_OffCmd);
+                        }
+                    }
+                    break;
+            }
         }
     }
 
     @Override
-    public void initialize() {
-        // TODO: Initialize the thing. If done set status to ONLINE to indicate proper working.
-        // Long running initialization should be done asynchronously in background.
-        updateStatus(ThingStatus.UNKNOWN);
+    public void setState(PrimitiveType _state) {
+        this.setUpdateTimeNow();
+        this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
 
-        // Note: When initialization can NOT be done set the status with more details for further
-        // analysis. See also class ThingStatusDetail for all available status details.
-        // Add a description to give user information to understand why thing does not work
-        // as expected. E.g.
-        // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
-        // "Can not access device as username and/or password are invalid");
-    }
-
-    @Override
-    public void setState(PrimitiveType state) {
-        // TODO Auto-generated method stub
+        if (((OnOffType) _state) != this.T1nState) {
+            this.updateState(SoulissBindingConstants.PULSE_CHANNEL, (OnOffType) _state);
+            this.updateThing(this.thing);
+            this.T1nState = (OnOffType) _state;
+        }
 
     }
 }

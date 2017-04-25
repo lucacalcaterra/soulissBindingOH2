@@ -60,9 +60,27 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
     private ScheduledFuture<?> pingTimer;
     private ScheduledFuture<?> subscriptionTimer;
     private int subscriptionRefreshInterval;
+    private Bridge bridge;
 
-    public SoulissGatewayHandler(Bridge bridge) {
-        super(bridge);
+    public SoulissGatewayHandler(Bridge _bridge) {
+        super(_bridge);
+        bridge = _bridge;
+        // initialize();
+
+    }
+
+    @Override
+    public void handleCommand(ChannelUID channelUID, Command command) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void initialize() {
+        logger.debug("initializing server handler for thing {}", getThing());
+        // thingDiscoveryService = new ThingDiscoveryService(thing.getUID(), this);
+        // thingDiscoveryService.start(bundleContext);
+
         gwConfigurationMap = bridge.getConfiguration();
         SoulissBindingNetworkParameters.IPAddressOnLAN = (String) gwConfigurationMap
                 .get(SoulissBindingConstants.CONFIG_IP_ADDRESS);
@@ -109,22 +127,6 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
                     SoulissBindingUDPConstants.SOULISS_DEFAULT_NODE_INDEX);
 
         }
-
-        // initialize();
-
-    }
-
-    @Override
-    public void handleCommand(ChannelUID channelUID, Command command) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void initialize() {
-        logger.debug("initializing server handler for thing {}", getThing());
-        // thingDiscoveryService = new ThingDiscoveryService(thing.getUID(), this);
-        // thingDiscoveryService.start(bundleContext);
 
         datagramSocket = SoulissDatagramSocketFactory.getSocketDatagram();
         UDP_Server = new SoulissBindingUDPServerThread(datagramSocket, this);
@@ -296,14 +298,14 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
                 }
 
             }
-        }, pingRefreshInterval, pingRefreshInterval, TimeUnit.SECONDS);
+        }, 0, pingRefreshInterval, TimeUnit.SECONDS);
 
         subscriptionTimer = scheduler.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 sendSubscription();
             }
-        }, subscriptionRefreshInterval, subscriptionRefreshInterval, TimeUnit.MINUTES);
+        }, 0, subscriptionRefreshInterval, TimeUnit.MINUTES);
     }
 
     @Override

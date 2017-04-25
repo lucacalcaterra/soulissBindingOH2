@@ -76,15 +76,16 @@
 
 		<channels>
 			<channel id="onoff" typeId="onoff" />
+			<channel id="sleep" typeId="sleep" />
 			<channel id="lastStatusStored" typeId="lastStatusStored" />
 		</channels>
 
 		<config-description>
-			<parameter name="sleep" type="integer" min="13" max="1000">
+			<parameter name="sleep" type="integer" min="1" max="1000">
 				<label>Sleep</label>
 				<description>Set sleep timer in cicles</description>
 				<required>false</required>
-				<default>20</default>
+				<default>5</default>
 			</parameter>
 		</config-description>
 	</thing-type>
@@ -120,11 +121,23 @@
 		</supported-bridge-type-refs>
 		<label>T14</label>
 		<description>Pulse Digital Output</description>
-
 		<channels>
-			<channel id="stateOnOff" typeId="stateOnOff" />
+			<channel id="pulse" typeId="pulse" />
 		</channels>
 	</thing-type>
+
+<thing-type id="t51">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway" />
+        </supported-bridge-type-refs>
+        <label>T51</label>
+        <description>Floating Point Input</description>
+
+<channels>
+            <channel id="value" typeId="float"/>
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
+    </thing-type>
 
 	<thing-type id="t52">
 		<supported-bridge-type-refs>
@@ -133,6 +146,10 @@
 		<label>T52</label>
 		<description>Temperature measure (-20, +50) °C</description>
 
+<channels>
+            <channel id="value" typeId="temperature"/>
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
 	</thing-type>
 
 	<thing-type id="t53">
@@ -141,8 +158,23 @@
 		</supported-bridge-type-refs>
 		<label>T53</label>
 		<description>Humidity measure (0, 100) %</description>
-
+<channels>
+            <channel id="value" typeId="humidity"/>
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
 	</thing-type>
+
+    <thing-type id="t54">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway" />
+        </supported-bridge-type-refs>
+        <label>T53</label>
+        <description>Light Sensor (0, 40) kLux</description>
+<channels>
+            <channel id="value" typeId="voltage"/>
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
+    </thing-type>
 
 	<thing-type id="t55">
 		<supported-bridge-type-refs>
@@ -150,7 +182,10 @@
 		</supported-bridge-type-refs>
 		<label>T55</label>
 		<description>Voltage (0, 400) V</description>
-
+<channels>
+            <channel id="value" typeId="voltage"/>
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
 	</thing-type>
 
 	<thing-type id="t56">
@@ -159,7 +194,10 @@
 		</supported-bridge-type-refs>
 		<label>T56</label>
 		<description>Current (0, 25) A</description>
-
+<channels>
+            <channel id="value" typeId="ampere"/>
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
 	</thing-type>
 
 	<thing-type id="t57">
@@ -168,11 +206,25 @@
 		</supported-bridge-type-refs>
 		<label>T57</label>
 		<description>Power (0, 6500) W</description>
-
+<channels>
+            <channel id="value" typeId="power"/>
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
 	</thing-type>
 
+    <thing-type id="t58">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway" />
+        </supported-bridge-type-refs>
+        <label>T58</label>
+        <description>Pressure measure (0, 1500) hPa</description>
+<channels>
+            <channel id="value" typeId="power"/>
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
+    </thing-type>
 
-	<channel-type id="pulse" advanced="true">
+	<channel-type id="pulse">
 		<item-type>Switch</item-type>
 		<label>Set</label>
 		<description>Set</description>
@@ -184,6 +236,26 @@
 		<label>On/Off</label>
 		<description>Switch on/off</description>
 	</channel-type>
+	
+	 <channel-type id="sleep">
+        <item-type>Switch</item-type>
+        <label>Set On with timer</label>
+        <description>The output will be timed for nCYCLES of the Node associated timer</description>
+        
+    </channel-type>
+    
+    
+ <!--  <channel-type id="trigger-channel">
+    <kind>trigger</kind>
+    <label>Trigger Channel</label>
+    <event>
+      <options>
+        <option value="PRESSED">pressed</option>
+        <option value="RELEASED">released</option>
+        <option value="DOUBLE_PRESSED">double pressed</option>
+      </options>
+    </event>
+</channel-type> -->
 
 
 	<channel-type id="automode">
@@ -203,6 +275,7 @@
 		<item-type>DateTime</item-type>
 		<label>Last Message</label>
 		<description>Last Message emitted by the module</description>
+		<category>QualityOfService</category>
 		<state readOnly="true" />
 	</channel-type>
 
@@ -210,31 +283,66 @@
 		<item-type>DateTime</item-type>
 		<label>Last Status Stored</label>
 		<description>Last Status Store</description>
+		<category>QualityOfService</category>
 		<state readOnly="true" />
 	</channel-type>
+	
+	<channel-type id="float">
+        <item-type>Number</item-type>
+        <label>V</label>
+        <description>Floating Point Input</description>
+          <tags>
+      <tag>sensors</tag>
+    </tags>
+        <state readOnly="true" pattern="%.1f ">
+        </state>
+    </channel-type>
 
 	<channel-type id="humidity">
 		<item-type>Number</item-type>
 		<label>Humidity</label>
 		<description>Current humidity in %</description>
 		<category>Temperature</category>
+		  <tags>
+      <tag>sensors</tag>
+    </tags>
 		<state readOnly="true" pattern="%d %%">
 		</state>
 	</channel-type>
+	
+	
 	<channel-type id="temperature">
 		<item-type>Number</item-type>
 		<label>Temperature</label>
 		<description>Current temperature</description>
-		<category>Temperature</category>
+    	<category>Temperature</category>
+	<tags>
+      <tag>sensors</tag>
+    </tags>
+    
 		<state readOnly="true" pattern="%.1f °C">
 		</state>
 	</channel-type>
+
+<channel-type id="lux">
+        <item-type>Number</item-type>
+        <label>V</label>
+        <description>Lux</description>
+          <tags>
+      <tag>sensors</tag>
+    </tags>
+        <state readOnly="true" pattern="%.1f kLux">
+        </state>
+    </channel-type>
 
 	<channel-type id="voltage">
 		<item-type>Number</item-type>
 		<label>V</label>
 		<description>Current Voltage</description>
 		<category>Energy</category>
+		  <tags>
+      <tag>sensors</tag>
+    </tags>
 		<state readOnly="true" pattern="%.1f V">
 		</state>
 	</channel-type>
@@ -243,6 +351,9 @@
 		<label>A</label>
 		<description>Current Ampere</description>
 		<category>Energy</category>
+		  <tags>
+      <tag>sensors</tag>
+    </tags>
 		<state readOnly="true" pattern="%.1f A">
 		</state>
 	</channel-type>
@@ -252,10 +363,23 @@
 		<label>W</label>
 		<description>Current Power</description>
 		<category>Energy</category>
+		  <tags>
+      <tag>sensors</tag>
+    </tags>
 		<state readOnly="true" pattern="%d W">
 		</state>
 	</channel-type>
-
+   
+    <channel-type id="pressure">
+        <item-type>Number</item-type>
+        <label>V</label>
+        <description>Pressure</description>
+          <tags>
+      <tag>sensors</tag>
+    </tags>
+        <state readOnly="true" pattern="%.1f hPa">
+        </state>
+    </channel-type>
 
 
 </thing:thing-descriptions>

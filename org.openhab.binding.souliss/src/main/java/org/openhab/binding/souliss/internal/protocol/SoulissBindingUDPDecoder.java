@@ -14,6 +14,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.openhab.binding.souliss.SoulissBindingConstants;
@@ -21,6 +22,8 @@ import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
 import org.openhab.binding.souliss.SoulissBindingUDPConstants;
 import org.openhab.binding.souliss.handler.SoulissGenericTypical;
 import org.openhab.binding.souliss.handler.SoulissT11Handler;
+import org.openhab.binding.souliss.handler.SoulissT14Handler;
+import org.openhab.binding.souliss.handler.SoulissT5nHandler;
 import org.openhab.binding.souliss.internal.protocol.SoulissDiscover.DiscoverResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -232,12 +235,13 @@ public class SoulissBindingUDPDecoder {
                             && ((SoulissGenericTypical) typ.getHandler()).getNode() == tgtnode) {
                         // ...now check slot
                         int slot = ((SoulissGenericTypical) typ.getHandler()).getSlot();
+                        // get typical value
                         short sVal = getByteAtSlot(mac, slot);
-
+                        OnOffType typicalState = null;
                         // update Txx
                         switch (sUID_Array[1]) {
                             case SoulissBindingConstants.T11:
-                                OnOffType typicalState = null;
+                                typicalState = null;
                                 if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil) {
                                     typicalState = OnOffType.ON;
                                 } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil) {
@@ -246,19 +250,31 @@ public class SoulissBindingUDPDecoder {
                                 ((SoulissT11Handler) typ.getHandler()).setState(typicalState);
                                 // cercare di capire come forzare un update
                                 break;
+
+                            case SoulissBindingConstants.T14:
+                                typicalState = null;
+                                if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil) {
+                                    typicalState = OnOffType.ON;
+                                } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil) {
+                                    typicalState = OnOffType.OFF;
+                                }
+                                ((SoulissT14Handler) typ.getHandler()).setState(typicalState);
+                                // cercare di capire come forzare un update
+                                break;
                             case SoulissBindingConstants.T12:
                                 break;
                             case SoulissBindingConstants.T13:
                                 break;
-                            case SoulissBindingConstants.T14:
-                                break;
+                            case SoulissBindingConstants.T51:
                             case SoulissBindingConstants.T52:
-                                break;
                             case SoulissBindingConstants.T53:
-                                break;
+                            case SoulissBindingConstants.T54:
                             case SoulissBindingConstants.T55:
-                                break;
+                            case SoulissBindingConstants.T56:
                             case SoulissBindingConstants.T57:
+                            case SoulissBindingConstants.T58:
+                                ((SoulissT5nHandler) typ.getHandler())
+                                        .setState(DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
                                 break;
 
                         }

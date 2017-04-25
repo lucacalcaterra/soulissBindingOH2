@@ -17,16 +17,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link SoulissT57Handler} is responsible for handling commands, which are
+ * The {@link SoulissT58Handler} is responsible for handling commands, which are
  * sent to one of the channels.
  *
  * @author Tonino Fazio - Initial contribution
  */
-public class SoulissT57Handler extends SoulissT5nHandler implements typicalCommonMethods {
+public class SoulissT58Handler extends SoulissT5nHandler implements typicalCommonMethods {
 
-    private Logger logger = LoggerFactory.getLogger(SoulissT57Handler.class);
+    private Logger logger = LoggerFactory.getLogger(SoulissT58Handler.class);
 
-    public SoulissT57Handler(Thing thing) {
+    public SoulissT58Handler(Thing thing) {
         super(thing);
     }
 

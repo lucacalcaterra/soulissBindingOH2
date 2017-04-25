@@ -36,33 +36,43 @@ public class SoulissBindingConstants {
     public final static String T12 = "t12";
     public final static String T13 = "t13";
     public final static String T14 = "t14";
+    public final static String T51 = "t51";
     public final static String T52 = "t52";
     public final static String T53 = "t53";
+    public final static String T54 = "t54";
     public final static String T55 = "t55";
     public final static String T56 = "t56";
     public final static String T57 = "t57";
+    public final static String T58 = "t58";
 
     public final static ThingTypeUID T11_THING_TYPE = new ThingTypeUID(BINDING_ID, T11);
     public final static ThingTypeUID T12_THING_TYPE = new ThingTypeUID(BINDING_ID, T12);
     public final static ThingTypeUID T13_THING_TYPE = new ThingTypeUID(BINDING_ID, T13);
     public final static ThingTypeUID T14_THING_TYPE = new ThingTypeUID(BINDING_ID, T14);
+    public final static ThingTypeUID T51_THING_TYPE = new ThingTypeUID(BINDING_ID, T51);
     public final static ThingTypeUID T52_THING_TYPE = new ThingTypeUID(BINDING_ID, T52);
     public final static ThingTypeUID T53_THING_TYPE = new ThingTypeUID(BINDING_ID, T53);
+    public final static ThingTypeUID T54_THING_TYPE = new ThingTypeUID(BINDING_ID, T54);
     public final static ThingTypeUID T55_THING_TYPE = new ThingTypeUID(BINDING_ID, T55);
     public final static ThingTypeUID T56_THING_TYPE = new ThingTypeUID(BINDING_ID, T56);
     public final static ThingTypeUID T57_THING_TYPE = new ThingTypeUID(BINDING_ID, T57);
+    public final static ThingTypeUID T58_THING_TYPE = new ThingTypeUID(BINDING_ID, T58);
 
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Sets.newHashSet(GATEWAY_THING_TYPE,
-            T11_THING_TYPE, T12_THING_TYPE, T13_THING_TYPE, T14_THING_TYPE, T52_THING_TYPE, T53_THING_TYPE,
-            T55_THING_TYPE, T56_THING_TYPE, T57_THING_TYPE);
+            T11_THING_TYPE, T12_THING_TYPE, T13_THING_TYPE, T14_THING_TYPE, T51_THING_TYPE, T52_THING_TYPE,
+            T53_THING_TYPE, T54_THING_TYPE, T55_THING_TYPE, T56_THING_TYPE, T57_THING_TYPE, T58_THING_TYPE);
 
     // List of all Channel ids
     public final static String ONOFF_CHANNEL = "onoff";
-
+    public final static String PULSE_CHANNEL = "pulse";
+    public final static String SLEEP_CHANNEL = "sleep";
     public final static String AUTOMODE_CHANNEL = "automode";
     public final static String STATEONOFF_CHANNEL = "stateOnOff";
     public final static String LASTMESSAGE_CHANNEL = "lastMessage";
     public final static String LASTSTATUSSTORED_CHANNEL = "lastStatusStored";
+
+    public final static String T5n_VALUE_CHANNEL = "value";
+    public final static String FLOATING_POINT_CHANNEL = "float";
     public final static String HUMIDITY_CHANNEL = "humidity";
     public final static String TEMPERATURE_CHANNEL = "temperature";
     public final static String AMPERE_CHANNEL = "ampere";

@@ -96,10 +96,10 @@
 		</supported-bridge-type-refs>
 		<label>T12</label>
 		<description>Simple Light with Auto Mode</description>
-
 		<channels>
 			<channel id="onoff" typeId="onoff" />
-			<channel id="automode" typeId="automode" />
+			<channel id="automode" typeId="automode"/>
+			<channel id="lastStatusStored" typeId="lastStatusStored" />
 		</channels>
 	</thing-type>
 
@@ -112,6 +112,7 @@
 
 		<channels>
 			<channel id="stateOnOff" typeId="stateOnOff" />
+			<channel id="lastStatusStored" typeId="lastStatusStored" />
 		</channels>
 	</thing-type>
 
@@ -258,11 +259,11 @@
 </channel-type> -->
 
 
-	<channel-type id="automode">
+	<channel-type id="automode" >
 		<item-type>Switch</item-type>
 		<label>On/Off Auto Mode</label>
 		<description>Switch on/off</description>
-	</channel-type>
+</channel-type>
 
 	<channel-type id="stateOnOff">
 		<item-type>Contact</item-type>

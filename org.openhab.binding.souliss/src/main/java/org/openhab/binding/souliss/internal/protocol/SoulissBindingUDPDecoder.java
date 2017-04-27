@@ -22,6 +22,8 @@ import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
 import org.openhab.binding.souliss.SoulissBindingUDPConstants;
 import org.openhab.binding.souliss.handler.SoulissGenericTypical;
 import org.openhab.binding.souliss.handler.SoulissT11Handler;
+import org.openhab.binding.souliss.handler.SoulissT12Handler;
+import org.openhab.binding.souliss.handler.SoulissT13Handler;
 import org.openhab.binding.souliss.handler.SoulissT14Handler;
 import org.openhab.binding.souliss.handler.SoulissT5nHandler;
 import org.openhab.binding.souliss.internal.protocol.SoulissDiscover.DiscoverResult;
@@ -239,201 +241,72 @@ public class SoulissBindingUDPDecoder {
                         short sVal = getByteAtSlot(mac, slot);
                         OnOffType typicalState = null;
                         // update Txx
-                        switch (sUID_Array[1]) {
-                            case SoulissBindingConstants.T11:
-                                typicalState = null;
-                                if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil) {
-                                    typicalState = OnOffType.ON;
-                                } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil) {
-                                    typicalState = OnOffType.OFF;
-                                }
-                                ((SoulissT11Handler) typ.getHandler()).setState(typicalState);
-                                // cercare di capire come forzare un update
-                                break;
+                        try {
+                            switch (sUID_Array[1]) {
+                                case SoulissBindingConstants.T11:
+                                    typicalState = getOHStateFromSoulissVal(sVal);
+                                    ((SoulissT11Handler) typ.getHandler()).setState(typicalState);
+                                    // cercare di capire come forzare un update
+                                    break;
+                                case SoulissBindingConstants.T12:
+                                    // public static final short Souliss_T1n_OnCoil = 0x01;
+                                    // public static final short Souliss_T1n_OffCoil = 0x00;
+                                    // public static final short Souliss_T1n_OnCoil_Auto = 0xF1;
+                                    // public static final short Souliss_T1n_OffCoil_Auto = 0xF0;
+                                    if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil_Auto) {
+                                        ((SoulissT12Handler) typ.getHandler()).setState(OnOffType.ON);
+                                        ((SoulissT12Handler) typ.getHandler()).setState_Automode(OnOffType.ON);
+                                    } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil_Auto) {
+                                        ((SoulissT12Handler) typ.getHandler()).setState(OnOffType.OFF);
+                                        ((SoulissT12Handler) typ.getHandler()).setState_Automode(OnOffType.ON);
 
-                            case SoulissBindingConstants.T14:
-                                typicalState = null;
-                                if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil) {
-                                    typicalState = OnOffType.ON;
-                                } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil) {
-                                    typicalState = OnOffType.OFF;
-                                }
-                                ((SoulissT14Handler) typ.getHandler()).setState(typicalState);
-                                // cercare di capire come forzare un update
-                                break;
-                            case SoulissBindingConstants.T12:
-                                break;
-                            case SoulissBindingConstants.T13:
-                                break;
-                            case SoulissBindingConstants.T51:
-                            case SoulissBindingConstants.T52:
-                            case SoulissBindingConstants.T53:
-                            case SoulissBindingConstants.T54:
-                            case SoulissBindingConstants.T55:
-                            case SoulissBindingConstants.T56:
-                            case SoulissBindingConstants.T57:
-                            case SoulissBindingConstants.T58:
-                                ((SoulissT5nHandler) typ.getHandler())
-                                        .setState(DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
-                                break;
+                                    } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil) {
+                                        ((SoulissT12Handler) typ.getHandler()).setState(OnOffType.ON);
+                                        ((SoulissT12Handler) typ.getHandler()).setState_Automode(OnOffType.OFF);
+                                    } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil) {
+                                        ((SoulissT12Handler) typ.getHandler()).setState(OnOffType.OFF);
+                                        ((SoulissT12Handler) typ.getHandler()).setState_Automode(OnOffType.OFF);
+                                    }
+                                    break;
+                                case SoulissBindingConstants.T13:
+                                    typicalState = getOHStateFromSoulissVal(sVal);
+                                    ((SoulissT13Handler) typ.getHandler()).setState(typicalState);
+                                    break;
+                                case SoulissBindingConstants.T14:
+                                    typicalState = getOHStateFromSoulissVal(sVal);
+                                    ((SoulissT14Handler) typ.getHandler()).setState(typicalState);
+                                    break;
 
+                                case SoulissBindingConstants.T51:
+                                case SoulissBindingConstants.T52:
+                                case SoulissBindingConstants.T53:
+                                case SoulissBindingConstants.T54:
+                                case SoulissBindingConstants.T55:
+                                case SoulissBindingConstants.T56:
+                                case SoulissBindingConstants.T57:
+                                case SoulissBindingConstants.T58:
+                                    ((SoulissT5nHandler) typ.getHandler())
+                                            .setState(DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
+                                    break;
+
+                            }
+                        } catch (ClassCastException ex) {
+                            logger.debug(ex.getMessage());
                         }
 
                     }
                 }
-
             }
-
         }
-        // SoulissThingState SoulisTState = new SoulissThingState();
+    }
 
-        // // QUI. AGGIORNAMENTO DEL TIMESTAMP PER OGNI NODO. DA FARE USANDO NODI
-        // // FITTIZI
-        // SoulissHandlerFactory sHFactory = new org.openhab.binding.souliss.internal.SoulissHandlerFactory();
-        // if (sHFactory.supportsThingType(SoulissBindingConstants.GATEWAY_THING_TYPE)) {
-        //
-        // }
-
-        // SoulissTServiceUpdater.updateTIMESTAMP(soulissTypicalsRecipients,
-        // tgtnode);
-        // // sfoglio hashtable e scelgo tipici del nodo indicato nel frame
-        // // leggo valore tipico in base allo slot
-        // synchronized (this) {
-        // Iterator<Entry<String, SoulissGenericTypical>> iteratorTypicals = soulissTypicalsRecipients
-        // .getIterator();
-        // while (iteratorTypicals.hasNext()) {
-        // SoulissGenericTypical typ = iteratorTypicals.next().getValue();
-        // // se il tipico estratto appartiene al nodo che il frame deve
-        // // aggiornare...
-        // bDecoded_forLOG = false;
-        // if (typ.getSoulissNodeID() == tgtnode) {
-        //
-        // // ...allora controllo lo slot
-        // int slot = typ.getSlot();
-        // // ...ed aggiorno lo stato in base al tipo
-        // int iNumBytes = 0;
-        //
-        // try {
-        // String sHex = Integer.toHexString(typ.getType());
-        // String sRes = SoulissNetworkParameter
-        // .getPropTypicalBytes(sHex.toUpperCase());
-        // if (sRes != null)
-        // iNumBytes = Integer.parseInt(sRes);
-        // } catch (NumberFormatException e) {
-        // e.printStackTrace();
-        // iNumBytes = 0;
-        // }
-        // float val = 0;
-        // // ***** T1A *****
-        // if (typ.getType() == 0x1A) {
-        // short sVal = getByteAtSlot(mac, slot);
-        // ((SoulissT1A) typ).setState(sVal);
-        // bDecoded_forLOG = true;
-        // // ***** T19 *****
-        // } else if (typ.getType() == 0x19) {
-        // // set value of T19 at number of second slot
-        // short sVal = getByteAtSlot(mac, slot + 1);
-        // typ.setState(sVal);
-        // bDecoded_forLOG = true;
-        // } else if (iNumBytes == 1) {
-        // // caso valori digitali
-        // val = getByteAtSlot(mac, slot);
-        // typ.setState(val);
-        // bDecoded_forLOG = true;
-        // } else if (iNumBytes == 2) {
-        // // caso valori float
-        // val = getFloatAtSlot(mac, slot);
-        // typ.setState(val);
-        // bDecoded_forLOG = true;
-        // } else if (iNumBytes == 4) {
-        // // ***** T16 RGB *****
-        // val = getByteAtSlot(mac, slot);
-        // typ.setState(val);
-        // ((SoulissT16) typ).setStateRED(getByteAtSlot(mac,
-        // slot + 1));
-        // ((SoulissT16) typ).setStateGREEN(getByteAtSlot(mac,
-        // slot + 2));
-        // ((SoulissT16) typ).setStateBLU(getByteAtSlot(mac,
-        // slot + 3));
-        // bDecoded_forLOG = true;
-        // } else if (iNumBytes == 5) {
-        // // ***** T31 *****
-        // // *******************
-        // // SLOT 0: Control State
-        // short sVal = getByteAtSlot(mac, slot);
-        // ((SoulissT31) typ).setRawCommandState(sVal);
-        // /*
-        // * The control state bit meaning follow as:
-        // * BIT 0 Not used
-        // * BIT 1 (0 Heating OFF , 1 Heating ON)
-        // * BIT 2 (0 Cooling OFF , 1 Cooling ON)
-        // * BIT 3 (0 Fan 1 OFF , 1 Fan 1 ON)
-        // * BIT 4 (0 Fan 2 OFF , 1 Fan 2 ON)
-        // * BIT 5 (0 Fan 3 OFF , 1 Fan 3 ON)
-        // * BIT 6 (0 Manual Mode , 1 Automatic Mode for Fan)
-        // * BIT 7 (0 Heating Mode, 1 Cooling Mode)
-        // */
-        //
-        // ((SoulissT31) typ).power.setState(getBitState(sVal, 0));
-        // ((SoulissT31) typ).heating.setState(getBitState(sVal, 1));
-        // ((SoulissT31) typ).cooling.setState(getBitState(sVal, 2));
-        // ((SoulissT31) typ).fanLow.setState(getBitState(sVal, 3));
-        // ((SoulissT31) typ).fanMed.setState(getBitState(sVal, 4));
-        // ((SoulissT31) typ).fanHigh.setState(getBitState(sVal, 5));
-        // ((SoulissT31) typ).fanAutoMode.setState(getBitState(sVal, 6));
-        // ((SoulissT31) typ).heatingCoolingModeValue.setState(getBitState(sVal, 7));
-        //
-        //
-        // // SLOT 1-2: Temperature Measured Value
-        // val = getFloatAtSlot(mac, slot + 1);
-        // ((SoulissT31) typ).setMeasuredValue(val);
-        // // SLOT 3-4: Temperature Setpoint Value
-        // val = getFloatAtSlot(mac, slot + 3);
-        // ((SoulissT31) typ).setSetpointValue(val);
-        // bDecoded_forLOG = true;
-        // }
-        // // non esegue per healt e timestamp, perchÃ¨ il LOG viene
-        // // inserito in un altro punto del codice
-        // if (typ.getType() != 152 && typ.getType() != 153)
-        // if (iNumBytes == 4)
-        // // RGB Log
-        // logger.debug(
-        // "decodeStateRequest: {} ({}) = {}. RGB= {}, {}, {}",
-        // typ.getName(),
-        // Short.valueOf(typ.getType()),
-        // ((SoulissT16) typ).getState(),
-        // ((SoulissT16) typ).getStateRED(),
-        // ((SoulissT16) typ).getStateGREEN(),
-        // ((SoulissT16) typ).getStateBLU());
-        // else if (iNumBytes == 5) {
-        // // T31 Thermostat
-        // logger.debug(
-        // "decodeStateRequest: {} ({}). Thermostat= {}, Temp.Measured= {}, Temp.SetPoint= {}",
-        // typ.getName(),
-        // Short.valueOf(typ.getType()),
-        // ((SoulissT31) typ).getRawCommandState(),
-        // ((SoulissT31) typ)
-        // .getTemperatureMeasuredValue(),
-        // ((SoulissT31) typ).getSetpointValue());
-        //
-        // } else if (bDecoded_forLOG) {
-        // if (typ.getType() == 0x1A) {
-        // logger.debug(
-        // "decodeStateRequest: {} (0x{}) = {}",
-        // typ.getName(),
-        // Integer.toHexString(typ.getType()),
-        // Integer.toBinaryString(((SoulissT1A) typ)
-        // .getRawState()));
-        // } else
-        // logger.debug(
-        // "decodeStateRequest: {} (0x{}) = {}",
-        // typ.getName(),
-        // Integer.toHexString(typ.getType()),
-        // Float.valueOf(val));
-        // }
-        // }
-        // }
-        // }
+    private OnOffType getOHStateFromSoulissVal(short sVal) {
+        if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil) {
+            return OnOffType.ON;
+        } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil) {
+            return OnOffType.OFF;
+        }
+        return null;
     }
 
     private Short getByteAtSlot(ArrayList<Short> mac, int slot) {

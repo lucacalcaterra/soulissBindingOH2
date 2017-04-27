@@ -125,4 +125,9 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
         Date n = new Date();
         return sdf.format(n.getTime());
     }
+
+    @Override
+    public void thingUpdated(Thing _thing) {
+        this.thing = _thing;
+    }
 }

@@ -7,9 +7,9 @@
  */
 package org.openhab.binding.souliss.handler;
 
+import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
@@ -26,39 +26,26 @@ import org.slf4j.LoggerFactory;
 public class SoulissT13Handler extends SoulissGenericTypical implements typicalCommonMethods {
 
     private Logger logger = LoggerFactory.getLogger(SoulissT13Handler.class);
+    OnOffType T1nState = OnOffType.OFF;
 
     public SoulissT13Handler(Thing thing) {
         super(thing);
     }
 
     @Override
-    public void handleCommand(ChannelUID channelUID, Command command) {
-        if (channelUID.getId().equals(SoulissBindingConstants.ONOFF_CHANNEL)) {
-            // TODO: handle command
-
-            // Note: if communication with thing fails for some reason,
-            // indicate that by setting the status with detail information
-            // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
-            // "Could not control device at IP address x.x.x.x");
+    public void setState(PrimitiveType _state) {
+        this.setUpdateTimeNow();
+        this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
+        if (((OnOffType) _state) != this.T1nState) {
+            this.updateState(SoulissBindingConstants.STATEONOFF_CHANNEL, (OnOffType) _state);
+            this.updateThing(this.thing);
+            this.T1nState = (OnOffType) _state;
         }
+
     }
 
     @Override
-    public void initialize() {
-        // TODO: Initialize the thing. If done set status to ONLINE to indicate proper working.
-        // Long running initialization should be done asynchronously in background.
-        updateStatus(ThingStatus.UNKNOWN);
-
-        // Note: When initialization can NOT be done set the status with more details for further
-        // analysis. See also class ThingStatusDetail for all available status details.
-        // Add a description to give user information to understand why thing does not work
-        // as expected. E.g.
-        // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
-        // "Can not access device as username and/or password are invalid");
-    }
-
-    @Override
-    public void setState(PrimitiveType state) {
+    public void handleCommand(ChannelUID channelUID, Command command) {
         // TODO Auto-generated method stub
 
     }

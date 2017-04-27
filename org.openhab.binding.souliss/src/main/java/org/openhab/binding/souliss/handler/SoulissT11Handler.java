@@ -34,7 +34,7 @@ public class SoulissT11Handler extends SoulissGenericTypical implements typicalC
     private Logger logger = LoggerFactory.getLogger(SoulissT11Handler.class);
     OnOffType T1nState = OnOffType.OFF;
     short xSleepTime = 0;
-    Thing thing;
+    // Thing thing;
 
     public SoulissT11Handler(Thing _thing) {
         super(_thing);
@@ -50,7 +50,9 @@ public class SoulissT11Handler extends SoulissGenericTypical implements typicalC
                     updateState(channelUID, T1nState);
                     break;
                 case SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL:
-                    updateState(channelUID, this.getLastUpdateTime());
+                    if (this.getLastUpdateTime() != null) {
+                        updateState(channelUID, this.getLastUpdateTime());
+                    }
                     break;
             }
         } else {

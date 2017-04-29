@@ -16,6 +16,7 @@ import java.util.Iterator;
 
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
+import org.eclipse.smarthome.core.library.types.UpDownType;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
@@ -25,6 +26,7 @@ import org.openhab.binding.souliss.handler.SoulissT11Handler;
 import org.openhab.binding.souliss.handler.SoulissT12Handler;
 import org.openhab.binding.souliss.handler.SoulissT13Handler;
 import org.openhab.binding.souliss.handler.SoulissT14Handler;
+import org.openhab.binding.souliss.handler.SoulissT22Handler;
 import org.openhab.binding.souliss.handler.SoulissT5nHandler;
 import org.openhab.binding.souliss.internal.protocol.SoulissDiscover.DiscoverResult;
 import org.slf4j.Logger;
@@ -275,6 +277,50 @@ public class SoulissBindingUDPDecoder {
                                 case SoulissBindingConstants.T14:
                                     typicalState = getOHStateFromSoulissVal(sVal);
                                     ((SoulissT14Handler) typ.getHandler()).setState(typicalState);
+                                    break;
+                                case SoulissBindingConstants.T21:
+                                case SoulissBindingConstants.T22:
+                                    if (sVal == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Open) {
+                                        ((SoulissT22Handler) typ.getHandler()).setState(UpDownType.UP);
+                                        ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                                SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_OPENING);
+                                    } else if (sVal == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Close) {
+                                        ((SoulissT22Handler) typ.getHandler()).setState(UpDownType.DOWN);
+                                        ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                                SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_CLOSING);
+                                    }
+                                    if (sVal == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Stop
+                                            || sVal == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Off
+                                            || sVal == SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Close
+                                            || sVal == SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Open
+                                            || sVal == SoulissBindingProtocolConstants.Souliss_T2n_Timer_Off) {
+                                        // ((SoulissT22Handler) typ.getHandler()).setState(StopMoveType.STOP);
+
+                                        switch (sVal) {
+                                            case SoulissBindingProtocolConstants.Souliss_T2n_Coil_Stop:
+                                                ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                                        SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_STOP);
+                                                break;
+                                            case SoulissBindingProtocolConstants.Souliss_T2n_Coil_Off:
+                                                ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                                        SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_OPENING);
+                                                break;
+                                            case SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Close:
+                                                ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                                        SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_LIMITSWITCH_CLOSE);
+                                                break;
+                                            case SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Open:
+                                                ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                                        SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_LIMITSWITCH_OPEN);
+                                                break;
+                                        }
+                                        // <option value="opening">Closing</option>
+                                        // <option value="stop">Stop</option>
+                                        // <option value="closing">Closing</option>
+                                        // <option value="limSwitch_close">Limit Switch Close</option>
+                                        // <option value="LimSwitch_close">Limit Switch Close</option>
+                                        // <option value="timer_off">Timer Off</option>
+                                    }
                                     break;
 
                                 case SoulissBindingConstants.T51:

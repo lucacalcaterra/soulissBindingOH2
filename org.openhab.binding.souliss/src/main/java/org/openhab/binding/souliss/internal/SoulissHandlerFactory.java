@@ -56,7 +56,7 @@ public class SoulissHandlerFactory extends BaseThingHandlerFactory {
             return new SoulissT13Handler(thing);
         } else if (thingTypeUID.equals(T14_THING_TYPE)) {
             return new SoulissT14Handler(thing);
-        } else if (thingTypeUID.equals(T22_THING_TYPE)) {
+        } else if (thingTypeUID.equals(T21_THING_TYPE) || (thingTypeUID.equals(T22_THING_TYPE))) {
             return new SoulissT22Handler(thing);
         } else if (thingTypeUID.equals(T52_THING_TYPE)) {
             return new SoulissT52Handler(thing);

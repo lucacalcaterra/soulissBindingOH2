@@ -127,12 +127,25 @@
 		</channels>
 	</thing-type>
 
+ <thing-type id="t21">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway" />
+        </supported-bridge-type-refs>
+        <label>T21</label>
+        <description>Motorized devices with limit switches</description>
+        <channels>
+            <channel id="rollershutter" typeId="rollershutter" />
+            <channel id="rollershutter_state" typeId="rollershutter_state" />
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
+    </thing-type>
+    
     <thing-type id="t22">
         <supported-bridge-type-refs>
             <bridge-type-ref id="gateway" />
         </supported-bridge-type-refs>
         <label>T22</label>
-        <description>Simple Light with Auto Mode</description>
+        <description>Motorized devices with limit switches and middle position</description>
         <channels>
             <channel id="rollershutter" typeId="rollershutter" />
             <channel id="rollershutter_state" typeId="rollershutter_state" />

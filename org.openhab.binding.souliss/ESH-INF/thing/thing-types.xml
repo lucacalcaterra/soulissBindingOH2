@@ -28,17 +28,13 @@
 			</parameter>
 			<parameter name="ID" type="text" required="false">
 				<label>Bridge ID</label>
-				<description>Sicuramente non servirà - The mac address in upper case letters without delimiter for Version 3+ bridges. Leave empty for Version 1/2 devices.
-                This is used to check if the given IP corresponds to the right device. The gateway is set offline if the device
-                does not respond with the correct Bride ID and a re-detection is started. Useful for DHCP environments where
-                IPs may change over time, after power outage etc.
+				<description>Free Gateway ID String
                 </description>
 				<advanced>true</advanced>
 			</parameter>
 			<parameter name="PING_INTERVAL" type="integer" min="1" max="300">
 				<label>Ping interval</label>
-				<description>Interval in seconds to check for device presence.
-                </description>
+				<description>Interval in seconds to check for device presence.</description>
 				<default>30</default>
 				<advanced>true</advanced>
 			</parameter>
@@ -134,7 +130,7 @@
         <label>T21</label>
         <description>Motorized devices with limit switches</description>
         <channels>
-            <channel id="rollershutter" typeId="rollershutter" />
+            <channel id="onoff" typeId="onoff" />
             <channel id="rollershutter_state" typeId="rollershutter_state" />
             <channel id="lastStatusStored" typeId="lastStatusStored" />
         </channels>

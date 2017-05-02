@@ -190,6 +190,8 @@ public class SoulissBindingProtocolConstants {
     public static final short Souliss_T2n_CloseCmd = 0x01;
     public static final short Souliss_T2n_OpenCmd = 0x02;
     public static final short Souliss_T2n_StopCmd = 0x04;
+    public static final short Souliss_T2n_CloseCmd_Local = 0x12; // Close Command (only from local pushbutton)
+    public static final short Souliss_T2n_OpenCmd_Local = 0x10; // Open Command (only from local pushbutton)
     public static final short Souliss_T2n_ToogleCmd = 0x08;
     public static final short Souliss_T2n_RstCmd = 0x00;
     public static final short Souliss_T2n_Timer_Val = 0x1F;

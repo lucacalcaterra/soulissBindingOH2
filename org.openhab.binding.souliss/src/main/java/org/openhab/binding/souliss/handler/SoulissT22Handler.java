@@ -7,6 +7,7 @@
  */
 package org.openhab.binding.souliss.handler;
 
+import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.StopMoveType;
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.library.types.UpDownType;
@@ -63,7 +64,15 @@ public class SoulissT22Handler extends SoulissGenericTypical implements typicalC
                             commandSEND(SoulissBindingProtocolConstants.Souliss_T2n_StopCmd);
                         }
                     }
-
+                    break;
+                case SoulissBindingConstants.ONOFF_CHANNEL:
+                    if (command instanceof OnOffType) {
+                        if (command.equals(OnOffType.ON)) {
+                            commandSEND(SoulissBindingProtocolConstants.Souliss_T2n_OpenCmd_Local);
+                        } else if (command.equals(OnOffType.OFF)) {
+                            commandSEND(SoulissBindingProtocolConstants.Souliss_T2n_CloseCmd_Local);
+                        }
+                    }
                     break;
             }
         }
@@ -82,6 +91,7 @@ public class SoulissT22Handler extends SoulissGenericTypical implements typicalC
             this.updateState(SoulissBindingConstants.ROLLERSHUTTER_CHANNEL, (State) _state);
             this.updateThing(this.thing);
         }
+        this.updateThing(this.thing);
     }
 
     public void setState_Message(String rollershutterMessage) {

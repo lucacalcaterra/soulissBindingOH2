@@ -294,7 +294,7 @@ public class SoulissBindingUDPDecoder {
                                             || sVal == SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Close
                                             || sVal == SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Open
                                             || sVal == SoulissBindingProtocolConstants.Souliss_T2n_Timer_Off) {
-                                        // ((SoulissT22Handler) typ.getHandler()).setState(StopMoveType.STOP);
+                                        // ((SoulissT22Handler) typ.getHandler()).setState(PercentType.valueOf("50"));
 
                                         switch (sVal) {
                                             case SoulissBindingProtocolConstants.Souliss_T2n_Coil_Stop:
@@ -314,12 +314,6 @@ public class SoulissBindingUDPDecoder {
                                                         SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_LIMITSWITCH_OPEN);
                                                 break;
                                         }
-                                        // <option value="opening">Closing</option>
-                                        // <option value="stop">Stop</option>
-                                        // <option value="closing">Closing</option>
-                                        // <option value="limSwitch_close">Limit Switch Close</option>
-                                        // <option value="LimSwitch_close">Limit Switch Close</option>
-                                        // <option value="timer_off">Timer Off</option>
                                     }
                                     break;
 

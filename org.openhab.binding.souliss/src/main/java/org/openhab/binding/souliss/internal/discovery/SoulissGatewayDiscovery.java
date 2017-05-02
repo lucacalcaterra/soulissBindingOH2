@@ -128,69 +128,57 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
 
     @Override
     public void thingDetected(short typical, short node, short slot) {
-        ThingUID thingUID;
-        String label;
+        ThingUID thingUID = null;
+        String label = "";
         DiscoveryResult discoveryResult;
         String sNodeId = node + SoulissBindingConstants.UUID_NODE_SLOT_SEPARATOR + slot;
         switch (typical) {
             case SoulissBindingProtocolConstants.Souliss_T11:
                 thingUID = new ThingUID(SoulissBindingConstants.T11_THING_TYPE, sNodeId);
                 label = "T11: node " + node + ", slot " + slot;
-                discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label).withBridge(gatewayUID)
-                        .build();
-                thingDiscovered(discoveryResult);
                 break;
             case SoulissBindingProtocolConstants.Souliss_T12:
                 thingUID = new ThingUID(SoulissBindingConstants.T12_THING_TYPE, sNodeId);
-                label = "T11: node " + node + ", slot " + slot;
-                discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label).withBridge(gatewayUID)
-                        .build();
-                thingDiscovered(discoveryResult);
+                label = "T12: node " + node + ", slot " + slot;
                 break;
             case SoulissBindingProtocolConstants.Souliss_T13:
-                thingUID = new ThingUID(SoulissBindingConstants.T12_THING_TYPE, sNodeId);
-                label = "T11: node " + node + ", slot " + slot;
-                discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label).withBridge(gatewayUID)
-                        .build();
-                thingDiscovered(discoveryResult);
+                thingUID = new ThingUID(SoulissBindingConstants.T13_THING_TYPE, sNodeId);
+                label = "T13: node " + node + ", slot " + slot;
                 break;
             case SoulissBindingProtocolConstants.Souliss_T14:
                 thingUID = new ThingUID(SoulissBindingConstants.T14_THING_TYPE, sNodeId);
                 label = "T14: node " + node + ", slot " + slot;
-                discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label).withBridge(gatewayUID)
-                        .build();
-                thingDiscovered(discoveryResult);
+                break;
+            case SoulissBindingProtocolConstants.Souliss_T21:
+                thingUID = new ThingUID(SoulissBindingConstants.T21_THING_TYPE, sNodeId);
+                label = "T21: node " + node + ", slot " + slot;
+                break;
+            case SoulissBindingProtocolConstants.Souliss_T22:
+                thingUID = new ThingUID(SoulissBindingConstants.T22_THING_TYPE, sNodeId);
+                label = "T22: node " + node + ", slot " + slot;
                 break;
             case SoulissBindingProtocolConstants.Souliss_T52_TemperatureSensor:
                 thingUID = new ThingUID(SoulissBindingConstants.T52_THING_TYPE, sNodeId);
                 label = "T52: node " + node + ", slot " + slot;
-                discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label).withBridge(gatewayUID)
-                        .build();
-                thingDiscovered(discoveryResult);
                 break;
             case SoulissBindingProtocolConstants.Souliss_T55_VoltageSensor:
                 thingUID = new ThingUID(SoulissBindingConstants.T55_THING_TYPE, sNodeId);
                 label = "T55: node " + node + ", slot " + slot;
-                discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label).withBridge(gatewayUID)
-                        .build();
-                thingDiscovered(discoveryResult);
                 break;
             case SoulissBindingProtocolConstants.Souliss_T56_CurrentSensor:
                 thingUID = new ThingUID(SoulissBindingConstants.T56_THING_TYPE, sNodeId);
                 label = "T56: node " + node + ", slot " + slot;
-                discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label).withBridge(gatewayUID)
-                        .build();
-                thingDiscovered(discoveryResult);
                 break;
             case SoulissBindingProtocolConstants.Souliss_T57_PowerSensor:
                 thingUID = new ThingUID(SoulissBindingConstants.T57_THING_TYPE, sNodeId);
                 label = "T57: node " + node + ", slot " + slot;
-                discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label).withBridge(gatewayUID)
-                        .build();
-                thingDiscovered(discoveryResult);
                 break;
         }
-
+        if (thingUID != null) {
+            label = "[" + gatewayUID + "] " + label;
+            discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label).withBridge(gatewayUID).build();
+            thingDiscovered(discoveryResult);
+        }
     }
 
     @Override

@@ -79,6 +79,9 @@ public class SoulissBindingConstants {
     public final static String ROLLERSHUTTER_MESSAGE_CLOSING = "closing";
     public final static String ROLLERSHUTTER_MESSAGE_LIMITSWITCH_OPEN = "limSwitch_open";
     public final static String ROLLERSHUTTER_MESSAGE_LIMITSWITCH_CLOSE = "limSwitch_close";
+    public final static String ROLLERSHUTTER_MESSAGE_STATE_OPEN = "state_open";
+    public final static String ROLLERSHUTTER_MESSAGE_STATE_CLOSE = "state_close";
+    public final static String ROLLERSHUTTER_MESSAGE_NO_LIMITSWITCH = "NoLimSwitch";
     public static final String ROLLERSHUTTER_MESSAGE_STOP = "stop";
 
     public final static String LASTMESSAGE_CHANNEL = "lastMessage";

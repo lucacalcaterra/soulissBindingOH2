@@ -120,6 +120,7 @@
 		<description>Pulse Digital Output</description>
 		<channels>
 			<channel id="pulse" typeId="pulse" />
+			<channel id="lastStatusStored" typeId="lastStatusStored" />
 		</channels>
 	</thing-type>
 
@@ -314,6 +315,10 @@
                 <option value="closing">Closing</option>
                 <option value="limSwitch_open">Limit Switch Open</option>
                 <option value="limSwitch_close">Limit Switch Close</option>
+                <option value="state_open">State Open</option>
+                <option value="state_close">State Close</option>
+                   <option value="NoLimSwitch">No Limit Switch</option>
+                
             </options>
         </state>
     </channel-type>
@@ -430,3 +435,4 @@
 
 
 </thing:thing-descriptions>
+

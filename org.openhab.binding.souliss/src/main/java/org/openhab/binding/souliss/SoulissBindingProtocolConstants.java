@@ -194,10 +194,15 @@ public class SoulissBindingProtocolConstants {
     public static final short Souliss_T2n_OpenCmd_Local = 0x10; // Open Command (only from local pushbutton)
     public static final short Souliss_T2n_ToogleCmd = 0x08;
     public static final short Souliss_T2n_RstCmd = 0x00;
-    public static final short Souliss_T2n_Timer_Val = 0x1F;
-    public static final short Souliss_T2n_Timer_Off = 0x10;
-    public static final short Souliss_T2n_LimSwitch_Close = 0x08;
-    public static final short Souliss_T2n_LimSwitch_Open = 0x10;
+    public static final short Souliss_T2n_Timer_Val = 0xC0; // Timer set value
+    public static final short Souliss_T2n_Timer_Off = 0xA0; // Timer expired value
+    public static final short Souliss_T2n_TimedStop_Val = 0xC2; // Timed stop value
+    public static final short Souliss_T2n_TimedStop_Off = 0xC0; // Timed stop exipred value
+    public static final short Souliss_T2n_LimSwitch_Close = 0x14;
+    public static final short Souliss_T2n_LimSwitch_Open = 0x16;
+    public static final short Souliss_T2n_State_Close = 0x08; // Close Feedback from Limit Switch
+    public static final short Souliss_T2n_State_Open = 0x10; // Open Feedback from Limit Switch
+
     public static final short Souliss_T2n_NoLimSwitch = 0x20;
     public static final short Souliss_T2n_Coil_Close = 0x01;
     public static final short Souliss_T2n_Coil_Open = 0x02;
@@ -280,5 +285,4 @@ public class SoulissBindingProtocolConstants {
     public static final String ConfigurationFileName_commands_to_states = "/properties/commands_to_states.properties";
 
     public static final String Openhab_RGB_TYPE = "HSBType";
-
 }

@@ -138,6 +138,7 @@ public class SoulissBindingProtocolConstants {
     public static final short Souliss_T1n_OnCoil_Auto = 0xF1;
     public static final short Souliss_T1n_OffCoil_Auto = 0xF0;
     public static final short Souliss_T1n_Set = 0x22; // Set a state
+
     public static final short Souliss_T1n_BrightUp = 0x10; // Increase Light
     public static final short Souliss_T1n_BrightDown = 0x20; // Decrease Light
     public static final short Souliss_T1n_Flash = 0x21; // Flash Light

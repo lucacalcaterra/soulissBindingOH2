@@ -36,6 +36,7 @@ public class SoulissBindingConstants {
     public final static String T12 = "t12";
     public final static String T13 = "t13";
     public final static String T14 = "t14";
+    public final static String T16 = "t16";
     public final static String T21 = "t21";
     public final static String T22 = "t22";
     public final static String T51 = "t51";
@@ -51,6 +52,7 @@ public class SoulissBindingConstants {
     public final static ThingTypeUID T12_THING_TYPE = new ThingTypeUID(BINDING_ID, T12);
     public final static ThingTypeUID T13_THING_TYPE = new ThingTypeUID(BINDING_ID, T13);
     public final static ThingTypeUID T14_THING_TYPE = new ThingTypeUID(BINDING_ID, T14);
+    public final static ThingTypeUID T16_THING_TYPE = new ThingTypeUID(BINDING_ID, T16);
     public final static ThingTypeUID T21_THING_TYPE = new ThingTypeUID(BINDING_ID, T21);
     public final static ThingTypeUID T22_THING_TYPE = new ThingTypeUID(BINDING_ID, T22);
     public final static ThingTypeUID T51_THING_TYPE = new ThingTypeUID(BINDING_ID, T51);
@@ -63,9 +65,9 @@ public class SoulissBindingConstants {
     public final static ThingTypeUID T58_THING_TYPE = new ThingTypeUID(BINDING_ID, T58);
 
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Sets.newHashSet(GATEWAY_THING_TYPE,
-            T11_THING_TYPE, T12_THING_TYPE, T13_THING_TYPE, T14_THING_TYPE, T21_THING_TYPE, T22_THING_TYPE,
-            T51_THING_TYPE, T52_THING_TYPE, T53_THING_TYPE, T54_THING_TYPE, T55_THING_TYPE, T56_THING_TYPE,
-            T57_THING_TYPE, T58_THING_TYPE);
+            T11_THING_TYPE, T12_THING_TYPE, T13_THING_TYPE, T14_THING_TYPE, T16_THING_TYPE, T21_THING_TYPE,
+            T22_THING_TYPE, T51_THING_TYPE, T52_THING_TYPE, T53_THING_TYPE, T54_THING_TYPE, T55_THING_TYPE,
+            T56_THING_TYPE, T57_THING_TYPE, T58_THING_TYPE);
 
     // List of all Channel ids
     public final static String ONOFF_CHANNEL = "onoff";
@@ -74,15 +76,20 @@ public class SoulissBindingConstants {
     public final static String AUTOMODE_CHANNEL = "automode";
     public final static String STATEONOFF_CHANNEL = "stateOnOff";
     public final static String ROLLERSHUTTER_CHANNEL = "rollershutter";
-    public final static String ROLLERSHUTTER_STATE_CHANNEL = "rollershutter_state";
-    public final static String ROLLERSHUTTER_MESSAGE_OPENING = "opening";
-    public final static String ROLLERSHUTTER_MESSAGE_CLOSING = "closing";
-    public final static String ROLLERSHUTTER_MESSAGE_LIMITSWITCH_OPEN = "limSwitch_open";
-    public final static String ROLLERSHUTTER_MESSAGE_LIMITSWITCH_CLOSE = "limSwitch_close";
-    public final static String ROLLERSHUTTER_MESSAGE_STATE_OPEN = "state_open";
-    public final static String ROLLERSHUTTER_MESSAGE_STATE_CLOSE = "state_close";
-    public final static String ROLLERSHUTTER_MESSAGE_NO_LIMITSWITCH = "NoLimSwitch";
-    public static final String ROLLERSHUTTER_MESSAGE_STOP = "stop";
+    public final static String ROLLERSHUTTER_STATE_CHANNEL_CHANNEL = "rollershutter_state";
+    public final static String ROLLERSHUTTER_MESSAGE_OPENING_CHANNEL = "opening";
+    public final static String ROLLERSHUTTER_MESSAGE_CLOSING_CHANNEL = "closing";
+    public final static String ROLLERSHUTTER_MESSAGE_LIMITSWITCH_OPEN_CHANNEL = "limSwitch_open";
+    public final static String ROLLERSHUTTER_MESSAGE_LIMITSWITCH_CLOSE_CHANNEL = "limSwitch_close";
+    public final static String ROLLERSHUTTER_MESSAGE_STATE_OPEN_CHANNEL = "state_open";
+    public final static String ROLLERSHUTTER_MESSAGE_STATE_CLOSE_CHANNEL = "state_close";
+    public final static String ROLLERSHUTTER_MESSAGE_NO_LIMITSWITCH_CHANNEL = "NoLimSwitch";
+    public static final String ROLLERSHUTTER_MESSAGE_STOP_CHANNEL = "stop";
+
+    public static final String WHITE_MODE_CHANNEL = "whitemode";
+    public static final String ROLLER_BRIGHTNESS_CHANNEL = "roller_brightness";
+    public static final String DIMMER_BRIGHTNESS_CHANNEL = "dimmer_brightness";
+    public static final String LED_COLOR_CHANNEL = "ledcolor";
 
     public final static String LASTMESSAGE_CHANNEL = "lastMessage";
     public final static String LASTSTATUSSTORED_CHANNEL = "lastStatusStored";

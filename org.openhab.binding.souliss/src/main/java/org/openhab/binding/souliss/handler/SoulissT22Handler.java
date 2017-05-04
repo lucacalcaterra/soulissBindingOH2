@@ -95,7 +95,7 @@ public class SoulissT22Handler extends SoulissGenericTypical implements typicalC
     }
 
     public void setState_Message(String rollershutterMessage) {
-        this.updateState(SoulissBindingConstants.ROLLERSHUTTER_STATE_CHANNEL, StringType.valueOf(rollershutterMessage));
+        this.updateState(SoulissBindingConstants.ROLLERSHUTTER_STATE_CHANNEL_CHANNEL, StringType.valueOf(rollershutterMessage));
         this.updateThing(this.thing);
 
     }

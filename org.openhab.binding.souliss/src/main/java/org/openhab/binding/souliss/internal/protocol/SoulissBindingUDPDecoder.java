@@ -26,6 +26,7 @@ import org.openhab.binding.souliss.handler.SoulissT11Handler;
 import org.openhab.binding.souliss.handler.SoulissT12Handler;
 import org.openhab.binding.souliss.handler.SoulissT13Handler;
 import org.openhab.binding.souliss.handler.SoulissT14Handler;
+import org.openhab.binding.souliss.handler.SoulissT16Handler;
 import org.openhab.binding.souliss.handler.SoulissT22Handler;
 import org.openhab.binding.souliss.handler.SoulissT5nHandler;
 import org.openhab.binding.souliss.internal.protocol.SoulissDiscover.DiscoverResult;
@@ -251,10 +252,6 @@ public class SoulissBindingUDPDecoder {
                                     // cercare di capire come forzare un update
                                     break;
                                 case SoulissBindingConstants.T12:
-                                    // public static final short Souliss_T1n_OnCoil = 0x01;
-                                    // public static final short Souliss_T1n_OffCoil = 0x00;
-                                    // public static final short Souliss_T1n_OnCoil_Auto = 0xF1;
-                                    // public static final short Souliss_T1n_OffCoil_Auto = 0xF0;
                                     if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil_Auto) {
                                         ((SoulissT12Handler) typ.getHandler()).setState(OnOffType.ON);
                                         ((SoulissT12Handler) typ.getHandler()).setState_Automode(OnOffType.ON);
@@ -277,6 +274,11 @@ public class SoulissBindingUDPDecoder {
                                 case SoulissBindingConstants.T14:
                                     typicalState = getOHStateFromSoulissVal(sVal);
                                     ((SoulissT14Handler) typ.getHandler()).setState(typicalState);
+                                    break;
+                                case SoulissBindingConstants.T16:
+                                    ((SoulissT16Handler) typ.getHandler()).setState(getOHStateFromSoulissVal(sVal));
+                                    ((SoulissT16Handler) typ.getHandler()).setStateRGB(getByteAtSlot(mac, slot + 1),
+                                            getByteAtSlot(mac, slot + 2), getByteAtSlot(mac, slot + 3));
                                     break;
                                 case SoulissBindingConstants.T21:
                                 case SoulissBindingConstants.T22:

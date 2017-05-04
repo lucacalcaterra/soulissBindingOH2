@@ -39,6 +39,7 @@ public class SoulissT11Handler extends SoulissGenericTypical implements typicalC
     public SoulissT11Handler(Thing _thing) {
         super(_thing);
         thing = _thing;
+
     }
 
     @Override

@@ -42,4 +42,5 @@ public class SoulissT6nHandler extends SoulissGenericTypical implements typicalC
         this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
         this.updateState(SoulissBindingConstants.T6n_VALUE_CHANNEL, (DecimalType) state);
     }
+
 }

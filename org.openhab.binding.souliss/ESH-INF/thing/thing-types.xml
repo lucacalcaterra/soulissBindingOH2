@@ -275,6 +275,19 @@
             <channel id="lastStatusStored" typeId="lastStatusStored" />
         </channels>
     </thing-type>
+    
+    <thing-type id="t61">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway" />
+        </supported-bridge-type-refs>
+        <label>T61</label>
+        <description>Floating Point SetPoint</description>
+
+        <channels>
+            <channel id="value" typeId="float"/>
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
+    </thing-type>
 
 	<channel-type id="pulse">
 		<item-type>Switch</item-type>

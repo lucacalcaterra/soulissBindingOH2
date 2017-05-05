@@ -107,4 +107,5 @@ public class SoulissT12Handler extends SoulissGenericTypical implements typicalC
             this.T1nAutomodeState = (OnOffType) _state;
         }
     }
+
 }

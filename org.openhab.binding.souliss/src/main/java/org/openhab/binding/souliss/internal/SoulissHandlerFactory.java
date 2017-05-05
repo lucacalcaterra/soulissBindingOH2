@@ -30,7 +30,7 @@ import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParame
 
 /**
  * The {@link SoulissHandlerFactory} is responsible for creating things and thing
- * handlers.
+ * handlers. It fire when a new thing is added.
  *
  * @author Tonino Fazio - Initial contribution
  */

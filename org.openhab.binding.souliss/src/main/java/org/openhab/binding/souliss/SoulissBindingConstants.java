@@ -95,6 +95,7 @@ public class SoulissBindingConstants {
     public final static String LASTSTATUSSTORED_CHANNEL = "lastStatusStored";
 
     public final static String T5n_VALUE_CHANNEL = "value";
+    public final static String T6n_VALUE_CHANNEL = "value6n";
     public final static String FLOATING_POINT_CHANNEL = "float";
     public final static String HUMIDITY_CHANNEL = "humidity";
     public final static String TEMPERATURE_CHANNEL = "temperature";

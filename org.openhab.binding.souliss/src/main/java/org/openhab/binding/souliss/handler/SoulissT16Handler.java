@@ -207,7 +207,6 @@ public class SoulissT16Handler extends SoulissGenericTypical implements typicalC
             dimmerValue = hsb.getBrightness().intValue();
         }
         // updateState(SoulissBindingConstants.chann, new PercentType(state.saturation));
-        // updateState(MilightBindingConstants.CHANNEL_BRIGHTNESS, new PercentType(state.brightness));
 
         //
         // } else if (command instanceof OnOffType) {
@@ -216,7 +215,6 @@ public class SoulissT16Handler extends SoulissGenericTypical implements typicalC
         // } else if (command instanceof PercentType) {
         // PercentType p = (PercentType) command;
         // bulbCom.setBrightness(p.intValue(), state);
-        // updateState(MilightBindingConstants.CHANNEL_BRIGHTNESS, new PercentType(state.brightness));
     }
 
     short getStateRED() {

@@ -14,25 +14,9 @@ import java.net.InetAddress;
 import java.net.SocketException;
 
 import org.eclipse.smarthome.core.library.types.PercentType;
-import org.openhab.binding.souliss.internal.SoulissThingState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * This milight protocol implementation class is able to do the following tasks with Milight compatible systems:
- * <ul>
- * <li>Switching bulbs on and off.</li>
- * <li>Change color temperature of a bulb, what results in a white color.</li>
- * <li>Change the brightness of a bulb without changing the color.</li>
- * <li>Change the RGB values of a bulb.</li>
- * </ul>
- * The class is state-less, use {@link SoulissThingState} instead.
- *
- * @author David Gräff - Converted to pure Communication/Protocol implementation class
- * @author Hans-Joerg Merk
- * @author Kai Kreuzer
- * @since 1.3.0
- */
 public class SoulissCommunication {
 
     private static final Logger logger = LoggerFactory.getLogger(SoulissCommunication.class);
@@ -73,7 +57,7 @@ public class SoulissCommunication {
             }
 
             int repeatCount = Math.abs((int) Math.round(value / stepSize) - (int) Math.round(oldPercent / stepSize));
-            logger.debug("milight: dim from '{}' with command '{}' via '{}' steps.", String.valueOf(oldPercent),
+            logger.debug("souliss: dim from '{}' with command '{}' via '{}' steps.", String.valueOf(oldPercent),
                     String.valueOf(value), repeatCount);
             if (value > oldPercent) {
                 for (int i = 0; i < repeatCount; i++) {
@@ -108,7 +92,7 @@ public class SoulissCommunication {
                 int newCommand = (value * (rgbwSteps - 2) / 100 + 2);
                 sleep(100);
                 String messageBytes = "4E:" + Integer.toHexString(newCommand) + ":55";
-                logger.debug("milight: send dimming packet '{}' to RGBW bulb channel '{}'", messageBytes, bulb);
+                logger.debug("souliss: send dimming packet '{}' to RGBW bulb channel '{}'", messageBytes, bulb);
                 sendMessage(messageBytes);
             } else if (value > 99) {
                 value = setFull(bulb);
@@ -183,7 +167,7 @@ public class SoulissCommunication {
             }
 
             int repeatCount = Math.abs((int) Math.round(value / stepSize) - (int) Math.round(oldPercent / stepSize));
-            logger.debug("milight: dim from '{}' with command '{}' via '{}' steps.", oldPercent, value, repeatCount);
+            logger.debug("souliss: dim from '{}' with command '{}' via '{}' steps.", oldPercent, value, repeatCount);
             if (value > oldPercent) {
                 for (int i = 0; i < repeatCount; i++) {
                     sleep(50);
@@ -215,7 +199,7 @@ public class SoulissCommunication {
     }
 
     public int increaseBrightness(int bulb, int oldPercent) {
-        logger.debug("milight: sendIncrease");
+        logger.debug("souliss: sendIncrease");
         String messageBytes = null;
         switch (bulb) {
             // increase brightness of white bulbs
@@ -247,14 +231,14 @@ public class SoulissCommunication {
             logger.debug("Bulb '{}' set to '{}' dimming Steps", bulb, rgbwSteps);
         } else if (bulb < 5) {
             newPercent = (int) Math.round((Math.round(oldPercent / 9.090909090909091) + 1) * 9.090909090909091);
-            logger.debug("milight: Bulb '{}' getting increased to '{}'", bulb, newPercent);
+            logger.debug("souliss: Bulb '{}' getting increased to '{}'", bulb, newPercent);
         }
         sendMessage(messageBytes);
         return newPercent;
     }
 
     public int decreaseBrightness(int bulb, int oldPercent) {
-        logger.debug("milight: sendDecrease");
+        logger.debug("souliss: sendDecrease");
         String messageBytes = null;
         switch (bulb) {
             // decrease brightness of white bulbs
@@ -284,7 +268,7 @@ public class SoulissCommunication {
                 logger.debug("Bulb '{}' set to '{}' dimming Steps", bulb, rgbwSteps);
             } else if (bulb < 5) {
                 newPercent = (int) Math.round((Math.round(oldPercent / 9.090909090909091) - 1) * 9.090909090909091);
-                logger.debug("milight: Bulb '{}' getting decreased to '{}'", bulb, newPercent);
+                logger.debug("souliss: Bulb '{}' getting decreased to '{}'", bulb, newPercent);
             }
             sendMessage(messageBytes);
         }
@@ -292,7 +276,7 @@ public class SoulissCommunication {
     }
 
     public int warmer(int bulb, int oldPercent) {
-        logger.debug("milight: sendWarmer");
+        logger.debug("souliss: sendWarmer");
         int newPercent = oldPercent + 10;
         if (newPercent > 100) {
             newPercent = 100;
@@ -303,7 +287,7 @@ public class SoulissCommunication {
     }
 
     public int cooler(int bulb, int oldPercent) {
-        logger.debug("milight: sendCooler");
+        logger.debug("souliss: sendCooler");
         int newPercent = oldPercent - 10;
         if (newPercent < 0) {
             newPercent = 0;
@@ -315,7 +299,7 @@ public class SoulissCommunication {
     }
 
     public int nextDiscoMode(int bulb, int oldPercent) {
-        logger.debug("milight: sendDiscoModeUp");
+        logger.debug("souliss: sendDiscoModeUp");
         if (bulb < 6) {
             String messageBytes = "27:00:55";
             sendMessage(messageBytes);
@@ -328,14 +312,14 @@ public class SoulissCommunication {
     }
 
     public int previousDiscoMode(int bulb, int oldPercent) {
-        logger.debug("milight: sendDiscoModeDown");
+        logger.debug("souliss: sendDiscoModeDown");
         String messageBytes = "28:00:55";
         sendMessage(messageBytes);
         return Math.min(oldPercent - 10, 0);
     }
 
     public void increaseSpeed(int bulb) {
-        logger.debug("milight: sendIncreaseSpeed");
+        logger.debug("souliss: sendIncreaseSpeed");
         String messageBytes = null;
         switch (bulb) {
             case 5:
@@ -355,7 +339,7 @@ public class SoulissCommunication {
     }
 
     public void decreaseSpeed(int bulb) {
-        logger.debug("milight: sendDecreaseSpeed");
+        logger.debug("souliss: sendDecreaseSpeed");
         String messageBytes = null;
         switch (bulb) {
             case 5:
@@ -375,7 +359,7 @@ public class SoulissCommunication {
     }
 
     public void setNightMode(int bulb) {
-        logger.debug("milight: sendNightMode");
+        logger.debug("souliss: sendNightMode");
         String messageBytes = null;
         String messageBytes2 = null;
         switch (bulb) {
@@ -440,7 +424,7 @@ public class SoulissCommunication {
     }
 
     public void setWhiteMode(int bulb) {
-        logger.debug("milight: sendWhiteMode");
+        logger.debug("souliss: sendWhiteMode");
         String messageBytes = null;
         switch (bulb) {
             case 6:
@@ -511,7 +495,7 @@ public class SoulissCommunication {
     }
 
     public void setOn(int bulb) {
-        logger.debug("milight: sendOn");
+        logger.debug("souliss: sendOn");
         String messageBytes = null;
         switch (bulb) {
             case 0:
@@ -563,7 +547,7 @@ public class SoulissCommunication {
     }
 
     public int setOff(int bulb) {
-        logger.debug("milight: sendOff");
+        logger.debug("souliss: sendOff");
         String messageBytes = null;
         switch (bulb) {
             case 0:
@@ -628,18 +612,18 @@ public class SoulissCommunication {
      * @param hue A value from 0 to 360
      */
     public void setColor(int bulb, int hue) {
-        logger.debug("milight: sendColor");
+        logger.debug("souliss: sendColor");
 
-        // we have to map [0,360] to [0,0xFF], where red equals hue=0 and the milight color 0xB0 (=176)
-        Integer milightColorNo = (256 + 176 - (int) (hue / 360.0 * 255.0)) % 256;
+        // we have to map [0,360] to [0,0xFF], where red equals hue=0 and the souliss color 0xB0 (=176)
+        Integer soulissColorNo = (256 + 176 - (int) (hue / 360.0 * 255.0)) % 256;
         if (bulb == 5) {
-            String messageBytes = "20:" + Integer.toHexString(milightColorNo) + ":55";
+            String messageBytes = "20:" + Integer.toHexString(soulissColorNo) + ":55";
             sendMessage(messageBytes);
         }
         if (bulb > 5) {
             setOn(bulb);
             sleep(50);
-            String messageBytes = "40:" + Integer.toHexString(milightColorNo) + ":55";
+            String messageBytes = "40:" + Integer.toHexString(soulissColorNo) + ":55";
             sendMessage(messageBytes);
         }
     }
@@ -658,7 +642,7 @@ public class SoulissCommunication {
     }
 
     private byte[] getMessageBytes(String messageBytes) {
-        logger.debug("milight: messageBytes to transform: '{}'", messageBytes);
+        logger.debug("souliss: messageBytes to transform: '{}'", messageBytes);
         if (messageBytes == null) {
             logger.error("messageBytes must not be null");
             return null;

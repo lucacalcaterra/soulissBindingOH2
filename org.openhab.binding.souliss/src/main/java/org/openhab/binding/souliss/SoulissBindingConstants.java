@@ -47,6 +47,7 @@ public class SoulissBindingConstants {
     public final static String T56 = "t56";
     public final static String T57 = "t57";
     public final static String T58 = "t58";
+    public final static String T61 = "t61";
 
     public final static ThingTypeUID T11_THING_TYPE = new ThingTypeUID(BINDING_ID, T11);
     public final static ThingTypeUID T12_THING_TYPE = new ThingTypeUID(BINDING_ID, T12);
@@ -63,11 +64,12 @@ public class SoulissBindingConstants {
     public final static ThingTypeUID T56_THING_TYPE = new ThingTypeUID(BINDING_ID, T56);
     public final static ThingTypeUID T57_THING_TYPE = new ThingTypeUID(BINDING_ID, T57);
     public final static ThingTypeUID T58_THING_TYPE = new ThingTypeUID(BINDING_ID, T58);
+    public final static ThingTypeUID T61_THING_TYPE = new ThingTypeUID(BINDING_ID, T61);
 
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Sets.newHashSet(GATEWAY_THING_TYPE,
             T11_THING_TYPE, T12_THING_TYPE, T13_THING_TYPE, T14_THING_TYPE, T16_THING_TYPE, T21_THING_TYPE,
             T22_THING_TYPE, T51_THING_TYPE, T52_THING_TYPE, T53_THING_TYPE, T54_THING_TYPE, T55_THING_TYPE,
-            T56_THING_TYPE, T57_THING_TYPE, T58_THING_TYPE);
+            T56_THING_TYPE, T57_THING_TYPE, T58_THING_TYPE, T61_THING_TYPE);
 
     // List of all Channel ids
     public final static String ONOFF_CHANNEL = "onoff";
@@ -95,6 +97,7 @@ public class SoulissBindingConstants {
     public final static String LASTSTATUSSTORED_CHANNEL = "lastStatusStored";
 
     public final static String T5n_VALUE_CHANNEL = "value";
+    public final static String T6n_VALUE_CHANNEL = "value";
     public final static String FLOATING_POINT_CHANNEL = "float";
     public final static String HUMIDITY_CHANNEL = "humidity";
     public final static String TEMPERATURE_CHANNEL = "temperature";

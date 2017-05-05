@@ -42,6 +42,7 @@ public class SoulissT11Handler extends SoulissGenericTypical implements typicalC
 
     }
 
+    // called on every status change or change request
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
 
@@ -117,7 +118,6 @@ public class SoulissT11Handler extends SoulissGenericTypical implements typicalC
             this.updateThing(this.thing);
             this.T1nState = (OnOffType) _state;
         }
-
     }
 
 }

@@ -66,8 +66,7 @@ public class SoulissBindingUDPServerThread extends Thread {
                 buf = packet.getData();
 
                 // **************** DECODER ********************
-                logger.debug("Packet received");
-                logger.debug(MaCacoToString(buf));
+                logger.debug("Packet received " + MaCacoToString(buf));
                 decoder.decodeVNetDatagram(packet);
 
             } catch (IOException e) {

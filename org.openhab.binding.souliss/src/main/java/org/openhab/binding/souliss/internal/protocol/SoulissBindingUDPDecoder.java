@@ -76,15 +76,15 @@ public class SoulissBindingUDPDecoder {
      */
     private void decodeMacaco(ArrayList<Short> macacoPck) {
         int functionalCode = macacoPck.get(0);
-        logger.debug("decodeMacaco: Received functional code: 0x" + Integer.toHexString(functionalCode));
         switch (functionalCode) {
 
             case SoulissBindingUDPConstants.Souliss_UDP_function_ping_resp:
-                logger.debug("function_ping_resp");
+                logger.debug("Received functional code: 0x" + Integer.toHexString(functionalCode) + " - Ping answer");
                 decodePing(macacoPck);
                 break;
             case SoulissBindingUDPConstants.Souliss_UDP_function_discover_GW_node_bcas_resp:
-                logger.debug("function_ping_broadcast_resp");
+                logger.debug("Received functional code: 0x" + Integer.toHexString(functionalCode)
+                        + " - Discover a gateway node answer (broadcast)");
                 try {
                     decodePingBroadcast(macacoPck);
                 } catch (UnknownHostException e) {
@@ -95,12 +95,14 @@ public class SoulissBindingUDPDecoder {
 
             case SoulissBindingUDPConstants.Souliss_UDP_function_subscribe_resp:
             case SoulissBindingUDPConstants.Souliss_UDP_function_poll_resp:
-                logger.debug("Souliss_UDP_function_subscribe_resp / Souliss_UDP_function_poll_resp");
+                logger.debug(
+                        "Received functional code: 0x" + Integer.toHexString(functionalCode) + " - Read state answer");
                 decodeStateRequest(macacoPck);
                 break;
 
             case SoulissBindingUDPConstants.Souliss_UDP_function_typreq_resp:// Answer for assigned typical logic
-                logger.debug("** TypReq answer");
+                logger.debug("Received functional code: 0x" + Integer.toHexString(functionalCode)
+                        + " - Read typical logic answer");
                 decodeTypRequest(macacoPck);
                 break;
 
@@ -111,9 +113,9 @@ public class SoulissBindingUDPDecoder {
             // decodeHealthRequest(macacoPck);
             // break;
 
-            case (byte) SoulissBindingUDPConstants.Souliss_UDP_function_db_struct_resp:// Answer
-                // nodes
-                logger.debug("function_db_struct_resp");
+            case (byte) SoulissBindingUDPConstants.Souliss_UDP_function_db_struct_resp:
+                logger.debug("Received functional code: 0x" + Integer.toHexString(functionalCode)
+                        + " - Database structure answer");
                 decodeDBStructRequest(macacoPck);
                 break;
             // case 0x83:
@@ -128,6 +130,10 @@ public class SoulissBindingUDPDecoder {
             // default:
             // logger.debug("Unknown functional code");
             // break;
+            default:
+                logger.debug("Received functional code: 0x" + Integer.toHexString(functionalCode) + " - Unused");
+                break;
+
         }
     }
 
@@ -156,8 +162,8 @@ public class SoulissBindingUDPDecoder {
             int numberOf = mac.get(4);
 
             int typXnodo = SoulissBindingNetworkParameters.maxnodes;
-            logger.debug("--DECODE MACACO OFFSET: {} NUMOF: {} TYPICALSXNODE: {}", tgtnode, numberOf, typXnodo);
-            // // creates Souliss nodes
+            // logger.debug("Node: {} Nodes: {} Typicals x node: {}", tgtnode, numberOf, typXnodo);
+            // creates Souliss nodes
             for (int j = 0; j < numberOf; j++) {
                 if (mac.get(5 + j) != 0) {// create only not-empty typicals
                     if (!(mac.get(5 + j) == SoulissBindingProtocolConstants.Souliss_T_related)) {
@@ -204,12 +210,12 @@ public class SoulissBindingUDPDecoder {
             // SoulissBindingNetworkParameters.MaCacoTYP_s = MaCaco_TYP_S;
             // SoulissBindingNetworkParameters.MaCacoOUT_s = MaCaco_OUT_S;
 
-            logger.debug("decodeDBStructRequest");
-            logger.debug("Nodes: " + nodes);
-            logger.debug("maxnodes: " + maxnodes);
-            logger.debug("maxTypicalXnode: " + maxTypicalXnode);
-            logger.debug("maxrequests: " + maxrequests);
-            // logger.debug("MaCaco_IN_S: " + MaCaco_IN_S);
+            // logger.debug("decodeDBStructRequest");
+            // logger.debug("Nodes: " + nodes);
+            // logger.debug("maxnodes: " + maxnodes);
+            // logger.debug("maxTypicalXnode: " + maxTypicalXnode);
+            // logger.debug("maxrequests: " + maxrequests);
+            // // logger.debug("MaCaco_IN_S: " + MaCaco_IN_S);
             // logger.debug("MaCaco_TYP_S: " + MaCaco_TYP_S);
             // logger.debug("MaCaco_OUT_S: " + MaCaco_OUT_S);
 
@@ -247,11 +253,13 @@ public class SoulissBindingUDPDecoder {
                         try {
                             switch (sUID_Array[1]) {
                                 case SoulissBindingConstants.T11:
+                                    logger.debug("Decoding " + SoulissBindingConstants.T11 + " packet");
                                     typicalState = getOHStateFromSoulissVal(sVal);
                                     ((SoulissT11Handler) typ.getHandler()).setState(typicalState);
                                     // cercare di capire come forzare un update
                                     break;
                                 case SoulissBindingConstants.T12:
+                                    logger.debug("Decoding " + SoulissBindingConstants.T12 + " packet");
                                     if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil_Auto) {
                                         ((SoulissT12Handler) typ.getHandler()).setState(OnOffType.ON);
                                         ((SoulissT12Handler) typ.getHandler()).setState_Automode(OnOffType.ON);
@@ -268,20 +276,25 @@ public class SoulissBindingUDPDecoder {
                                     }
                                     break;
                                 case SoulissBindingConstants.T13:
+                                    logger.debug("Decoding " + SoulissBindingConstants.T13 + " packet");
                                     typicalState = getOHStateFromSoulissVal(sVal);
                                     ((SoulissT13Handler) typ.getHandler()).setState(typicalState);
                                     break;
                                 case SoulissBindingConstants.T14:
+                                    logger.debug("Decoding " + SoulissBindingConstants.T14 + " packet");
                                     typicalState = getOHStateFromSoulissVal(sVal);
                                     ((SoulissT14Handler) typ.getHandler()).setState(typicalState);
                                     break;
                                 case SoulissBindingConstants.T16:
+                                    logger.debug("Decoding " + SoulissBindingConstants.T16 + " packet");
                                     ((SoulissT16Handler) typ.getHandler()).setState(getOHStateFromSoulissVal(sVal));
                                     ((SoulissT16Handler) typ.getHandler()).setStateRGB(getByteAtSlot(mac, slot + 1),
                                             getByteAtSlot(mac, slot + 2), getByteAtSlot(mac, slot + 3));
                                     break;
                                 case SoulissBindingConstants.T21:
                                 case SoulissBindingConstants.T22:
+                                    logger.debug("Decoding " + SoulissBindingConstants.T21 + "/"
+                                            + SoulissBindingConstants.T21 + " packet");
                                     if (sVal == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Open) {
                                         ((SoulissT22Handler) typ.getHandler()).setState(UpDownType.UP);
                                         ((SoulissT22Handler) typ.getHandler()).setState_Message(
@@ -342,10 +355,12 @@ public class SoulissBindingUDPDecoder {
                                 case SoulissBindingConstants.T56:
                                 case SoulissBindingConstants.T57:
                                 case SoulissBindingConstants.T58:
+                                    logger.debug("Decoding T5n packet");
                                     ((SoulissT5nHandler) typ.getHandler())
                                             .setState(DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
                                     break;
-
+                                default:
+                                    logger.debug("Unsupported typical");
                             }
                         } catch (ClassCastException ex) {
                             logger.debug(ex.getMessage());

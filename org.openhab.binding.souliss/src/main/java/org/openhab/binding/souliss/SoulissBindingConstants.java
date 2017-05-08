@@ -37,6 +37,7 @@ public class SoulissBindingConstants {
     public final static String T13 = "t13";
     public final static String T14 = "t14";
     public final static String T16 = "t16";
+    public final static String LYT = "LYT";
     public final static String T21 = "t21";
     public final static String T22 = "t22";
     public final static String T51 = "t51";
@@ -54,6 +55,7 @@ public class SoulissBindingConstants {
     public final static ThingTypeUID T13_THING_TYPE = new ThingTypeUID(BINDING_ID, T13);
     public final static ThingTypeUID T14_THING_TYPE = new ThingTypeUID(BINDING_ID, T14);
     public final static ThingTypeUID T16_THING_TYPE = new ThingTypeUID(BINDING_ID, T16);
+    public final static ThingTypeUID LYT_THING_TYPE = new ThingTypeUID(BINDING_ID, LYT);
     public final static ThingTypeUID T21_THING_TYPE = new ThingTypeUID(BINDING_ID, T21);
     public final static ThingTypeUID T22_THING_TYPE = new ThingTypeUID(BINDING_ID, T22);
     public final static ThingTypeUID T51_THING_TYPE = new ThingTypeUID(BINDING_ID, T51);
@@ -67,9 +69,9 @@ public class SoulissBindingConstants {
     public final static ThingTypeUID T61_THING_TYPE = new ThingTypeUID(BINDING_ID, T61);
 
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Sets.newHashSet(GATEWAY_THING_TYPE,
-            T11_THING_TYPE, T12_THING_TYPE, T13_THING_TYPE, T14_THING_TYPE, T16_THING_TYPE, T21_THING_TYPE,
-            T22_THING_TYPE, T51_THING_TYPE, T52_THING_TYPE, T53_THING_TYPE, T54_THING_TYPE, T55_THING_TYPE,
-            T56_THING_TYPE, T57_THING_TYPE, T58_THING_TYPE, T61_THING_TYPE);
+            T11_THING_TYPE, T12_THING_TYPE, T13_THING_TYPE, T14_THING_TYPE, T16_THING_TYPE, LYT_THING_TYPE,
+            T21_THING_TYPE, T22_THING_TYPE, T51_THING_TYPE, T52_THING_TYPE, T53_THING_TYPE, T54_THING_TYPE,
+            T55_THING_TYPE, T56_THING_TYPE, T57_THING_TYPE, T58_THING_TYPE, T61_THING_TYPE);
 
     // List of all Channel ids
     public final static String ONOFF_CHANNEL = "onoff";

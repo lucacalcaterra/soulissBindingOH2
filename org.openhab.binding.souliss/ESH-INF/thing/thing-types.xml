@@ -304,7 +304,7 @@
 	
 	 <channel-type id="sleep">
         <item-type>Switch</item-type>
-        <label>Set On with timer</label>
+        <label>Set timer</label>
         <description>The output will be timed for nCYCLES of the Node associated timer</description>
         
     </channel-type>

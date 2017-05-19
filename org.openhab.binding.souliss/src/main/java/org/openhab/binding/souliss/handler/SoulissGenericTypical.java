@@ -20,7 +20,6 @@ import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.internal.SoulissDatagramSocketFactory;
-import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
 import org.openhab.binding.souliss.internal.protocol.SoulissCommonCommands;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,13 +99,13 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
      * @param command
      */
     public void commandSEND(short command) {
-        SoulissCommonCommands.sendFORCEFrame(SoulissDatagramSocketFactory.getSocketDatagram(),
-                SoulissBindingNetworkParameters.IPAddressOnLAN, this.getNode(), this.getSlot(), command);
+        SoulissCommonCommands.sendFORCEFrame(SoulissDatagramSocketFactory.getSocketDatagram(), getGatewayIP(),
+                getGatewayNodeIndex(), getGatewayUserIndex(), this.getNode(), this.getSlot(), command);
     }
 
     public void commandSEND_RGB(short command, short R, short G, short B) {
-        SoulissCommonCommands.sendFORCEFrame(SoulissDatagramSocketFactory.getSocketDatagram(),
-                SoulissBindingNetworkParameters.IPAddressOnLAN, this.getNode(), this.getSlot(), command, R, G, B);
+        SoulissCommonCommands.sendFORCEFrame(SoulissDatagramSocketFactory.getSocketDatagram(), getGatewayIP(),
+                getGatewayNodeIndex(), getGatewayUserIndex(), this.getNode(), this.getSlot(), command, R, G, B);
     }
 
     public DateTimeType getLastUpdateTime() {
@@ -146,5 +145,17 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
         } else if (bridgeStatusInfo.getStatus() == ThingStatus.ONLINE) {
             updateStatus(ThingStatus.ONLINE);
         }
+    }
+
+    public String getGatewayIP() {
+        return ((SoulissGatewayHandler) thingRegistry.get(thing.getBridgeUID()).getHandler()).IPAddressOnLAN;
+    }
+
+    public short getGatewayUserIndex() {
+        return ((SoulissGatewayHandler) thingRegistry.get(thing.getBridgeUID()).getHandler()).userIndex;
+    }
+
+    public short getGatewayNodeIndex() {
+        return ((SoulissGatewayHandler) thingRegistry.get(thing.getBridgeUID()).getHandler()).nodeIndex;
     }
 }

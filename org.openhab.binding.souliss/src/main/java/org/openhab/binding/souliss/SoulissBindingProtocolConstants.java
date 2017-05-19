@@ -277,13 +277,4 @@ public class SoulissBindingProtocolConstants {
     public static final short Souliss_T_HumiditySensor = 0x69;
     public static final byte Souliss_T_HumiditySensor_refresh = 0x03;
 
-    public static final String CONF_FIELD_DELIMITER = "_";
-
-    public static final String ConfigurationFileName_typicals_value_bytes = "/properties/typicals_value_bytes.properties";
-    public static final String ConfigurationFileName_commands_OHtoSOULISS = "/properties/commands_OHtoSOULISS.properties";
-    public static final String ConfigurationFileName_states_SOULISStoOH = "/properties/states_SOULISStoOH.properties";
-    public static final String ConfigurationFileName_ItemsType_SOULISS = "/properties/itemsType_SOULISS.properties";
-    public static final String ConfigurationFileName_commands_to_states = "/properties/commands_to_states.properties";
-
-    public static final String Openhab_RGB_TYPE = "HSBType";
 }

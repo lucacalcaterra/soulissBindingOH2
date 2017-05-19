@@ -46,14 +46,14 @@
 				<advanced>true</advanced>
 			</parameter>
 
-			<parameter name="CONFIG_USER_INDEX" type="integer" required="true">
+			<parameter name="USER_INDEX" type="integer" required="true">
 				<label>User Index</label>
 				<description>Generally the default value work good. It must is different from other user interfaces (ex: SoulissApp)
                 </description>
 				<default>70</default>
 				<advanced>true</advanced>
 			</parameter>
-			<parameter name="CONFIG_NODE_INDEX" type="integer" required="true">
+			<parameter name="NODE_INDEX" type="integer" required="true">
 				<label>Node Index</label>
 				<description>Generally the default value work good. It must is different from other user interfaces (ex: SoulissApp)
                 </description>

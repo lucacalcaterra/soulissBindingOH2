@@ -39,7 +39,6 @@ public class SoulissT11Handler extends SoulissGenericTypical implements typicalC
     public SoulissT11Handler(Thing _thing) {
         super(_thing);
         thing = _thing;
-
     }
 
     // called on every status change or change request
@@ -87,14 +86,13 @@ public class SoulissT11Handler extends SoulissGenericTypical implements typicalC
     public void initialize() {
         // TODO: Initialize the thing. If done set status to ONLINE to indicate proper working.
         // Long running initialization should be done asynchronously in background.
-
         updateStatus(ThingStatus.ONLINE);
 
         gwConfigurationMap = thing.getConfiguration();
-
         if (gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL) != null) {
             xSleepTime = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL)).shortValue();
         }
+
         // Note: When initialization can NOT be done set the status with more details for further
         // analysis. See also class ThingStatusDetail for all available status details.
         // Add a description to give user information to understand why thing does not work

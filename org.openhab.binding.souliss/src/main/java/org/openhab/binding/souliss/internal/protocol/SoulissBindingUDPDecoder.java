@@ -21,6 +21,7 @@ import org.eclipse.smarthome.core.thing.Thing;
 import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
 import org.openhab.binding.souliss.SoulissBindingUDPConstants;
+import org.openhab.binding.souliss.handler.SoulissGatewayHandler;
 import org.openhab.binding.souliss.handler.SoulissGenericTypical;
 import org.openhab.binding.souliss.handler.SoulissT11Handler;
 import org.openhab.binding.souliss.handler.SoulissT12Handler;
@@ -66,21 +67,25 @@ public class SoulissBindingUDPDecoder {
         for (int ig = 7; ig < checklen; ig++) {
             mac.add((short) (packet.getData()[ig] & 0xFF));
         }
-        decodeMacaco(mac);
+        // Last number of IP of Original Destination Address (2 byte)
+
+        decodeMacaco(packet.getData()[5], mac);
     }
 
     /**
      * Decodes lower level MaCaCo packet
      *
+     * @param lastByteGatewayIP
+     *
      * @param macacoPck
      */
-    private void decodeMacaco(ArrayList<Short> macacoPck) {
+    private void decodeMacaco(byte lastByteGatewayIP, ArrayList<Short> macacoPck) {
         int functionalCode = macacoPck.get(0);
         switch (functionalCode) {
 
             case SoulissBindingUDPConstants.Souliss_UDP_function_ping_resp:
                 logger.debug("Received functional code: 0x" + Integer.toHexString(functionalCode) + " - Ping answer");
-                decodePing(macacoPck);
+                decodePing(lastByteGatewayIP, macacoPck);
                 break;
             case SoulissBindingUDPConstants.Souliss_UDP_function_discover_GW_node_bcas_resp:
                 logger.debug("Received functional code: 0x" + Integer.toHexString(functionalCode)
@@ -97,13 +102,13 @@ public class SoulissBindingUDPDecoder {
             case SoulissBindingUDPConstants.Souliss_UDP_function_poll_resp:
                 logger.debug(
                         "Received functional code: 0x" + Integer.toHexString(functionalCode) + " - Read state answer");
-                decodeStateRequest(macacoPck);
+                decodeStateRequest(lastByteGatewayIP, macacoPck);
                 break;
 
             case SoulissBindingUDPConstants.Souliss_UDP_function_typreq_resp:// Answer for assigned typical logic
                 logger.debug("Received functional code: 0x" + Integer.toHexString(functionalCode)
                         + " - Read typical logic answer");
-                decodeTypRequest(macacoPck);
+                decodeTypRequest(lastByteGatewayIP, macacoPck);
                 break;
 
             // case (byte) ConstantsUDP.Souliss_UDP_function_health_resp:// Answer
@@ -116,7 +121,7 @@ public class SoulissBindingUDPDecoder {
             case (byte) SoulissBindingUDPConstants.Souliss_UDP_function_db_struct_resp:
                 logger.debug("Received functional code: 0x" + Integer.toHexString(functionalCode)
                         + " - Database structure answer");
-                decodeDBStructRequest(macacoPck);
+                decodeDBStructRequest(lastByteGatewayIP, macacoPck);
                 break;
             // case 0x83:
             // logger.debug("Functional code not supported");
@@ -140,11 +145,11 @@ public class SoulissBindingUDPDecoder {
     /**
      * @param mac
      */
-    private void decodePing(ArrayList<Short> mac) {
+    private void decodePing(byte lastByteGatewayIP, ArrayList<Short> mac) {
         int putIn_1 = mac.get(1); // not used
         int putIn_2 = mac.get(2); // not used
         logger.debug("decodePing: putIn code: {}, {}", putIn_1, putIn_2);
-        discoverResult.gatewayDetected();
+        discoverResult.gatewayDetected(lastByteGatewayIP);
     }
 
     private void decodePingBroadcast(ArrayList<Short> macaco) throws UnknownHostException {
@@ -156,7 +161,7 @@ public class SoulissBindingUDPDecoder {
         discoverResult.gatewayDetected(InetAddress.getByAddress(addr), macaco.get(8).toString());
     }
 
-    private void decodeTypRequest(ArrayList<Short> mac) {
+    private void decodeTypRequest(byte lastByteGatewayIP, ArrayList<Short> mac) {
         try {
             short tgtnode = mac.get(3);
             int numberOf = mac.get(4);
@@ -172,7 +177,7 @@ public class SoulissBindingUDPDecoder {
                         short slot = (short) (j % typXnodo);
                         short node = (short) (j / typXnodo + tgtnode);
 
-                        discoverResult.thingDetected(typical, node, slot);
+                        discoverResult.thingDetected(lastByteGatewayIP, typical, node, slot);
                     }
                 }
             }
@@ -190,57 +195,50 @@ public class SoulissBindingUDPDecoder {
      * max requests
      * See Souliss wiki for details
      *
+     * @param lastByteGatewayIP
+     *
      * @param mac
      */
-    private void decodeDBStructRequest(ArrayList<Short> mac) {
+    private void decodeDBStructRequest(byte lastByteGatewayIP, ArrayList<Short> mac) {
         try {
             int nodes = mac.get(5);
             int maxnodes = mac.get(6);
             int maxTypicalXnode = mac.get(7);
             int maxrequests = mac.get(8);
-            // int MaCaco_IN_S = mac.get(9);
-            // int MaCaco_TYP_S = mac.get(10);
-            // int MaCaco_OUT_S = mac.get(11);
 
             SoulissBindingNetworkParameters.nodes = nodes;
             SoulissBindingNetworkParameters.maxnodes = maxnodes;
             SoulissBindingNetworkParameters.maxTypicalXnode = maxTypicalXnode;
             SoulissBindingNetworkParameters.maxrequests = maxrequests;
-            // SoulissBindingNetworkParameters.MaCacoIN_s = MaCaco_IN_S;
-            // SoulissBindingNetworkParameters.MaCacoTYP_s = MaCaco_TYP_S;
-            // SoulissBindingNetworkParameters.MaCacoOUT_s = MaCaco_OUT_S;
 
-            // logger.debug("decodeDBStructRequest");
-            // logger.debug("Nodes: " + nodes);
-            // logger.debug("maxnodes: " + maxnodes);
-            // logger.debug("maxTypicalXnode: " + maxTypicalXnode);
-            // logger.debug("maxrequests: " + maxrequests);
-            // // logger.debug("MaCaco_IN_S: " + MaCaco_IN_S);
-            // logger.debug("MaCaco_TYP_S: " + MaCaco_TYP_S);
-            // logger.debug("MaCaco_OUT_S: " + MaCaco_OUT_S);
-
-            discoverResult.dbStructAnswerReceived();
+            // db Struct Answer from lastByteGatewayIP
+            discoverResult.dbStructAnswerReceived(
+                    (SoulissGatewayHandler) SoulissBindingNetworkParameters.getGateway(lastByteGatewayIP).getHandler());
 
         } catch (Exception e) {
             logger.error("decodeDBStructRequest: SoulissNetworkParameter update ERROR");
         }
     }
 
-    private void decodeStateRequest(ArrayList<Short> mac) {
+    private void decodeStateRequest(byte lastByteGatewayIP, ArrayList<Short> mac) {
         boolean bDecoded_forLOG = false;
         int tgtnode = mac.get(3);
 
+        SoulissGatewayHandler gateway = (SoulissGatewayHandler) SoulissBindingNetworkParameters
+                .getGateway(lastByteGatewayIP).getHandler();
+
         Iterator thingsIterator;
-        if (SoulissBindingNetworkParameters.getGateway() != null
-                && SoulissBindingNetworkParameters.getGateway().getThings() != null) {
-            thingsIterator = SoulissBindingNetworkParameters.getGateway().getThings().iterator();
+        if (gateway != null && gateway.IPAddressOnLAN != null
+                && Byte.parseByte(gateway.IPAddressOnLAN.split("\\.")[3]) == lastByteGatewayIP) {
+            thingsIterator = gateway.getThing().getThings().iterator();
             boolean bFound = false;
             Thing typ = null;
             while (thingsIterator.hasNext() && !bFound) {
                 typ = (Thing) thingsIterator.next();
                 String sUID_Array[] = typ.getUID().getAsString().split(":");
                 // execute only if binding is Souliss
-                if (sUID_Array[0].equals(SoulissBindingConstants.BINDING_ID)) {
+                if (sUID_Array[0].equals(SoulissBindingConstants.BINDING_ID) && Short.parseShort(
+                        ((SoulissGenericTypical) typ).getGatewayIP().toString().split("\\.")[3]) == lastByteGatewayIP) {
                     // execute only if it is node to update
                     if (((SoulissGenericTypical) typ.getHandler()) != null
                             && ((SoulissGenericTypical) typ.getHandler()).getNode() == tgtnode) {

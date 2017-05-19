@@ -8,11 +8,11 @@
  */
 package org.openhab.binding.souliss.internal.protocol;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Thing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,12 +25,9 @@ import org.slf4j.LoggerFactory;
  * @since 1.7.0
  */
 public class SoulissBindingNetworkParameters {
-    public static String IPAddressOnLAN = "";
-    public static int preferred_local_port = 23000;
-    public static int souliss_gateway_port = 230;
-    public static int NodeIndex = 70;
-    public static int UserIndex = 120;
 
+    public static short defaultNodeIndex = 130;
+    public static short defaultUserIndex = 70;
     public static int nodes;
     public static int maxnodes;
     public static int maxTypicalXnode;
@@ -49,38 +46,18 @@ public class SoulissBindingNetworkParameters {
     public static long SECURE_SEND_TIMEOUT_TO_REQUEUE = presetTime;
     public static long SECURE_SEND_TIMEOUT_TO_REMOVE_PACKET = presetTime;
     private static Logger logger = LoggerFactory.getLogger(SoulissBindingNetworkParameters.class);
-    private static Bridge gateway;
 
-    // public static DatagramSocket datagramsocket;
+    private static ConcurrentHashMap<Byte, Thing> hashTableGateway = new ConcurrentHashMap<Byte, Thing>();
 
-    /**
-     * @return sPar value format to string 0x+sPar
-     */
-    public static String getPropTypicalBytes(String sPar) {
-        return (String) prop.get("0x" + sPar);
+    public static void addGateway(byte lastByteGatewayIP, Thing thing) {
+        hashTableGateway.put(lastByteGatewayIP, thing);
     }
 
-    /**
-     * Load in the memory the contents of InputStream is
-     *
-     * @param is
-     */
-    public static void load(InputStream is) {
-        try {
-            prop.load(is);
-            logger.trace("ok");
-            is.close();
-        } catch (IOException e) {
-            logger.warn(e.getMessage());
-        }
+    public static Bridge getGateway(byte lastByteGatewayIP) {
+        return (Bridge) hashTableGateway.get(lastByteGatewayIP);
     }
 
-    public static void setGateway(Bridge thing) {
-        gateway = thing;
+    public static void removeGateway(byte lastByteGatewayIP) {
+        hashTableGateway.remove(lastByteGatewayIP);
     }
-
-    public static Bridge getGateway() {
-        return gateway;
-    }
-
 }

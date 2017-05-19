@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ThingUID;
+import org.openhab.binding.souliss.handler.SoulissGatewayHandler;
 import org.openhab.binding.souliss.internal.SoulissDatagramSocketFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,19 +35,19 @@ public class SoulissDiscover extends Thread {
 
         void gatewayDetected(InetAddress addr, String id);
 
-        void gatewayDetected();
-
         boolean isGatewayDetected();
 
         void setGatewayDetected();
 
         void setGatewayUndetected();
 
-        void dbStructAnswerReceived();
-
-        void thingDetected(short typical, short node, short slot);
+        void thingDetected(byte lastByteGatewayIP, short typical, short node, short slot);
 
         ThingUID getGateway();
+
+        void dbStructAnswerReceived(SoulissGatewayHandler soulissGatewayHandler);
+
+        void gatewayDetected(byte lastByteGatewayIP);
     }
 
     private boolean willbeclosed = false;
@@ -72,10 +73,6 @@ public class SoulissDiscover extends Thread {
 
     public void stopReceiving() {
         willbeclosed = true;
-
-        // UDP_Server.closeSocket();
-        // UDP_Server = null;
-
         try {
             join(500);
         } catch (InterruptedException e) {
@@ -88,10 +85,6 @@ public class SoulissDiscover extends Thread {
             resendTimer.cancel(false);
             resendTimer = null;
         }
-        // if (datagramSocket_port230 != null) {
-        // datagramSocket_port230.close();
-        // datagramSocket_port230 = null;
-        // }
     }
 
     /**

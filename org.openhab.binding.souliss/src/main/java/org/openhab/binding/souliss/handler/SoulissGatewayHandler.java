@@ -50,23 +50,21 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
     boolean bGatewayDetected = false;
 
     Configuration gwConfigurationMap;
-    // private SoulissCommunication com;
-    // private int refrehInterval;
-    // private String bridgeid;
-    // private ScheduledFuture<?> discoverTimer;
-    // private SoulissDiscover discover;
-    // private ThingDiscoveryService thingDiscoveryService;
+
     private int pingRefreshInterval;
     private ScheduledFuture<?> pingTimer;
     private ScheduledFuture<?> subscriptionTimer;
     private int subscriptionRefreshInterval;
     private Bridge bridge;
+    public int preferred_local_port;
+    public int souliss_gateway_port;
+    public short userIndex;
+    public short nodeIndex;
+    public String IPAddressOnLAN;
 
     public SoulissGatewayHandler(Bridge _bridge) {
         super(_bridge);
         bridge = _bridge;
-        // initialize();
-
     }
 
     @Override
@@ -82,25 +80,22 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
         // thingDiscoveryService.start(bundleContext);
 
         gwConfigurationMap = bridge.getConfiguration();
-        SoulissBindingNetworkParameters.IPAddressOnLAN = (String) gwConfigurationMap
-                .get(SoulissBindingConstants.CONFIG_IP_ADDRESS);
+        IPAddressOnLAN = (String) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_IP_ADDRESS);
 
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_LOCAL_PORT) != null) {
-            SoulissBindingNetworkParameters.preferred_local_port = ((BigDecimal) gwConfigurationMap
-                    .get(SoulissBindingConstants.CONFIG_LOCAL_PORT)).intValue();
+            preferred_local_port = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_LOCAL_PORT))
+                    .intValue();
         }
 
-        if (SoulissBindingNetworkParameters.preferred_local_port < 0
-                && SoulissBindingNetworkParameters.preferred_local_port > 65000) {
+        if (preferred_local_port < 0 && preferred_local_port > 65000) {
             bridge.getConfiguration().put(SoulissBindingConstants.CONFIG_LOCAL_PORT, 0);
         }
 
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_PORT) != null) {
-            SoulissBindingNetworkParameters.souliss_gateway_port = ((BigDecimal) gwConfigurationMap
-                    .get(SoulissBindingConstants.CONFIG_PORT)).intValue();
+            souliss_gateway_port = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_PORT))
+                    .intValue();
         }
-        if (SoulissBindingNetworkParameters.souliss_gateway_port < 0
-                && SoulissBindingNetworkParameters.souliss_gateway_port > 65000)
+        if (souliss_gateway_port < 0 && souliss_gateway_port > 65000)
 
         {
             bridge.getConfiguration().put(SoulissBindingConstants.CONFIG_PORT,
@@ -110,19 +105,17 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_USER_INDEX) != null)
 
         {
-            SoulissBindingNetworkParameters.UserIndex = ((BigDecimal) gwConfigurationMap
-                    .get(SoulissBindingConstants.CONFIG_USER_INDEX)).intValue();
-            if (SoulissBindingNetworkParameters.UserIndex < 0 && SoulissBindingNetworkParameters.UserIndex > 255) {
+            userIndex = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_USER_INDEX)).shortValue();
+            if (userIndex < 0 && userIndex > 255) {
                 bridge.getConfiguration().put(SoulissBindingConstants.CONFIG_USER_INDEX,
                         SoulissBindingUDPConstants.SOULISS_DEFAULT_USER_INDEX);
             }
         }
 
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_NODE_INDEX) != null) {
-            SoulissBindingNetworkParameters.NodeIndex = ((BigDecimal) gwConfigurationMap
-                    .get(SoulissBindingConstants.CONFIG_NODE_INDEX)).intValue();
+            nodeIndex = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_NODE_INDEX)).shortValue();
         }
-        if (SoulissBindingNetworkParameters.NodeIndex < 0 && SoulissBindingNetworkParameters.NodeIndex > 255) {
+        if (nodeIndex < 0 && nodeIndex > 255) {
             bridge.getConfiguration().put(SoulissBindingConstants.CONFIG_NODE_INDEX,
                     SoulissBindingUDPConstants.SOULISS_DEFAULT_NODE_INDEX);
 
@@ -142,7 +135,10 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
     private void sendPing() {
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_IP_ADDRESS).toString().length() > 0) {
             SoulissCommonCommands.sendPing(datagramSocket_port230,
-                    gwConfigurationMap.get(SoulissBindingConstants.CONFIG_IP_ADDRESS).toString(), (byte) 0, (byte) 0);
+                    gwConfigurationMap.get(SoulissBindingConstants.CONFIG_IP_ADDRESS).toString(),
+                    Short.parseShort(gwConfigurationMap.get(SoulissBindingConstants.CONFIG_NODE_INDEX).toString()),
+                    Short.parseShort(gwConfigurationMap.get(SoulissBindingConstants.CONFIG_USER_INDEX).toString()),
+                    (byte) 0, (byte) 0);
             logger.debug("Sent ping packet");
         }
     }
@@ -151,6 +147,8 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_IP_ADDRESS).toString().length() > 0) {
             SoulissCommonCommands.sendSUBSCRIPTIONframe(datagramSocket,
                     gwConfigurationMap.get(SoulissBindingConstants.CONFIG_IP_ADDRESS).toString(),
+                    Short.parseShort(gwConfigurationMap.get(SoulissBindingConstants.CONFIG_NODE_INDEX).toString()),
+                    Short.parseShort(gwConfigurationMap.get(SoulissBindingConstants.CONFIG_USER_INDEX).toString()),
                     SoulissBindingNetworkParameters.nodes);
         }
     }
@@ -218,7 +216,8 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
      */
     @Override
     public void gatewayDetected(InetAddress addr, String id) {
-
+        SoulissCommonCommands.sendDBStructFrame(SoulissDatagramSocketFactory.getDatagram_for_broadcast(),
+                addr.getHostAddress(), nodeIndex, userIndex);
     }
 
     /**
@@ -227,16 +226,11 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
      * @author Tonino Fazio - Initial contribution
      */
     @Override
-    public void gatewayDetected() {
-        updateStatus(ThingStatus.ONLINE);
-        setGatewayDetected();
-
-    }
-
-    @Override
-    public void dbStructAnswerReceived() {
-        // TODO Auto-generated method stub
-
+    public void gatewayDetected(byte lastByteGatewayIP) {
+        if (Byte.parseByte(this.IPAddressOnLAN.split("\\.")[3]) == lastByteGatewayIP) {
+            updateStatus(ThingStatus.ONLINE);
+            setGatewayDetected();
+        }
     }
 
     @Override
@@ -309,15 +303,30 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
     }
 
     @Override
-    public void thingDetected(short typical, short node, short slot) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public ThingUID getGateway() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void dbStructAnswerReceived(SoulissGatewayHandler gateway) {
+        Configuration gwConfigurationMap = bridge.getConfiguration();
+        String IPAddressOnLAN = (String) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_IP_ADDRESS);
+        // short nodeIndex = gwConfigurationMap.get(SoulissBindingConstants.CONFIG_NODE_INDEX))
+        // short userIndex = gwConfigurationMap.get(SoulissBindingConstants.CONFIG_USER_INDEX).shortValue();
+
+        SoulissCommonCommands.sendTYPICAL_REQUESTframe(SoulissDatagramSocketFactory.getDatagram_for_broadcast(),
+                IPAddressOnLAN, nodeIndex, userIndex);
+    }
+
+    public String getGatewayIP() {
+        return ((SoulissGatewayHandler) thingRegistry.get(thing.getBridgeUID()).getHandler()).IPAddressOnLAN;
+    }
+
+    @Override
+    public void thingDetected(byte lastByteGatewayIP, short typical, short node, short slot) {
+        // TODO Auto-generated method stub
+
     }
 
 }

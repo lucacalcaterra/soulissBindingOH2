@@ -26,9 +26,9 @@ import org.openhab.binding.souliss.handler.SoulissT11Handler;
 import org.openhab.binding.souliss.handler.SoulissT12Handler;
 import org.openhab.binding.souliss.handler.SoulissT13Handler;
 import org.openhab.binding.souliss.handler.SoulissT14Handler;
-import org.openhab.binding.souliss.handler.SoulissT16Handler;
 import org.openhab.binding.souliss.handler.SoulissT22Handler;
 import org.openhab.binding.souliss.handler.SoulissT5nHandler;
+import org.openhab.binding.souliss.handler.SoulissT61Handler;
 import org.openhab.binding.souliss.internal.protocol.SoulissDiscover.DiscoverResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -285,12 +285,6 @@ public class SoulissBindingUDPDecoder {
                                     typicalState = getOHStateFromSoulissVal(sVal);
                                     ((SoulissT14Handler) typ.getHandler()).setState(typicalState);
                                     break;
-                                case SoulissBindingConstants.T16:
-                                    logger.debug("Decoding " + SoulissBindingConstants.T16 + " packet");
-                                    ((SoulissT16Handler) typ.getHandler()).setState(getOHStateFromSoulissVal(sVal));
-                                    ((SoulissT16Handler) typ.getHandler()).setStateRGB(getByteAtSlot(mac, slot + 1),
-                                            getByteAtSlot(mac, slot + 2), getByteAtSlot(mac, slot + 3));
-                                    break;
                                 case SoulissBindingConstants.T21:
                                 case SoulissBindingConstants.T22:
                                     logger.debug("Decoding " + SoulissBindingConstants.T21 + "/"
@@ -359,6 +353,12 @@ public class SoulissBindingUDPDecoder {
                                     ((SoulissT5nHandler) typ.getHandler())
                                             .setState(DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
                                     break;
+                                case SoulissBindingConstants.T61:
+                                    logger.debug("Decoding " + SoulissBindingConstants.T61 + " packet");
+                                    ((SoulissT61Handler) typ.getHandler())
+                                            .setState(DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
+                                    break;
+
                                 default:
                                     logger.debug("Unsupported typical");
                             }

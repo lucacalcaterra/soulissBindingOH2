@@ -77,6 +77,15 @@ public class SoulissBindingProtocolConstants {
     public static final short Souliss_T57_PowerSensor = 0x57;
     public static final short Souliss_T58_PressureSensor = 0x58;
 
+    public static final short Souliss_T61 = 0x61;
+    public static final short Souliss_T62_TemperatureSensor = 0x62;
+    public static final short Souliss_T63_HumiditySensor = 0x63;
+    public static final short Souliss_T64_LuxSensor = 0x64;
+    public static final short Souliss_T65_VoltageSensor = 0x65;
+    public static final short Souliss_T66_CurrentSensor = 0x66;
+    public static final short Souliss_T67_PowerSensor = 0x67;
+    public static final short Souliss_T68_PressureSensor = 0x68;
+
     // customized (remote) AirCon commands
     public static final int Souliss_T_IrCom_AirCon_Pow_On = 0x8FFE;
     public static final int Souliss_T_IrCom_AirCon_Pow_Auto_20 = 0x8FFD;

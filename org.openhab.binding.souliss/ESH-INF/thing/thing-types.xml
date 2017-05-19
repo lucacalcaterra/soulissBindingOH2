@@ -275,20 +275,19 @@
             <channel id="lastStatusStored" typeId="lastStatusStored" />
         </channels>
     </thing-type>
-    
+
     <thing-type id="t61">
         <supported-bridge-type-refs>
-            <bridge-type-ref id="gateway" />
+            <bridge-type-ref id="gateway"/>
         </supported-bridge-type-refs>
         <label>T61</label>
-        <description>Floating Point SetPoint</description>
-
+        <description>Analog setpoint</description>
         <channels>
-            <channel id="value" typeId="float"/>
+            <channel id="value" typeId="float6n" />
             <channel id="lastStatusStored" typeId="lastStatusStored" />
         </channels>
     </thing-type>
-
+    
 	<channel-type id="pulse">
 		<item-type>Switch</item-type>
 		<label>Set</label>
@@ -381,12 +380,21 @@
 	
 	<channel-type id="float">
         <item-type>Number</item-type>
-        <label>V</label>
+        <label>Value</label>
         <description>Floating Point Input</description>
           <tags>
       <tag>sensors</tag>
     </tags>
         <state readOnly="true" pattern="%.1f ">
+        </state>
+    </channel-type>
+    
+    <channel-type id="float6n">
+        <item-type>Number</item-type>
+        <label>Value</label>
+        <description>Floating Point Input</description>
+        <category>Temperature</category>
+        <state pattern="%.1f">
         </state>
     </channel-type>
 

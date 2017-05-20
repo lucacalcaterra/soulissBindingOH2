@@ -26,6 +26,13 @@ import org.openhab.binding.souliss.handler.SoulissT55Handler;
 import org.openhab.binding.souliss.handler.SoulissT56Handler;
 import org.openhab.binding.souliss.handler.SoulissT57Handler;
 import org.openhab.binding.souliss.handler.SoulissT61Handler;
+import org.openhab.binding.souliss.handler.SoulissT62Handler;
+import org.openhab.binding.souliss.handler.SoulissT63Handler;
+import org.openhab.binding.souliss.handler.SoulissT64Handler;
+import org.openhab.binding.souliss.handler.SoulissT65Handler;
+import org.openhab.binding.souliss.handler.SoulissT66Handler;
+import org.openhab.binding.souliss.handler.SoulissT67Handler;
+import org.openhab.binding.souliss.handler.SoulissT68Handler;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
 
 /**
@@ -71,6 +78,20 @@ public class SoulissHandlerFactory extends BaseThingHandlerFactory {
             return new SoulissT57Handler(thing);
         } else if (thingTypeUID.equals(T61_THING_TYPE)) {
             return new SoulissT61Handler(thing);
+        } else if (thingTypeUID.equals(T62_THING_TYPE)) {
+            return new SoulissT62Handler(thing);
+        } else if (thingTypeUID.equals(T63_THING_TYPE)) {
+            return new SoulissT63Handler(thing);
+        } else if (thingTypeUID.equals(T64_THING_TYPE)) {
+            return new SoulissT64Handler(thing);
+        } else if (thingTypeUID.equals(T65_THING_TYPE)) {
+            return new SoulissT65Handler(thing);
+        } else if (thingTypeUID.equals(T66_THING_TYPE)) {
+            return new SoulissT66Handler(thing);
+        } else if (thingTypeUID.equals(T67_THING_TYPE)) {
+            return new SoulissT67Handler(thing);
+        } else if (thingTypeUID.equals(T68_THING_TYPE)) {
+            return new SoulissT68Handler(thing);
         }
 
         return null;

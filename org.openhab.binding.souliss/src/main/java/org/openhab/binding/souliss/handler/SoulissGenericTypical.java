@@ -109,9 +109,9 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
                 SoulissBindingNetworkParameters.IPAddressOnLAN, this.getNode(), this.getSlot(), command, R, G, B);
     }
 
-    public void CommandSEND(short command, short B1, short B2) {
+    public void CommandSEND(short B1, short B2) {
         SoulissCommonCommands.sendFORCEFrameT61SetPoint(SoulissDatagramSocketFactory.getSocketDatagram(),
-                SoulissBindingNetworkParameters.IPAddressOnLAN, this.getNode(), this.getSlot(), command, B1, B2);
+                SoulissBindingNetworkParameters.IPAddressOnLAN, this.getNode(), this.getSlot(), B1, B2);
     }
 
     public DateTimeType getLastUpdateTime() {

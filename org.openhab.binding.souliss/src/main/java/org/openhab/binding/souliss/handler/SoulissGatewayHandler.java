@@ -137,6 +137,7 @@ public class SoulissGatewayHandler extends BaseBridgeHandler implements Discover
         UDP_Server_port230.start();
 
         setupRefreshTimer();
+
     }
 
     private void sendPing() {

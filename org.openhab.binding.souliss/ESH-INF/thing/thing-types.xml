@@ -288,6 +288,90 @@
         </channels>
     </thing-type>
     
+    <thing-type id="t62">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway"/>
+        </supported-bridge-type-refs>
+        <label>T62</label>
+        <description>Temperature measure (-20, +50) °C</description>
+        <channels>
+            <channel id="value" typeId="float6n" />
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
+    </thing-type>
+    
+    <thing-type id="t63">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway"/>
+        </supported-bridge-type-refs>
+        <label>T63</label>
+        <description>Humidity measure (0, 100) %</description>
+        <channels>
+            <channel id="value" typeId="float6n" />
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
+    </thing-type>
+    
+    <thing-type id="t64">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway"/>
+        </supported-bridge-type-refs>
+        <label>T64</label>
+        <description>Light Sensor (0, 40) kLux</description>
+        <channels>
+            <channel id="value" typeId="float6n" />
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
+    </thing-type>
+    
+    <thing-type id="t65">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway"/>
+        </supported-bridge-type-refs>
+        <label>T65</label>
+        <description>Voltage (0, 400) V</description>
+        <channels>
+            <channel id="value" typeId="float6n" />
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
+    </thing-type>
+    
+    <thing-type id="t66">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway"/>
+        </supported-bridge-type-refs>
+        <label>T66</label>
+        <description>Current (0, 25) A</description>
+        <channels>
+            <channel id="value" typeId="float6n" />
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
+    </thing-type>
+    
+    <thing-type id="t67">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway"/>
+        </supported-bridge-type-refs>
+        <label>T67</label>
+        <description>Power (0, 6500) W</description>
+        <channels>
+            <channel id="value" typeId="float6n" />
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
+    </thing-type>
+    
+    <thing-type id="t68">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway"/>
+        </supported-bridge-type-refs>
+        <label>T68</label>
+        <description>Pressure measure (0, 1500) hPa</description>
+        <channels>
+            <channel id="value" typeId="float6n" />
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
+    </thing-type>
+    
 	<channel-type id="pulse">
 		<item-type>Switch</item-type>
 		<label>Set</label>

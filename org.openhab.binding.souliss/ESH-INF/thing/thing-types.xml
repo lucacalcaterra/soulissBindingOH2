@@ -177,6 +177,21 @@
         </channels>
     </thing-type>
 
+    <thing-type id="t31">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway"/>
+        </supported-bridge-type-refs>
+        <label>T31</label>
+        <description>Temperature control with cooling and heating mode</description>
+        <channels>
+            <channel id="fan" typeId="fan-channel" />
+            <channel id="mode" typeId="mode-channel" />
+            <channel id="setPoint" typeId="float6n" />
+            <channel id="asMeasured" typeId="button">
+                <label>As measured</label>
+            </channel>
+        </channels>
+    </thing-type>
 
 <thing-type id="t51">
         <supported-bridge-type-refs>
@@ -198,7 +213,7 @@
 		<label>T52</label>
 		<description>Temperature measure (-20, +50) °C</description>
 
-<channels>
+        <channels>
             <channel id="value" typeId="temperature"/>
             <channel id="lastStatusStored" typeId="lastStatusStored" />
         </channels>
@@ -210,7 +225,7 @@
 		</supported-bridge-type-refs>
 		<label>T53</label>
 		<description>Humidity measure (0, 100) %</description>
-<channels>
+        <channels>
             <channel id="value" typeId="humidity"/>
             <channel id="lastStatusStored" typeId="lastStatusStored" />
         </channels>
@@ -222,7 +237,7 @@
         </supported-bridge-type-refs>
         <label>T53</label>
         <description>Light Sensor (0, 40) kLux</description>
-<channels>
+        <channels>
             <channel id="value" typeId="voltage"/>
             <channel id="lastStatusStored" typeId="lastStatusStored" />
         </channels>
@@ -372,6 +387,38 @@
         </channels>
     </thing-type>
     
+    <channel-type id="fan-channel">
+    <item-type>String</item-type>
+    <label>Fan</label>
+    <state readOnly="false" >
+      <options>
+        <option value="AUTO">Auto</option>
+        <option value="HIGH">High</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="LOW">Low</option>
+      </options>
+    </state>
+    </channel-type>
+    
+    <channel-type id="mode-channel">
+    <item-type>String</item-type>
+    <label>Mode</label>
+    <state readOnly="false" >
+      <options>
+        <option value="COOL">Cool</option>
+        <option value="HEAT">Heat</option>
+        <option value="POWEREDOFF">Powered off</option>
+      </options>
+    </state>
+    </channel-type>
+    
+    <channel-type id="button">
+        <item-type>Switch</item-type>
+        <label>Button</label>
+        <description>Button to trigger something</description>
+        <category>Switch</category>
+    </channel-type>
+    
 	<channel-type id="pulse">
 		<item-type>Switch</item-type>
 		<label>Set</label>
@@ -475,7 +522,7 @@
     
     <channel-type id="float6n">
         <item-type>Number</item-type>
-        <label>Value</label>
+        <label>Setpoint</label>
         <description>Floating Point Input</description>
         <category>Temperature</category>
         <state pattern="%.1f">

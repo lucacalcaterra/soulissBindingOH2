@@ -347,7 +347,11 @@ public class SoulissBindingUDPDecoder {
                                         }
                                     }
                                     break;
+                                case SoulissBindingConstants.T31:
+                                    logger.debug("Decoding " + SoulissBindingConstants.T31 + "/"
+                                            + SoulissBindingConstants.T31 + " packet");
 
+                                    break;
                                 case SoulissBindingConstants.T51:
                                 case SoulissBindingConstants.T52:
                                 case SoulissBindingConstants.T53:

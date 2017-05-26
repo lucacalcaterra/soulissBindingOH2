@@ -224,14 +224,14 @@ public class SoulissBindingProtocolConstants {
     public static final String Souliss_T31_Use_Of_Slot_MEASURED = "measured";
     public static final String Souliss_T31_Use_Of_Slot_SETASMEASURED = "setasmeasured";
 
-    public static final String Souliss_T31_Use_Of_Slot_SETPOINT_COMMAND = "settemp";
-    public static final String Souliss_T31_Use_Of_Slot_HEATING = "heating";
-    public static final String Souliss_T31_Use_Of_Slot_COOLING = "cooling";
+    public static final short Souliss_T31_Use_Of_Slot_SETPOINT_COMMAND = 0x0C;
+    public static final short Souliss_T31_Use_Of_Slot_HEATING = 0x05;
+    public static final short Souliss_T31_Use_Of_Slot_COOLING = 0x04;
     public static final String Souliss_T31_Use_Of_Slot_HEATING_COOLING = "heatingcooling";
     public static final String Souliss_T31_Use_Of_Slot_FANOFF = "fanoff";
     public static final String Souliss_T31_Use_Of_Slot_FANLOW = "fanlow";
     public static final String Souliss_T31_Use_Of_Slot_FANMED = "fanmed";
-    public static final String Souliss_T31_Use_Of_Slot_FANHIGH = "fanhigh";
+    public static final short Souliss_T31_Use_Of_Slot_FANHIGH = 0x09;
     public static final String Souliss_T31_Use_Of_Slot_FANAUTOMODE = "fanautomode";
     public static final String Souliss_T31_Use_Of_Slot_POWER = "power";
 

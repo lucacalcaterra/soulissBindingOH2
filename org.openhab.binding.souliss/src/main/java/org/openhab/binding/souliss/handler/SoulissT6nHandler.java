@@ -34,7 +34,7 @@ public class SoulissT6nHandler extends SoulissGenericTypical implements typicalC
             byte B2 = (byte) (uu >> 8);
             byte B1 = (byte) uu;
             // setpoint command
-            CommandSEND(B1, B2);
+            commandSEND(B1, B2);
         }
     }
 

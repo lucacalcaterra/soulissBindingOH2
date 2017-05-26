@@ -17,8 +17,11 @@ import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.PrimitiveType;
+import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
+import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
 import org.openhab.binding.souliss.handler.SoulissGenericTypical.typicalCommonMethods;
+import org.openhab.binding.souliss.internal.HalfFloatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,10 +45,13 @@ public class SoulissT31Handler extends SoulissGenericTypical implements typicalC
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
 
-        if (command instanceof StringType) {
+        if (command instanceof RefreshType) {
+
+        } else if (command instanceof StringType) {
             switch (((StringType) command).toString()) {
                 // FAN
                 case "HIGH":
+                    commandSEND(SoulissBindingProtocolConstants.Souliss_T31_Use_Of_Slot_FANHIGH);
                     break;
                 case "MEDIUM":
                     break;
@@ -55,8 +61,10 @@ public class SoulissT31Handler extends SoulissGenericTypical implements typicalC
                     break;
                 // MODE
                 case "HEAT":
+                    commandSEND(SoulissBindingProtocolConstants.Souliss_T31_Use_Of_Slot_HEATING);
                     break;
                 case "COOL":
+                    commandSEND(SoulissBindingProtocolConstants.Souliss_T31_Use_Of_Slot_COOLING);
                     break;
                 case "POWEREDOFF":
                     break;
@@ -64,8 +72,11 @@ public class SoulissT31Handler extends SoulissGenericTypical implements typicalC
         } else if (command instanceof OnOffType) {
             // As Measured clicked
         } else if (command instanceof DecimalType) {
-            // Setpoint setted
-
+            int uu = HalfFloatUtils.fromFloat(((DecimalType) command).floatValue());
+            byte B2 = (byte) (uu >> 8);
+            byte B1 = (byte) uu;
+            // setpoint command
+            commandSEND(SoulissBindingProtocolConstants.Souliss_T31_Use_Of_Slot_SETPOINT_COMMAND, B1, B2);
         }
     }
 

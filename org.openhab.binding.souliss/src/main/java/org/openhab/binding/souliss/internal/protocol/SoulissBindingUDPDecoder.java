@@ -27,6 +27,7 @@ import org.openhab.binding.souliss.handler.SoulissT12Handler;
 import org.openhab.binding.souliss.handler.SoulissT13Handler;
 import org.openhab.binding.souliss.handler.SoulissT14Handler;
 import org.openhab.binding.souliss.handler.SoulissT22Handler;
+import org.openhab.binding.souliss.handler.SoulissT31Handler;
 import org.openhab.binding.souliss.handler.SoulissT5nHandler;
 import org.openhab.binding.souliss.handler.SoulissT61Handler;
 import org.openhab.binding.souliss.handler.SoulissT62Handler;
@@ -37,6 +38,8 @@ import org.openhab.binding.souliss.handler.SoulissT66Handler;
 import org.openhab.binding.souliss.handler.SoulissT67Handler;
 import org.openhab.binding.souliss.handler.SoulissT68Handler;
 import org.openhab.binding.souliss.internal.protocol.SoulissDiscover.DiscoverResult;
+import org.openhab.binfing.souliss.primitivetypes.FanModeType;
+import org.openhab.binfing.souliss.primitivetypes.ThermostatModeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -255,6 +258,7 @@ public class SoulissBindingUDPDecoder {
                         int slot = ((SoulissGenericTypical) typ.getHandler()).getSlot();
                         // get typical value
                         short sVal = getByteAtSlot(mac, slot);
+
                         OnOffType typicalState = null;
                         // update Txx
                         try {
@@ -350,6 +354,69 @@ public class SoulissBindingUDPDecoder {
                                 case SoulissBindingConstants.T31:
                                     logger.debug("Decoding " + SoulissBindingConstants.T31 + "/"
                                             + SoulissBindingConstants.T31 + " packet");
+
+                                    switch (getBitState(sVal, 1)) {
+                                        case 0:
+                                            ((SoulissT31Handler) typ.getHandler())
+                                                    .setState(ThermostatModeType.HEATING_OFF);
+                                            break;
+                                        case 1:
+                                            ((SoulissT31Handler) typ.getHandler())
+                                                    .setState(ThermostatModeType.HEATING_ON);
+                                            break;
+                                    }
+
+                                    switch (getBitState(sVal, 2)) {
+                                        case 0:
+                                            ((SoulissT31Handler) typ.getHandler())
+                                                    .setState(ThermostatModeType.COOLING_OFF);
+                                            break;
+                                        case 1:
+                                            ((SoulissT31Handler) typ.getHandler())
+                                                    .setState(ThermostatModeType.COOLING_ON);
+                                            break;
+                                    }
+
+                                    switch (getBitState(sVal, 3) + getBitState(sVal, 4) + getBitState(sVal, 5)) {
+                                        case 1:
+                                            ((SoulissT31Handler) typ.getHandler()).setState(FanModeType.LOW);
+                                            break;
+                                        case 2:
+                                            ((SoulissT31Handler) typ.getHandler()).setState(FanModeType.MEDIUM);
+                                            break;
+                                        case 3:
+                                            ((SoulissT31Handler) typ.getHandler()).setState(FanModeType.HIGH);
+                                            break;
+                                    }
+                                    switch (getBitState(sVal, 6)) {
+                                        case 0:
+                                            ((SoulissT31Handler) typ.getHandler()).setState(FanModeType.MANUAL);
+                                            break;
+                                        case 1:
+                                            ((SoulissT31Handler) typ.getHandler()).setState(FanModeType.AUTO);
+                                            break;
+                                    }
+
+                                    switch (getBitState(sVal, 7)) {
+                                        case 0:
+                                            ((SoulissT31Handler) typ.getHandler())
+                                                    .setState(ThermostatModeType.HEATING_MODE);
+                                            break;
+                                        case 1:
+                                            ((SoulissT31Handler) typ.getHandler())
+                                                    .setState(ThermostatModeType.COOLING_MODE);
+                                            break;
+                                    }
+
+                                    // SLOT 1-2: Temperature Measured value
+                                    float val = getFloatAtSlot(mac, slot + 1);
+                                    // ((SoulissT31Handler) typ).setMeasuredValue(val);
+                                    // ((SoulissT31Handler) typ.getHandler()).setState((DecimalType)val);
+
+                                    // SLOT 3-4: Temperature Setpoint Value
+                                    val = getFloatAtSlot(mac, slot + 3);
+                                    ((SoulissT31Handler) typ.getHandler())
+                                            .setState(DecimalType.valueOf(String.valueOf(val)));
 
                                     break;
                                 case SoulissBindingConstants.T51:
@@ -456,4 +523,15 @@ public class SoulissBindingUDPDecoder {
         float ret = HalfFloatUtils.toFloat(shifted + iOutput);
         return ret;
     }
+
+    public short getBitState(short vRaw, int iBit) {
+        final int MASK_BIT_1 = 0x1;
+
+        if (((vRaw >>> iBit) & MASK_BIT_1) == 0) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
 }

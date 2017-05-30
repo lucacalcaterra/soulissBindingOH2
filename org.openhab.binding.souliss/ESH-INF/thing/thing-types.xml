@@ -396,6 +396,7 @@
         <option value="HIGH">High</option>
         <option value="MEDIUM">Medium</option>
         <option value="LOW">Low</option>
+        <option value="OFF">Powered off</option>
       </options>
     </state>
     </channel-type>

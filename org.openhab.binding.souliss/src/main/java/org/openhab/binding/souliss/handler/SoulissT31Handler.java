@@ -11,14 +11,12 @@ package org.openhab.binding.souliss.handler;
 import org.eclipse.smarthome.config.core.Configuration;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
-import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.eclipse.smarthome.core.types.RefreshType;
-import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
 import org.openhab.binding.souliss.handler.SoulissGenericTypical.typicalCommonMethods;
 import org.openhab.binding.souliss.internal.HalfFloatUtils;
@@ -47,30 +45,37 @@ public class SoulissT31Handler extends SoulissGenericTypical implements typicalC
 
         if (command instanceof RefreshType) {
 
-        } else if (command instanceof StringType) {
-            switch (((StringType) command).toString()) {
+        } else if (command instanceof PrimitiveType) {
+            switch ((command).toString()) {
                 // FAN
                 case "HIGH":
-                    commandSEND(SoulissBindingProtocolConstants.Souliss_T31_Use_Of_Slot_FANHIGH);
+                    commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_FanHigh);
                     break;
                 case "MEDIUM":
+                    commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_FanMed);
                     break;
                 case "LOW":
+                    commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_FanLow);
                     break;
                 case "AUTO":
+                    commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_FanAuto);
+                    break;
+                case "OFF":
+                    commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_FanOff);
                     break;
                 // MODE
                 case "HEAT":
-                    commandSEND(SoulissBindingProtocolConstants.Souliss_T31_Use_Of_Slot_HEATING);
+                    commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_Heating);
                     break;
                 case "COOL":
-                    commandSEND(SoulissBindingProtocolConstants.Souliss_T31_Use_Of_Slot_COOLING);
+                    commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_Cooling);
                     break;
                 case "POWEREDOFF":
+                    commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_ShutDown);
                     break;
             }
         } else if (command instanceof OnOffType) {
-            // As Measured clicked
+            commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_AsMeasured);
         } else if (command instanceof DecimalType) {
             int uu = HalfFloatUtils.fromFloat(((DecimalType) command).floatValue());
             byte B2 = (byte) (uu >> 8);
@@ -94,8 +99,17 @@ public class SoulissT31Handler extends SoulissGenericTypical implements typicalC
     @Override
     public void setState(PrimitiveType _state) {
 
-        this.setUpdateTimeNow();
-        this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
+        /*
+         * the control state bit meaning follow as:
+         * BIT 0 Not used
+         * BIT 1 (0 Heating OFF, 1 Heating ON)
+         * BIT 2 (0 Cooling OFF, 1 Cooling ON)
+         * BIT 3 (0 Fan 1 OFF, 1 Fan 1 ON)
+         * BIT 4 (0 Fan 2 OFF, 1 Fan 2 ON)
+         * BIT 5 (0 Fan 3 OFF, 1 Fan 3 ON)
+         * BIT 6 (0 Manual Mode, 1 Automatic Mode for Fan)
+         * BIT 7 (0 Heating mode, 1 Cooling Mode
+         */
 
         // updateState(SoulissBindingConstants.SLEEP_CHANNEL, OnOffType.OFF);
 
@@ -105,4 +119,5 @@ public class SoulissT31Handler extends SoulissGenericTypical implements typicalC
         // this.T1nState = (OnOffType) _state;
         // }
     }
+
 }

@@ -108,6 +108,10 @@ public class SoulissBindingConstants {
     public final static String ROLLERSHUTTER_MESSAGE_NO_LIMITSWITCH_CHANNEL = "NoLimSwitch";
     public static final String ROLLERSHUTTER_MESSAGE_STOP_CHANNEL = "stop";
 
+    public final static String T31FAN_CHANNEL = "fan-channel";
+    public final static String T31MODE_CHANNEL = "mode-channel";
+    public final static String BUTTON_CHANNEL = "button";
+
     public static final String WHITE_MODE_CHANNEL = "whitemode";
     public static final String ROLLER_BRIGHTNESS_CHANNEL = "roller_brightness";
     public static final String DIMMER_BRIGHTNESS_CHANNEL = "dimmer_brightness";

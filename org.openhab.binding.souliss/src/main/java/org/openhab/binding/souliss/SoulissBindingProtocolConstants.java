@@ -15,6 +15,8 @@ package org.openhab.binding.souliss;
  * @author Alessandro Del Pex
  * @author Tonino Fazio
  * @since 1.7.0
+ * @author Luca Remigio
+ * @since 2.0.0
  */
 
 public class SoulissBindingProtocolConstants {
@@ -228,26 +230,26 @@ public class SoulissBindingProtocolConstants {
     public static final short Souliss_T31_Use_Of_Slot_HEATING = 0x05;
     public static final short Souliss_T31_Use_Of_Slot_COOLING = 0x04;
     public static final String Souliss_T31_Use_Of_Slot_HEATING_COOLING = "heatingcooling";
-    public static final String Souliss_T31_Use_Of_Slot_FANOFF = "fanoff";
-    public static final String Souliss_T31_Use_Of_Slot_FANLOW = "fanlow";
-    public static final String Souliss_T31_Use_Of_Slot_FANMED = "fanmed";
+    public static final short Souliss_T31_Use_Of_Slot_FANOFF = 0x06;
+    public static final short Souliss_T31_Use_Of_Slot_FANLOW = 0x07;
+    public static final short Souliss_T31_Use_Of_Slot_FANMED = 0x08;
     public static final short Souliss_T31_Use_Of_Slot_FANHIGH = 0x09;
-    public static final String Souliss_T31_Use_Of_Slot_FANAUTOMODE = "fanautomode";
+    public static final short Souliss_T31_Use_Of_Slot_FANAUTOMODE = 0x0A;
     public static final String Souliss_T31_Use_Of_Slot_POWER = "power";
 
-    public static final String Souliss_T3n_InSetPoint = "0x01";
-    public static final String Souliss_T3n_OutSetPoint = "0x02";
-    public static final String Souliss_T3n_AsMeasured = "0x03";
-    public static final String Souliss_T3n_Cooling = "0x04";
-    public static final String Souliss_T3n_Heating = "0x05";
-    public static final String Souliss_T3n_FanOff = "0x06";
-    public static final String Souliss_T3n_FanLow = "0x07";
-    public static final String Souliss_T3n_FanMed = "0x08";
-    public static final String Souliss_T3n_FanHigh = "0x09";
-    public static final String Souliss_T3n_FanAuto = "0x0A";
-    public static final String Souliss_T3n_FanManual = "0x0B";
-    public static final String Souliss_T3n_SetTemp = "0x0C";
-    public static final String Souliss_T3n_ShutDown = "0x0D";
+    public static final short Souliss_T3n_InSetPoint = 0x01;
+    public static final short Souliss_T3n_OutSetPoint = 0x02;
+    public static final short Souliss_T3n_AsMeasured = 0x03;
+    public static final short Souliss_T3n_Cooling = 0x04;
+    public static final short Souliss_T3n_Heating = 0x05;
+    public static final short Souliss_T3n_FanOff = 0x06;
+    public static final short Souliss_T3n_FanLow = 0x07;
+    public static final short Souliss_T3n_FanMed = 0x08;
+    public static final short Souliss_T3n_FanHigh = 0x09;
+    public static final short Souliss_T3n_FanAuto = 0x0A;
+    public static final short Souliss_T3n_FanManual = 0x0B;
+    public static final short Souliss_T3n_SetTemp = 0x0C;
+    public static final short Souliss_T3n_ShutDown = 0x0D;
 
     public static final String Souliss_T3n_HeatingOn = "0x02";
     public static final String Souliss_T3n_CoolingOn = "0x03";

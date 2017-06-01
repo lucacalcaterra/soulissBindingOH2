@@ -108,9 +108,21 @@ public class SoulissBindingConstants {
     public final static String ROLLERSHUTTER_MESSAGE_NO_LIMITSWITCH_CHANNEL = "NoLimSwitch";
     public static final String ROLLERSHUTTER_MESSAGE_STOP_CHANNEL = "stop";
 
-    public final static String T31FAN_CHANNEL = "fan-channel";
-    public final static String T31MODE_CHANNEL = "mode-channel";
-    public final static String BUTTON_CHANNEL = "button";
+    public final static String T31_FAN_CHANNEL = "fan";
+    public final static String T31_MODE_CHANNEL = "mode";
+    public final static String T31_CONDITIONING_CHANNEL = "conditioning";
+    public final static String T31_BUTTON_CHANNEL = "asMeasured";
+    public final static String T31_SETPOINT_CHANNEL = "setPoint";
+    public final static String T31_COOLINGMODE_MESSAGE_CHANNEL = "COOLING_MODE";
+    public final static String T31_HEATINGMODE_MESSAGE_CHANNEL = "HEATING_MODE";
+    public final static String T31_POWER_MESSAGE_CHANNEL = "POWER";
+    public final static String T31_FANAUTO_MESSAGE_CHANNEL = "AUTO";
+    public final static String T31_FANOFF_MESSAGE_CHANNEL = "FANOFF";
+    public final static String T31_FANLOW_MESSAGE_CHANNEL = "LOW";
+    public final static String T31_FANMEDIUM_MESSAGE_CHANNEL = "MEDIUM";
+    public final static String T31_FANHIGH_MESSAGE_CHANNEL = "HIGH";
+    public final static String T31_POWEROFF_MESSAGE_CHANNEL = "POWEROFF";
+    public final static String T31_POWERON_MESSAGE_CHANNEL = "POWERON";
 
     public static final String WHITE_MODE_CHANNEL = "whitemode";
     public static final String ROLLER_BRIGHTNESS_CHANNEL = "roller_brightness";

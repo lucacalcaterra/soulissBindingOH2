@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 public class SoulissT6nHandler extends SoulissGenericTypical implements typicalCommonMethods {
 
     private Logger logger = LoggerFactory.getLogger(SoulissT6nHandler.class);
+    private DecimalType _setPointValue = DecimalType.ZERO;
 
     public SoulissT6nHandler(Thing thing) {
         super(thing);
@@ -46,11 +47,14 @@ public class SoulissT6nHandler extends SoulissGenericTypical implements typicalC
     }
 
     @Override
-    public void setState(PrimitiveType state) {
+    public void setState(PrimitiveType _state) {
         this.setUpdateTimeNow();
 
         this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
-        this.updateState(SoulissBindingConstants.T6n_VALUE_CHANNEL, (DecimalType) state);
+        if (!_setPointValue.equals(_state)) {
+            this.updateState(SoulissBindingConstants.T6n_VALUE_CHANNEL, (DecimalType) _state);
+            _setPointValue = (DecimalType) _state;
+        }
     }
 
 }

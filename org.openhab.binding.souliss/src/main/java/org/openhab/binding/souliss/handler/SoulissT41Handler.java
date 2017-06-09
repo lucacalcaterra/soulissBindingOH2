@@ -82,17 +82,24 @@ public class SoulissT41Handler extends SoulissGenericTypical implements typicalC
     @Override
     public void setState(PrimitiveType _state) {
 
-        this.updateState(SoulissBindingConstants.T31_BUTTON_CHANNEL, OnOffType.OFF);
+        if (_state instanceof OnOffType) {
+            this.updateState(SoulissBindingConstants.T41_ONOFFALARM_CHANNEL, (OnOffType) _state);
+        } else if (_state instanceof StringType) {
+            switch (String.valueOf(_state)) {
+                case SoulissBindingConstants.T41_ALARMON_MESSAGE_CHANNEL:
+                    this.updateState(SoulissBindingConstants.T41_STATUSALARM_CHANNEL, OnOffType.ON);
+                    break;
+                case SoulissBindingConstants.T41_ALARMOFF_MESSAGE_CHANNEL:
+                    this.updateState(SoulissBindingConstants.T41_STATUSALARM_CHANNEL, OnOffType.OFF);
+                    break;
+            }
+        }
+        // Resetto il tassto di reset. Questo perchè se premuto non torna da solo in off
+        this.updateState(SoulissBindingConstants.T41_RESETALARM_CHANNEL, OnOffType.OFF);
 
         this.setUpdateTimeNow();
         this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
-        if (_state instanceof DecimalType) {
-            this.updateState(SoulissBindingConstants.T31_SETPOINT_CHANNEL, (DecimalType) _state);
-        } else if (_state instanceof StringType) {
 
-            this.updateState(SoulissBindingConstants.T31_CONDITIONING_CHANNEL, OnOffType.ON);
-
-        }
         this.updateThing(this.thing);
     }
 

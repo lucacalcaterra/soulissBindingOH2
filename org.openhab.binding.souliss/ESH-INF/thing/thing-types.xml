@@ -204,7 +204,10 @@
         <label>T41</label>
         <description>Anti-theft integration (Main)</description>
         <channels>
-            <channel id="onOffAlarm" typeId="buttonOnly">
+            <channel id="statusAlarm" typeId="buttonReadOnly">
+                <label>Alarm activation</label>
+            </channel>
+            <channel id="onOffAlarm" typeId="button">
                 <label>Alarm activation</label>
             </channel>
             <channel id="resetAlarm" typeId="button">

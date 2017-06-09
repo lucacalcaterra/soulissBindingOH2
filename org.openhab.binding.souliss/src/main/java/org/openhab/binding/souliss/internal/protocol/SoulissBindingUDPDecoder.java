@@ -29,6 +29,7 @@ import org.openhab.binding.souliss.handler.SoulissT13Handler;
 import org.openhab.binding.souliss.handler.SoulissT14Handler;
 import org.openhab.binding.souliss.handler.SoulissT22Handler;
 import org.openhab.binding.souliss.handler.SoulissT31Handler;
+import org.openhab.binding.souliss.handler.SoulissT41Handler;
 import org.openhab.binding.souliss.handler.SoulissT5nHandler;
 import org.openhab.binding.souliss.handler.SoulissT61Handler;
 import org.openhab.binding.souliss.handler.SoulissT62Handler;
@@ -457,7 +458,20 @@ public class SoulissBindingUDPDecoder {
                                     break;
                                 case SoulissBindingConstants.T41:
                                     switch (sVal) {
-
+                                        case SoulissBindingProtocolConstants.Souliss_T4n_NoAntitheft:
+                                            ((SoulissT41Handler) typ.getHandler()).setState(OnOffType.OFF);
+                                            ((SoulissT41Handler) typ.getHandler()).setState(StringType
+                                                    .valueOf(SoulissBindingConstants.T41_ALARMOFF_MESSAGE_CHANNEL));
+                                            break;
+                                        case SoulissBindingProtocolConstants.Souliss_T4n_Antitheft:
+                                            ((SoulissT41Handler) typ.getHandler()).setState(OnOffType.ON);
+                                            ((SoulissT41Handler) typ.getHandler()).setState(StringType
+                                                    .valueOf(SoulissBindingConstants.T41_ALARMOFF_MESSAGE_CHANNEL));
+                                            break;
+                                        case SoulissBindingProtocolConstants.Souliss_T4n_InAlarm:
+                                            ((SoulissT41Handler) typ.getHandler()).setState(StringType
+                                                    .valueOf(SoulissBindingConstants.T41_ALARMON_MESSAGE_CHANNEL));
+                                            break;
                                     }
                                     break;
                                 case SoulissBindingConstants.T51:

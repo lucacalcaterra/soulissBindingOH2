@@ -126,6 +126,13 @@ public class SoulissBindingConstants {
     public final static String T31_POWEROFF_MESSAGE_CHANNEL = "POWEROFF";
     public final static String T31_POWERON_MESSAGE_CHANNEL = "POWERON";
 
+    public final static String T41_ONOFFALARM_CHANNEL = "onOffAlarm";
+    public final static String T41_STATUSALARM_CHANNEL = "statusAlarm";
+    public final static String T41_RESETALARM_CHANNEL = "resetAlarm";
+
+    public final static String T41_ALARMON_MESSAGE_CHANNEL = "ALARMON";
+    public final static String T41_ALARMOFF_MESSAGE_CHANNEL = "ALARMOFF";
+
     public static final String WHITE_MODE_CHANNEL = "whitemode";
     public static final String ROLLER_BRIGHTNESS_CHANNEL = "roller_brightness";
     public static final String DIMMER_BRIGHTNESS_CHANNEL = "dimmer_brightness";

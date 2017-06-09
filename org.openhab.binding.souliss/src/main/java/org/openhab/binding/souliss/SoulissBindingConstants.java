@@ -41,6 +41,7 @@ public class SoulissBindingConstants {
     public final static String T21 = "t21";
     public final static String T22 = "t22";
     public final static String T31 = "t31";
+    public final static String T41 = "t41";
     public final static String T51 = "t51";
     public final static String T52 = "t52";
     public final static String T53 = "t53";
@@ -67,6 +68,7 @@ public class SoulissBindingConstants {
     public final static ThingTypeUID T21_THING_TYPE = new ThingTypeUID(BINDING_ID, T21);
     public final static ThingTypeUID T22_THING_TYPE = new ThingTypeUID(BINDING_ID, T22);
     public final static ThingTypeUID T31_THING_TYPE = new ThingTypeUID(BINDING_ID, T31);
+    public final static ThingTypeUID T41_THING_TYPE = new ThingTypeUID(BINDING_ID, T41);
     public final static ThingTypeUID T51_THING_TYPE = new ThingTypeUID(BINDING_ID, T51);
     public final static ThingTypeUID T52_THING_TYPE = new ThingTypeUID(BINDING_ID, T52);
     public final static ThingTypeUID T53_THING_TYPE = new ThingTypeUID(BINDING_ID, T53);
@@ -86,10 +88,10 @@ public class SoulissBindingConstants {
 
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Sets.newHashSet(GATEWAY_THING_TYPE,
             T11_THING_TYPE, T12_THING_TYPE, T13_THING_TYPE, T14_THING_TYPE, T16_THING_TYPE, LYT_THING_TYPE,
-            T21_THING_TYPE, T22_THING_TYPE, T31_THING_TYPE, T51_THING_TYPE, T52_THING_TYPE, T53_THING_TYPE,
-            T54_THING_TYPE, T55_THING_TYPE, T56_THING_TYPE, T57_THING_TYPE, T58_THING_TYPE, T61_THING_TYPE,
-            T62_THING_TYPE, T63_THING_TYPE, T64_THING_TYPE, T65_THING_TYPE, T66_THING_TYPE, T67_THING_TYPE,
-            T68_THING_TYPE);
+            T21_THING_TYPE, T22_THING_TYPE, T31_THING_TYPE, T41_THING_TYPE, T51_THING_TYPE, T52_THING_TYPE,
+            T53_THING_TYPE, T54_THING_TYPE, T55_THING_TYPE, T56_THING_TYPE, T57_THING_TYPE, T58_THING_TYPE,
+            T61_THING_TYPE, T62_THING_TYPE, T63_THING_TYPE, T64_THING_TYPE, T65_THING_TYPE, T66_THING_TYPE,
+            T67_THING_TYPE, T68_THING_TYPE);
 
     // List of all Channel ids
     public final static String ONOFF_CHANNEL = "onoff";

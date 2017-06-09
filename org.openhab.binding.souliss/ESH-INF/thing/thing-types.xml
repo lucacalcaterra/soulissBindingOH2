@@ -196,6 +196,23 @@
             <channel id="lastStatusStored" typeId="lastStatusStored" />
         </channels>
     </thing-type>
+    
+    <thing-type id="t41">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway"/>
+        </supported-bridge-type-refs>
+        <label>T41</label>
+        <description>Anti-theft integration (Main)</description>
+        <channels>
+            <channel id="onOffAlarm" typeId="buttonOnly">
+                <label>Alarm activation</label>
+            </channel>
+            <channel id="resetAlarm" typeId="button">
+                <label>Reset</label>
+            </channel>
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
+    </thing-type>
 
 <thing-type id="t51">
         <supported-bridge-type-refs>

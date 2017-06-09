@@ -455,6 +455,11 @@ public class SoulissBindingUDPDecoder {
                                             .setState(DecimalType.valueOf(String.valueOf(val)));
 
                                     break;
+                                case SoulissBindingConstants.T41:
+                                    switch (sVal) {
+
+                                    }
+                                    break;
                                 case SoulissBindingConstants.T51:
                                 case SoulissBindingConstants.T52:
                                 case SoulissBindingConstants.T53:

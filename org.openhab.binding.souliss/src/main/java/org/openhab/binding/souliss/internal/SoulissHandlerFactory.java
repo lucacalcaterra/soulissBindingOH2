@@ -21,6 +21,7 @@ import org.openhab.binding.souliss.handler.SoulissT13Handler;
 import org.openhab.binding.souliss.handler.SoulissT14Handler;
 import org.openhab.binding.souliss.handler.SoulissT22Handler;
 import org.openhab.binding.souliss.handler.SoulissT31Handler;
+import org.openhab.binding.souliss.handler.SoulissT41Handler;
 import org.openhab.binding.souliss.handler.SoulissT52Handler;
 import org.openhab.binding.souliss.handler.SoulissT53Handler;
 import org.openhab.binding.souliss.handler.SoulissT55Handler;
@@ -69,6 +70,8 @@ public class SoulissHandlerFactory extends BaseThingHandlerFactory {
             return new SoulissT22Handler(thing);
         } else if (thingTypeUID.equals(T31_THING_TYPE)) {
             return new SoulissT31Handler(thing);
+        } else if (thingTypeUID.equals(T41_THING_TYPE)) {
+            return new SoulissT41Handler(thing);
         } else if (thingTypeUID.equals(T52_THING_TYPE)) {
             return new SoulissT52Handler(thing);
         } else if (thingTypeUID.equals(T53_THING_TYPE)) {

@@ -205,14 +205,17 @@
         <description>Anti-theft integration (Main)</description>
         <channels>
             <channel id="statusAlarm" typeId="buttonReadOnly">
-                <label>Alarm activation</label>
+                <label>Alarm status</label>
             </channel>
             <channel id="onOffAlarm" typeId="button">
-                <label>Alarm activation</label>
+                <label>Alarm ON/OFF</label>
             </channel>
-            <channel id="resetAlarm" typeId="button">
-                <label>Reset</label>
+            <channel id="rearmAlarm" typeId="button">
+                <label>Rearm</label>
             </channel>
+<!--             <channel id="resetAlarm" typeId="button"> -->
+<!--                 <label>Reset Alarm</label> -->
+<!--             </channel> -->
             <channel id="lastStatusStored" typeId="lastStatusStored" />
         </channels>
     </thing-type>

@@ -9,7 +9,6 @@
 package org.openhab.binding.souliss.handler;
 
 import org.eclipse.smarthome.config.core.Configuration;
-import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
@@ -21,7 +20,6 @@ import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
 import org.openhab.binding.souliss.handler.SoulissGenericTypical.typicalCommonMethods;
-import org.openhab.binding.souliss.internal.HalfFloatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,24 +46,31 @@ public class SoulissT41Handler extends SoulissGenericTypical implements typicalC
 
         if (command instanceof RefreshType) {
 
-        } else if (command instanceof StringType) {
+        } else if (channelUID.getAsString().split(":")[3].equals(SoulissBindingConstants.T41_ONOFFALARM_CHANNEL)) {
+            if (command instanceof OnOffType) {
 
-            commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_ShutDown);
+                switch (command.toFullString()) {
+                    case "OFF":
+                        commandSEND(SoulissBindingProtocolConstants.Souliss_T4n_NotArmed);
+                        break;
+                    case "ON":
+                        commandSEND(SoulissBindingProtocolConstants.Souliss_T4n_Armed);
+                        break;
+                }
 
-        } else if (command instanceof OnOffType) {
-            if (command.equals(OnOffType.ON)) {
-                commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_AsMeasured);
             }
+        } else if (channelUID.getAsString().split(":")[3].equals(SoulissBindingConstants.T41_REARMALARM_CHANNEL)) {
+            if (command instanceof OnOffType) {
 
-        } else if (command instanceof DecimalType) {
+                switch (command.toFullString()) {
+                    case "ON":
+                        commandSEND(SoulissBindingProtocolConstants.Souliss_T4n_ReArm);
+                        this.setState(StringType.valueOf(SoulissBindingConstants.T41_REARMOFF_MESSAGE_CHANNEL));
+                        break;
+                }
 
-            int uu = HalfFloatUtils.fromFloat(((DecimalType) command).floatValue());
-            byte B2 = (byte) (uu >> 8);
-            byte B1 = (byte) uu;
-            // setpoint command
-            commandSEND(SoulissBindingProtocolConstants.Souliss_T31_Use_Of_Slot_SETPOINT_COMMAND, B1, B2);
+            }
         }
-
     }
 
     @Override
@@ -74,7 +79,6 @@ public class SoulissT41Handler extends SoulissGenericTypical implements typicalC
         // Long running initialization should be done asynchronously in background.
 
         updateStatus(ThingStatus.ONLINE);
-
         // gwConfigurationMap = thing.getConfiguration();
 
     }
@@ -89,15 +93,15 @@ public class SoulissT41Handler extends SoulissGenericTypical implements typicalC
                 case SoulissBindingConstants.T41_ALARMON_MESSAGE_CHANNEL:
                     this.updateState(SoulissBindingConstants.T41_STATUSALARM_CHANNEL, OnOffType.ON);
                     break;
-                case SoulissBindingConstants.T41_ALARMOFF_MESSAGE_CHANNEL:
-                    this.updateState(SoulissBindingConstants.T41_STATUSALARM_CHANNEL, OnOffType.OFF);
-                    break;
+                case SoulissBindingConstants.T41_REARMOFF_MESSAGE_CHANNEL:
+                    this.updateState(SoulissBindingConstants.T41_REARMALARM_CHANNEL, OnOffType.OFF);
             }
         }
-        // Resetto il tassto di reset. Questo perchè se premuto non torna da solo in off
-        this.updateState(SoulissBindingConstants.T41_RESETALARM_CHANNEL, OnOffType.OFF);
+        // // Resetto il tasto di rearm. Questo perchè se premuto non torna da solo in off
+        this.updateState(SoulissBindingConstants.T41_REARMALARM_CHANNEL, OnOffType.OFF);
 
         this.setUpdateTimeNow();
+
         this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
 
         this.updateThing(this.thing);

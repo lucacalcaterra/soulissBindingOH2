@@ -128,10 +128,12 @@ public class SoulissBindingConstants {
 
     public final static String T41_ONOFFALARM_CHANNEL = "onOffAlarm";
     public final static String T41_STATUSALARM_CHANNEL = "statusAlarm";
+    public final static String T41_REARMALARM_CHANNEL = "rearmAlarm";
     public final static String T41_RESETALARM_CHANNEL = "resetAlarm";
 
     public final static String T41_ALARMON_MESSAGE_CHANNEL = "ALARMON";
     public final static String T41_ALARMOFF_MESSAGE_CHANNEL = "ALARMOFF";
+    public final static String T41_REARMOFF_MESSAGE_CHANNEL = "REARMMOFF";
 
     public static final String WHITE_MODE_CHANNEL = "whitemode";
     public static final String ROLLER_BRIGHTNESS_CHANNEL = "roller_brightness";

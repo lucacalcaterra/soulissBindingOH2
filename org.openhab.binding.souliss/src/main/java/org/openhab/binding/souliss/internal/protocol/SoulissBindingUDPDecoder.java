@@ -261,6 +261,7 @@ public class SoulissBindingUDPDecoder {
 
                         OnOffType typicalState = null;
                         // update Txx
+
                         try {
                             switch (sUID_Array[1]) {
                                 case SoulissBindingConstants.T11:

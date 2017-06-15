@@ -350,7 +350,7 @@ public class SoulissCommonCommands {
      * Build TYPICAL REQUEST Frame
      */
     public static void sendTYPICAL_REQUESTframe(DatagramSocket datagramSocket, String soulissNodeIPAddressOnLAN,
-            short nodeIndex, short userIndex) {
+            short nodeIndex, short userIndex, int nodes) {
 
         ArrayList<Byte> MACACOframe = new ArrayList<Byte>();
         MACACOframe.add(SoulissBindingUDPConstants.Souliss_UDP_function_typreq);
@@ -359,7 +359,7 @@ public class SoulissCommonCommands {
         MACACOframe.add((byte) 0x00);// PUTIN
         MACACOframe.add((byte) 0x00); // startOffset
 
-        MACACOframe.add((byte) SoulissBindingNetworkParameters.nodes); // iNodes
+        MACACOframe.add((byte) nodes); // iNodes
         // MACACOframe.add((byte) 0x00); // iNodes
         logger.debug("sendTYPICAL_REQUESTframe - {}, soulissNodeIPAddressOnLAN: {}", MaCacoToString(MACACOframe),
                 soulissNodeIPAddressOnLAN);

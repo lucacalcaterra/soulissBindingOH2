@@ -8,11 +8,11 @@
  */
 package org.openhab.binding.souliss.internal.discovery;
 
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Map;
-import java.util.TimerTask;
 import java.util.TreeMap;
 
 import org.eclipse.smarthome.config.discovery.AbstractDiscoveryService;
@@ -21,8 +21,11 @@ import org.eclipse.smarthome.config.discovery.DiscoveryResultBuilder;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
+import org.openhab.binding.souliss.SoulissBindingUDPConstants;
 import org.openhab.binding.souliss.handler.SoulissGatewayHandler;
+import org.openhab.binding.souliss.internal.SoulissDatagramSocketFactory;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
+import org.openhab.binding.souliss.internal.protocol.SoulissBindingUDPServerThread;
 import org.openhab.binding.souliss.internal.protocol.SoulissDiscover;
 import org.openhab.binding.souliss.internal.protocol.SoulissDiscover.DiscoverResult;
 import org.slf4j.Logger;
@@ -40,23 +43,24 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
     private boolean bGatewayDetected = false;
     private ThingUID gatewayUID;
     // private ScheduledFuture<?> schedulerFuture;
+    private DatagramSocket datagramSocket_forBroadcasting;
+    SoulissBindingUDPServerThread UDP_Server = null;
 
-    class DetectTask extends TimerTask {
-        @Override
-        public void run() {
-            soulissDiscoverThread.sendDiscover(scheduler);
-        }
-    }
+    // class DetectTask extends TimerTask {
+    // @Override
+    // public void run() {
+    // soulissDiscoverThread.sendDiscover(scheduler);
+    // }
+    // }
 
     private void startDiscoveryService() {
         if (soulissDiscoverThread == null) {
             try {
-                // receiveThread = new SoulissDiscover(broadcast, this, 50, 2000 / 50);
-                soulissDiscoverThread = new SoulissDiscover(this,
+                soulissDiscoverThread = new SoulissDiscover(datagramSocket_forBroadcasting, this,
                         SoulissBindingConstants.DISCOVERY_resendTimeoutInMillis,
                         SoulissBindingConstants.DISCOVERY_resendAttempts);
             } catch (SocketException e) {
-                logger.error("Opening a socket for the souliss discovery service failed. " + e.getLocalizedMessage());
+                logger.error("Opening the souliss discovery service failed. " + e.getLocalizedMessage());
                 return;
             }
             soulissDiscoverThread.start();
@@ -66,7 +70,18 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
     public SoulissGatewayDiscovery() throws IllegalArgumentException, UnknownHostException {
         super(SoulissBindingConstants.SUPPORTED_THING_TYPES_UIDS, SoulissBindingConstants.DISCOVERY_TimeoutInSeconds,
                 false);
-        // startDiscoveryService();
+
+        SoulissBindingNetworkParameters.discoverResult = this;
+        // open socket on port 230
+        datagramSocket_forBroadcasting = SoulissDatagramSocketFactory
+                .getSocketDatagram(SoulissBindingUDPConstants.SOULISS_GATEWAY_DEFAULT_PORT);
+        if (datagramSocket_forBroadcasting != null) {
+            SoulissBindingNetworkParameters.setDatagramSocket(datagramSocket_forBroadcasting);
+            UDP_Server = new SoulissBindingUDPServerThread(datagramSocket_forBroadcasting,
+                    SoulissBindingNetworkParameters.discoverResult);
+            UDP_Server.start();
+        }
+
     }
 
     @Override
@@ -109,23 +124,6 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
                 .withProperties(properties).build();
         thingDiscovered(discoveryResult);
         setGatewayDetected();
-
-    }
-
-    /**
-     * The {@link gatewayDetected} not used here
-     *
-     * @author Tonino Fazio - Initial contribution
-     */
-    @Override
-    public void gatewayDetected(byte lastByteGatewayIP) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void dbStructAnswerReceived(SoulissGatewayHandler gateway) {
-
     }
 
     @Override
@@ -134,6 +132,7 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
         // SoulissBindingConstants.DISCOVERY_TimeoutInMillis, TimeUnit.MILLISECONDS);
         startDiscoveryService();
         soulissDiscoverThread.sendDiscover(scheduler);
+
     }
 
     @Override
@@ -163,7 +162,7 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
     }
 
     @Override
-    public ThingUID getGateway() {
+    public ThingUID getGatewayUID() {
         return gatewayUID;
     }
 
@@ -172,9 +171,10 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
         ThingUID thingUID = null;
         String label = "";
         DiscoveryResult discoveryResult;
+        SoulissGatewayHandler gw = (SoulissGatewayHandler) (SoulissBindingNetworkParameters
+                .getGateway(lastByteGatewayIP).getHandler());
 
-        if (lastByteGatewayIP == Byte.parseByte(((SoulissGatewayHandler) SoulissBindingNetworkParameters
-                .getGateway(lastByteGatewayIP).getHandler()).IPAddressOnLAN)) {
+        if (lastByteGatewayIP == Byte.parseByte(gw.IPAddressOnLAN.split("\\.")[3])) {
 
             String sNodeId = node + SoulissBindingConstants.UUID_NODE_SLOT_SEPARATOR + slot;
             switch (typical) {

@@ -8,11 +8,12 @@
  */
 package org.openhab.binding.souliss.internal.protocol;
 
-import java.util.Properties;
+import java.net.DatagramSocket;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
+import org.openhab.binding.souliss.internal.protocol.SoulissDiscover.DiscoverResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,19 +29,7 @@ public class SoulissBindingNetworkParameters {
 
     public static short defaultNodeIndex = 130;
     public static short defaultUserIndex = 70;
-    public static int nodes;
-    public static int maxnodes;
-    public static int maxTypicalXnode;
-    public static int maxrequests;
-    public static int MaCacoIN_s;
-    public static int MaCacoTYP_s;
-    public static int MaCacoOUT_s;
-    static Properties prop = new Properties();
     public static int presetTime = 1000;
-    public static int REFRESH_DBSTRUCT_TIME = presetTime;
-    public static int REFRESH_SUBSCRIPTION_TIME = presetTime;
-    public static int REFRESH_HEALTY_TIME = presetTime;
-    public static int REFRESH_MONITOR_TIME = presetTime;
     public static int SEND_DELAY = presetTime;
     public static int SEND_MIN_DELAY = presetTime;
     public static long SECURE_SEND_TIMEOUT_TO_REQUEUE = presetTime;
@@ -48,9 +37,28 @@ public class SoulissBindingNetworkParameters {
     private static Logger logger = LoggerFactory.getLogger(SoulissBindingNetworkParameters.class);
 
     private static ConcurrentHashMap<Byte, Thing> hashTableGateway = new ConcurrentHashMap<Byte, Thing>();
+    private static DatagramSocket datagramSocketPort230;
+    public static DiscoverResult discoverResult;
+
+    public static DatagramSocket getDatagramSocket() {
+        return datagramSocketPort230;
+    }
+
+    public static void closeDatagramSocket() {
+        datagramSocketPort230.close();
+        datagramSocketPort230 = null;
+    }
+
+    public static void setDatagramSocket(DatagramSocket datagramSocket) {
+        SoulissBindingNetworkParameters.datagramSocketPort230 = datagramSocket;
+    }
 
     public static void addGateway(byte lastByteGatewayIP, Thing thing) {
         hashTableGateway.put(lastByteGatewayIP, thing);
+    }
+
+    public static ConcurrentHashMap<Byte, Thing> getHashTableGateway() {
+        return hashTableGateway;
     }
 
     public static Bridge getGateway(byte lastByteGatewayIP) {

@@ -11,14 +11,16 @@ package org.openhab.binding.souliss.internal.protocol;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.Collection;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.souliss.handler.SoulissGatewayHandler;
-import org.openhab.binding.souliss.internal.SoulissDatagramSocketFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,16 +45,12 @@ public class SoulissDiscover extends Thread {
 
         void thingDetected(byte lastByteGatewayIP, short typical, short node, short slot);
 
-        ThingUID getGateway();
-
-        void dbStructAnswerReceived(SoulissGatewayHandler soulissGatewayHandler);
-
-        void gatewayDetected(byte lastByteGatewayIP);
+        ThingUID getGatewayUID();
     }
 
-    private boolean willbeclosed = false;
-    private DatagramSocket datagramSocket_port230;
-    SoulissBindingUDPServerThread UDP_Server_port230 = null;
+    // private boolean willbeclosed = false;
+    private DatagramSocket datagramSocket_OnDefaultPort;
+    SoulissBindingUDPServerThread UDP_Server_OnDefaultPort = null;
     ///// Debug
     private Logger logger = LoggerFactory.getLogger(SoulissDiscover.class);
 
@@ -63,21 +61,21 @@ public class SoulissDiscover extends Thread {
     final private int resendTimeoutInMillis;
     final private int resendAttempts;
 
-    public SoulissDiscover(DiscoverResult discoverResult, int resendTimeoutInMillis, int resendAttempts)
-            throws SocketException {
+    public SoulissDiscover(DatagramSocket _datagramSocket_OnDefaultPort, DiscoverResult discoverResult,
+            int resendTimeoutInMillis, int resendAttempts) throws SocketException {
         this.resendAttempts = resendAttempts;
         this.resendTimeoutInMillis = resendTimeoutInMillis;
-
+        datagramSocket_OnDefaultPort = _datagramSocket_OnDefaultPort;
         this.discoverResult = discoverResult;
     }
 
     public void stopReceiving() {
-        willbeclosed = true;
-        try {
-            join(500);
-        } catch (InterruptedException e) {
-        }
-        interrupt();
+        // willbeclosed = true;
+        // try {
+        // join(500);
+        // } catch (InterruptedException e) {
+        // }
+        // interrupt();
     }
 
     public void stopResend() {
@@ -91,17 +89,18 @@ public class SoulissDiscover extends Thread {
      * Used by the scheduler to resend discover messages. Stops after 3 attempts.
      */
     private class SendDiscoverRunnable implements Runnable {
-        DatagramSocket datagramSocket_port230;
-
         public SendDiscoverRunnable() {
-            // costruire pacchetto
-            datagramSocket_port230 = SoulissDatagramSocketFactory.getDatagram_for_broadcast();
+
         }
 
         @Override
         public void run() {
             try {
-                SoulissCommonCommands.sendBroadcastGatewayDiscover(datagramSocket_port230);
+                // ===============================================================================
+                // ===============================================================================
+                SoulissCommonCommands.sendBroadcastGatewayDiscover(datagramSocket_OnDefaultPort);
+                // ===============================================================================
+                // ===============================================================================
                 logger.debug("Sent discovery packet");
 
                 if (++resendCounter > resendAttempts) {
@@ -137,32 +136,12 @@ public class SoulissDiscover extends Thread {
 
     @Override
     public void run() {
-        logger.debug("Discovery receive thread ready");
-
-        // Now loop forever, waiting to receive packets and printing them.
-        while (!willbeclosed) {
-            discoverResult.setGatewayUndetected();
-
-            if (UDP_Server_port230 == null) {
-                // logger.info("UDP_Server start");
-                // SoulissTypicals SoulissTypicalsRecipients = new SoulissTypicals();
-                datagramSocket_port230 = SoulissDatagramSocketFactory.getDatagram_for_broadcast();
-                UDP_Server_port230 = new SoulissBindingUDPServerThread(datagramSocket_port230, discoverResult);
-                UDP_Server_port230.start();
-
-            }
-
-            // datagramSocket.receive(packet);
-            // return bGateway_Detected TRUE if gateway detected
-            // decoder.decodeVNetDatagram(packet,discoverResult);
-
-            if (discoverResult.isGatewayDetected()) {
-                // Stop resend timer if we got a packet.
-                if (resendTimer != null) {
-                    resendTimer.cancel(true);
-                    resendTimer = null;
-                }
-            }
+        // everytime user click on refresh Inbox > Souliss Binding > Search
+        ConcurrentHashMap<Byte, Thing> gwMaps = SoulissBindingNetworkParameters.getHashTableGateway();
+        Collection<Thing> gwMapsCollection = gwMaps.values();
+        for (Thing t : gwMapsCollection) {
+            SoulissGatewayHandler gw = (SoulissGatewayHandler) t.getHandler();
+            SoulissCommonCommands.sendDBStructFrame(gw.datagramSocket, gw.IPAddressOnLAN, gw.nodeIndex, gw.userIndex);
         }
     }
 }

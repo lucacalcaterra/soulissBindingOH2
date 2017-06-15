@@ -8,10 +8,12 @@
  */
 package org.openhab.binding.souliss.handler;
 
+import java.net.DatagramSocket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.eclipse.smarthome.core.library.types.DateTimeType;
+import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
@@ -19,8 +21,6 @@ import org.eclipse.smarthome.core.thing.ThingStatusInfo;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
-import org.openhab.binding.souliss.internal.SoulissDatagramSocketFactory;
-import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
 import org.openhab.binding.souliss.internal.protocol.SoulissCommonCommands;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,13 +100,14 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
      * @param command
      */
     public void commandSEND(short command) {
-        SoulissCommonCommands.sendFORCEFrame(SoulissDatagramSocketFactory.getSocketDatagram(),
-                SoulissBindingNetworkParameters.IPAddressOnLAN, this.getNode(), this.getSlot(), command);
+
+        SoulissCommonCommands.sendFORCEFrame(getDatagramSocket(), getGatewayIP(), getGatewayNodeIndex(),
+                getGatewayUserIndex(), this.getNode(), this.getSlot(), command);
     }
 
     public void commandSEND_RGB(short command, short R, short G, short B) {
-        SoulissCommonCommands.sendFORCEFrame(SoulissDatagramSocketFactory.getSocketDatagram(),
-                SoulissBindingNetworkParameters.IPAddressOnLAN, this.getNode(), this.getSlot(), command, R, G, B);
+        SoulissCommonCommands.sendFORCEFrame(getDatagramSocket(), getGatewayIP(), getGatewayNodeIndex(),
+                getGatewayUserIndex(), this.getNode(), this.getSlot(), command, R, G, B);
     }
 
     public void commandSEND(short command, short B1, short B2) {
@@ -157,4 +158,29 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
             updateStatus(ThingStatus.ONLINE);
         }
     }
+
+    public String getGatewayIP() {
+        // return ((SoulissGatewayHandler) thingRegistry.get(thing.getBridgeUID()).getHandler()).IPAddressOnLAN;
+        Bridge bridge = getBridge();
+        if (bridge != null) {
+            return ((SoulissGatewayHandler) getBridge().getHandler()).IPAddressOnLAN;
+        } else {
+            return null;
+        }
+    }
+
+    public short getGatewayUserIndex() {
+        // return ((SoulissGatewayHandler) thingRegistry.get(thing.getBridgeUID()).getHandler()).userIndex;
+        return ((SoulissGatewayHandler) getBridge().getHandler()).userIndex;
+    }
+
+    public short getGatewayNodeIndex() {
+        // return ((SoulissGatewayHandler) thingRegistry.get(thing.getBridgeUID()).getHandler()).nodeIndex;
+        return ((SoulissGatewayHandler) getBridge().getHandler()).nodeIndex;
+    }
+
+    public DatagramSocket getDatagramSocket() {
+        return ((SoulissGatewayHandler) getBridge().getHandler()).datagramSocket;
+    }
+
 }

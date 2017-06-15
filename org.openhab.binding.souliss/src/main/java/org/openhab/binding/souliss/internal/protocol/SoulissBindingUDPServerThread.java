@@ -30,7 +30,7 @@ public class SoulissBindingUDPServerThread extends Thread {
     protected BufferedReader in = null;
     protected boolean bExit = false;
     SoulissBindingUDPDecoder decoder = null;
-    DiscoverResult discoverResult;
+    DiscoverResult discoverResult = null;
     DatagramSocket soulissDatagramSocket;
     private static Logger logger = LoggerFactory.getLogger(SoulissBindingUDPServerThread.class);
 
@@ -45,14 +45,28 @@ public class SoulissBindingUDPServerThread extends Thread {
     // + SoulissDatagramSocketFactory.getDatagram_for_broadcast().getLocalPort());
     // }
 
-    public SoulissBindingUDPServerThread(DatagramSocket soulissDatagramSocketLocale, DiscoverResult discoverResultLoc) {
+    public SoulissBindingUDPServerThread(DatagramSocket _datagramSocket, DiscoverResult _discoverResult) {
         super();
-        soulissDatagramSocket = soulissDatagramSocketLocale;
-        discoverResult = discoverResultLoc;
+        init(_datagramSocket, _discoverResult);
+    }
+
+    private void init(DatagramSocket _datagramSocket, DiscoverResult _discoverResult) {
+        this.discoverResult = _discoverResult;
+        this.soulissDatagramSocket = _datagramSocket;
+
+        // if (discoverResult != null) {
         decoder = new SoulissBindingUDPDecoder(discoverResult);
         logger.info("Start UDPServerThread - Server in ascolto sulla porta " + soulissDatagramSocket.getLocalPort());
+        // } else {
+        // bExit = true;
+        // logger.info("Start UDPServerThread - Error - 'discoverResult' is null");
+        // }
 
     }
+
+    // public void setResultClass(DiscoverResult _discoverResult) {
+    // this.discoverResult = _discoverResult;
+    // }
 
     @Override
     public void run() {
@@ -74,16 +88,15 @@ public class SoulissBindingUDPServerThread extends Thread {
                 logger.error(e.getMessage());
             }
         }
+        if (soulissDatagramSocket != null) {
+            soulissDatagramSocket.close();
+            soulissDatagramSocket = null;
+        }
     }
 
-    // public DatagramSocket getSocket() {
-    // return SoulissBindingNetworkParameters.datagramsocket;
-    // }
-    //
-    // public void closeSocket() {
-    // SoulissDatagramSocketFactory.doClose();
-    // bExit = true;
-    // }
+    public void stopServer() {
+        bExit = true;
+    }
 
     private String MaCacoToString(byte[] frame) {
         StringBuilder sb = new StringBuilder();

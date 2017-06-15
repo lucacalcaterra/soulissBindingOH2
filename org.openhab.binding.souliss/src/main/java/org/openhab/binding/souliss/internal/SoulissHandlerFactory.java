@@ -9,11 +9,13 @@ package org.openhab.binding.souliss.internal;
 
 import static org.openhab.binding.souliss.SoulissBindingConstants.*;
 
+import org.eclipse.smarthome.config.core.Configuration;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
+import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.handler.SoulissGatewayHandler;
 import org.openhab.binding.souliss.handler.SoulissT11Handler;
 import org.openhab.binding.souliss.handler.SoulissT12Handler;
@@ -56,7 +58,10 @@ public class SoulissHandlerFactory extends BaseThingHandlerFactory {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
         if (thingTypeUID.equals(GATEWAY_THING_TYPE)) {
-            SoulissBindingNetworkParameters.setGateway((Bridge) thing);
+            // get last byte of IP number
+            Configuration gwConfigurationMap = thing.getConfiguration();
+            String IPAddressOnLAN = (String) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_IP_ADDRESS);
+            SoulissBindingNetworkParameters.addGateway(Byte.parseByte(IPAddressOnLAN.split("\\.")[3]), thing);
             return new SoulissGatewayHandler((Bridge) thing);
         } else if (thingTypeUID.equals(T11_THING_TYPE)) {
             return new SoulissT11Handler(thing);

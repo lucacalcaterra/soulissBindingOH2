@@ -37,6 +37,7 @@ import org.openhab.binding.souliss.handler.SoulissT65Handler;
 import org.openhab.binding.souliss.handler.SoulissT66Handler;
 import org.openhab.binding.souliss.handler.SoulissT67Handler;
 import org.openhab.binding.souliss.handler.SoulissT68Handler;
+import org.openhab.binding.souliss.handler.SoulissTopicsHandler;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
 
 /**
@@ -103,6 +104,8 @@ public class SoulissHandlerFactory extends BaseThingHandlerFactory {
             return new SoulissT67Handler(thing);
         } else if (thingTypeUID.equals(T68_THING_TYPE)) {
             return new SoulissT68Handler(thing);
+        } else if (thingTypeUID.equals(TOPICS_THING_TYPE)) {
+            return new SoulissTopicsHandler(thing);
         }
 
         return null;

@@ -96,7 +96,7 @@ public class SoulissCommonCommands {
      */
 
     public static void sendFORCEFrameT61SetPoint(DatagramSocket datagramSocket, String soulissNodeIPAddressOnLAN,
-            int IDNode, int slot, Short byte1, Short byte2) {
+            short nodeIndex, short userIndex, int IDNode, int slot, Short byte1, Short byte2) {
 
         ArrayList<Byte> MACACOframe = new ArrayList<Byte>();
         MACACOframe.add(SoulissBindingUDPConstants.Souliss_UDP_function_force);
@@ -119,7 +119,7 @@ public class SoulissCommonCommands {
         logger.debug("sendFORCEFrame - {}, soulissNodeIPAddressOnLAN: {}", MaCacoToString(MACACOframe),
                 soulissNodeIPAddressOnLAN);
 
-        send(datagramSocket, MACACOframe, soulissNodeIPAddressOnLAN);
+        send(datagramSocket, MACACOframe, soulissNodeIPAddressOnLAN, nodeIndex, userIndex);
     }
 
     /*

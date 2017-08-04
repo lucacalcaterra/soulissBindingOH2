@@ -40,6 +40,7 @@ import org.openhab.binding.souliss.handler.SoulissT65Handler;
 import org.openhab.binding.souliss.handler.SoulissT66Handler;
 import org.openhab.binding.souliss.handler.SoulissT67Handler;
 import org.openhab.binding.souliss.handler.SoulissT68Handler;
+import org.openhab.binding.souliss.handler.SoulissTopicsHandler;
 import org.openhab.binding.souliss.internal.protocol.SoulissDiscover.DiscoverResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,10 +141,13 @@ public class SoulissBindingUDPDecoder {
             // default:
             // logger.debug("Unknown functional code");
             // break;
-            default:
-                logger.debug("Received functional code: 0x" + Integer.toHexString(functionalCode) + " - Unused");
+            case (byte) SoulissBindingUDPConstants.Souliss_UDP_function_ActionMessage:
+                logger.debug("Received functional code: 0x" + Integer.toHexString(functionalCode)
+                        + " Action Message (Topic)");
+                decodeActionMessages(lastByteGatewayIP, macacoPck);
                 break;
-
+            default:
+                logger.debug("Received functional code: 0x" + Integer.toHexString(functionalCode) + " - unused");
         }
     }
 
@@ -178,6 +182,14 @@ public class SoulissBindingUDPDecoder {
         }
     }
 
+    /**
+     * decode Typicals Request Packet
+     * It read Souliss Network and create OH items
+     *
+     * @param lastByteGatewayIP
+     *
+     * @param mac
+     */
     private void decodeTypRequest(byte lastByteGatewayIP, ArrayList<Short> mac) {
         try {
             short tgtnode = mac.get(3);
@@ -209,6 +221,60 @@ public class SoulissBindingUDPDecoder {
         } catch (Exception uy) {
             logger.error("decodeTypRequest ERROR");
         }
+    }
+
+    /**
+     * decode Typicals Request Packet
+     * It read Action Messages on Souliss Network and create items
+     *
+     * @param lastByteGatewayIP
+     *
+     * @param mac
+     */
+    private void decodeActionMessages(byte lastByteGatewayIP, ArrayList<Short> mac) {
+        String sTopicNumber;
+        String sTopicVariant;
+        float fRet;
+
+        try {
+            // A 16-bit Topic Number: Define the topic itself
+            // A 8-bit Topic Variant : Define a variant for the topic
+
+            String sTopicNumberArray[] = { Integer.toHexString(mac.get(2)).toUpperCase(),
+                    Integer.toHexString(mac.get(1)).toUpperCase() };
+            if (sTopicNumberArray[0].length() == 1) {
+                sTopicNumberArray[0] = "0" + sTopicNumberArray[0];
+            }
+            if (sTopicNumberArray[1].length() == 1) {
+                sTopicNumberArray[1] = "0" + sTopicNumberArray[1];
+            }
+            sTopicNumber = sTopicNumberArray[0] + sTopicNumberArray[1];
+            logger.debug("Topic Number: 0x" + sTopicNumberArray[0] + sTopicNumberArray[1]);
+
+            sTopicVariant = Integer.toHexString(mac.get(3)).toUpperCase();
+            if (sTopicVariant.length() == 1) {
+                sTopicVariant = "0" + sTopicVariant;
+            }
+            logger.debug("Topic Variant: 0x" + sTopicVariant);
+            if (mac.get(4) == 1) {
+                fRet = mac.get(5);
+                logger.debug("Topic Value (Payload one byte): " + Integer.toHexString(mac.get(5)).toUpperCase());
+            } else if (mac.get(4) == 2) {
+                short value[] = { mac.get(5), mac.get(6) };
+
+                int shifted = value[1] << 8;
+                fRet = HalfFloatUtils.toFloat(shifted + value[0]);
+                logger.debug("Topic Value (Payload 2 bytes): " + fRet);
+            }
+            // here I have:
+            // sTopicNumber
+            // sTopicVariant
+            // fRet
+
+        } catch (Exception uy) {
+            logger.error("decodeActionMessages ERROR");
+        }
+
     }
 
     /**
@@ -560,6 +626,13 @@ public class SoulissBindingUDPDecoder {
                                     }
                                     break;
 
+                                case SoulissBindingConstants.TOPICS:
+                                    logger.debug("Decoding " + SoulissBindingConstants.TOPICS + " packet");
+                                    if (getFloatAtSlot(mac, slot) != Float.NaN) {
+                                        ((SoulissTopicsHandler) typ.getHandler()).setState(
+                                                DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
+                                    }
+                                    break;
                                 default:
                                     logger.debug("Unsupported typical");
                             }

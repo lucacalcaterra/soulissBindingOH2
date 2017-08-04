@@ -48,6 +48,8 @@ public class SoulissBindingUDPConstants {
     public static final int Souliss_UDP_function_db_struct = 0x26;
     public static final int Souliss_UDP_function_db_struct_resp = 0x36;
 
+    public static final int Souliss_UDP_function_ActionMessage = 0x72;
+
     public static final Byte[] PING_PAYLOAD = { Souliss_UDP_function_ping, 0, 0, 0, 0 };
     public static final Byte[] PING_DISCOVER_BCAST_PAYLOAD = { Souliss_UDP_function_discover_GW_node_bcast, 0, 0, 0,
             0 };

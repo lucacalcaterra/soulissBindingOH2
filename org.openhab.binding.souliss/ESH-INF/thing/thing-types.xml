@@ -435,7 +435,7 @@
       <options>
         <option value="COOLING_MODE">Cool</option>
         <option value="HEATING_MODE">Heat</option>
-        <option value="POWER">Powered off</option>
+        <option value="POWEREDOFF_MODE">Powered off</option>
       </options>
     </state>
     </channel-type>

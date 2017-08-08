@@ -119,7 +119,8 @@ public class SoulissBindingConstants {
     public final static String T31_SETPOINT_CHANNEL = "setPoint";
     public final static String T31_COOLINGMODE_MESSAGE_CHANNEL = "COOLING_MODE";
     public final static String T31_HEATINGMODE_MESSAGE_CHANNEL = "HEATING_MODE";
-    public final static String T31_POWER_MESSAGE_CHANNEL = "POWER";
+    public final static String T31_POWEREDOFF_MESSAGE_CHANNEL = "POWEREDOFF_MODE";
+
     public final static String T31_FANAUTO_MESSAGE_CHANNEL = "AUTO";
     public final static String T31_FANOFF_MESSAGE_CHANNEL = "FANOFF";
     public final static String T31_FANLOW_MESSAGE_CHANNEL = "LOW";

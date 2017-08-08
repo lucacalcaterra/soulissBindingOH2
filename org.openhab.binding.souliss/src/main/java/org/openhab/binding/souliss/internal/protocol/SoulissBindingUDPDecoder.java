@@ -266,6 +266,7 @@ public class SoulissBindingUDPDecoder {
                 fRet = HalfFloatUtils.toFloat(shifted + value[0]);
                 logger.debug("Topic Value (Payload 2 bytes): " + fRet);
             }
+
             // here I have:
             // sTopicNumber
             // sTopicVariant
@@ -436,22 +437,32 @@ public class SoulissBindingUDPDecoder {
                                     break;
                                 case SoulissBindingConstants.T31:
                                     logger.debug("Decoding " + SoulissBindingConstants.T31 + "/"
-                                            + SoulissBindingConstants.T31 + " packet" + " -- bit0 (system on-off: "
-                                            + getBitState(sVal, 0) + " bit1 (heating on-off: " + getBitState(sVal, 1)
-                                            + " - bit2 (cooling on-off: " + getBitState(sVal, 2)
-                                            + " - bit3 (fan1 on-off: " + getBitState(sVal, 3) + " - bit4 (fan2 on-off: "
-                                            + getBitState(sVal, 4) + " - bit5 (fan3 on-off: " + getBitState(sVal, 5)
-                                            + " - bit6 (Manual/automatic fan mode: " + getBitState(sVal, 6)
-                                            + " - bit7 (heating/cooling mode: " + getBitState(sVal, 7));
+                                            + SoulissBindingConstants.T31 + " packet" + " -- bit0 (system on-off): "
+                                            + getBitState(sVal, 0) + " - bit1 (heating on-off): " + getBitState(sVal, 1)
+                                            + " - bit2 (cooling on-off): " + getBitState(sVal, 2)
+                                            + " - bit3 (fan1 on-off): " + getBitState(sVal, 3)
+                                            + " - bit4 (fan2 on-off): " + getBitState(sVal, 4)
+                                            + " - bit5 (fan3 on-off): " + getBitState(sVal, 5)
+                                            + " - bit6 (Manual/automatic fan mode): " + getBitState(sVal, 6)
+                                            + " - bit7 (heating/cooling mode): " + getBitState(sVal, 7));
 
                                     switch (getBitState(sVal, 0)) {
                                         case 0:
                                             ((SoulissT31Handler) typ.getHandler()).setState(StringType
-                                                    .valueOf(SoulissBindingConstants.T31_POWEROFF_MESSAGE_CHANNEL));
+                                                    .valueOf(SoulissBindingConstants.T31_POWEREDOFF_MESSAGE_CHANNEL));
                                             break;
                                         case 1:
-                                            ((SoulissT31Handler) typ.getHandler()).setState(StringType
-                                                    .valueOf(SoulissBindingConstants.T31_POWERON_MESSAGE_CHANNEL));
+                                            switch (getBitState(sVal, 7)) {
+                                                case 0:
+                                                    ((SoulissT31Handler) typ.getHandler()).setState(StringType.valueOf(
+                                                            SoulissBindingConstants.T31_HEATINGMODE_MESSAGE_CHANNEL));
+
+                                                    break;
+                                                case 1:
+                                                    ((SoulissT31Handler) typ.getHandler()).setState(StringType.valueOf(
+                                                            SoulissBindingConstants.T31_COOLINGMODE_MESSAGE_CHANNEL));
+                                                    break;
+                                            }
                                             break;
                                     }
 
@@ -471,67 +482,24 @@ public class SoulissBindingUDPDecoder {
                                     // FAN SPEED
                                     switch (getBitState(sVal, 3) + getBitState(sVal, 4) + getBitState(sVal, 5)) {
                                         case 0:
-
                                             ((SoulissT31Handler) typ.getHandler()).setState(StringType
                                                     .valueOf(SoulissBindingConstants.T31_FANOFF_MESSAGE_CHANNEL));
 
                                             break;
                                         case 1:
-                                            // if (getBitState(sVal, 6) == 0) {
                                             ((SoulissT31Handler) typ.getHandler()).setState(StringType
                                                     .valueOf(SoulissBindingConstants.T31_FANLOW_MESSAGE_CHANNEL));
-                                            // } else {
-                                            // ((SoulissT31Handler) typ.getHandler()).setState(StringType
-                                            // .valueOf(SoulissBindingConstants.T31_FANAUTO_MESSAGE_CHANNEL));
-                                            // }
                                             break;
                                         case 2:
-                                            // if (getBitState(sVal, 6) == 0) {
                                             ((SoulissT31Handler) typ.getHandler()).setState(StringType
                                                     .valueOf(SoulissBindingConstants.T31_FANMEDIUM_MESSAGE_CHANNEL));
-                                            // } else {
-                                            // ((SoulissT31Handler) typ.getHandler()).setState(StringType
-                                            // .valueOf(SoulissBindingConstants.T31_FANAUTO_MESSAGE_CHANNEL));
-                                            // }
                                             break;
                                         case 3:
-                                            // if (getBitState(sVal, 6) == 0) {
                                             ((SoulissT31Handler) typ.getHandler()).setState(StringType
                                                     .valueOf(SoulissBindingConstants.T31_FANHIGH_MESSAGE_CHANNEL));
-                                            // } else {
-                                            // ((SoulissT31Handler) typ.getHandler()).setState(StringType
-                                            // .valueOf(SoulissBindingConstants.T31_FANAUTO_MESSAGE_CHANNEL));
-                                            // }
+
                                             break;
                                     }
-
-                                    // FAN AUTO/MANUAL
-                                    // switch (getBitState(sVal, 6)) {
-                                    // case 0:
-                                    // //((SoulissT31Handler)
-                                    // //typ.getHandler()).setState(StringType.valueOf(SoulissBindingConstants.T31_FANM_MESSAGE_CHANNEL));
-                                    // break;
-                                    // case 1:
-                                    // ((SoulissT31Handler) typ.getHandler()).setState(StringType
-                                    // .valueOf(SoulissBindingConstants.T31_FANAUTO_MESSAGE_CHANNEL));
-                                    // break;
-                                    // }
-
-                                    switch (getBitState(sVal, 7)) {
-                                        case 0:
-                                            ((SoulissT31Handler) typ.getHandler()).setState(StringType
-                                                    .valueOf(SoulissBindingConstants.T31_HEATINGMODE_MESSAGE_CHANNEL));
-                                            break;
-                                        case 1:
-                                            ((SoulissT31Handler) typ.getHandler()).setState(StringType
-                                                    .valueOf(SoulissBindingConstants.T31_COOLINGMODE_MESSAGE_CHANNEL));
-                                            break;
-                                    }
-
-                                    // SLOT 1-2: Temperature Measured value
-                                    // float val = getFloatAtSlot(mac, slot + 1);
-                                    // ((SoulissT31Handler)
-                                    // typ.getHandler()).setState(DecimalType.valueOf(String.valueOf(val)));
 
                                     // SLOT 3-4: Temperature Setpoint Value
                                     float val = getFloatAtSlot(mac, slot + 3);

@@ -150,6 +150,42 @@
             </parameter>
         </config-description>
     </thing-type>
+    
+    <thing-type id="t1A">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway" />
+        </supported-bridge-type-refs>
+        <label>T1A</label>
+        <description>Digital input pass through</description>
+
+        <channels>
+            <channel id="one" typeId="buttonReadOnly">
+                <label>1</label>
+            </channel>
+            <channel id="two" typeId="buttonReadOnly">
+                <label>2</label>
+            </channel>
+            <channel id="three" typeId="buttonReadOnly">
+                <label>3</label>
+            </channel>
+            <channel id="four" typeId="buttonReadOnly">
+                <label>4</label>
+            </channel>
+            <channel id="five" typeId="buttonReadOnly">
+                <label>5</label>
+            </channel>
+            <channel id="six" typeId="buttonReadOnly">
+                <label>6</label>
+            </channel>
+            <channel id="seven" typeId="buttonReadOnly">
+                <label>7</label>
+            </channel>
+            <channel id="eight" typeId="buttonReadOnly">
+                <label>8</label>
+            </channel>
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>                     
+    </thing-type>
 
  <thing-type id="t21">
         <supported-bridge-type-refs>

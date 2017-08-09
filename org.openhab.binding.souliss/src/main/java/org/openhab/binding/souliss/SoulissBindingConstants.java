@@ -37,6 +37,7 @@ public class SoulissBindingConstants {
     public final static String T13 = "t13";
     public final static String T14 = "t14";
     public final static String T16 = "t16";
+    public final static String T1A = "t1A";
     public final static String LYT = "LYT";
     public final static String T21 = "t21";
     public final static String T22 = "t22";
@@ -65,6 +66,7 @@ public class SoulissBindingConstants {
     public final static ThingTypeUID T13_THING_TYPE = new ThingTypeUID(BINDING_ID, T13);
     public final static ThingTypeUID T14_THING_TYPE = new ThingTypeUID(BINDING_ID, T14);
     public final static ThingTypeUID T16_THING_TYPE = new ThingTypeUID(BINDING_ID, T16);
+    public final static ThingTypeUID T1A_THING_TYPE = new ThingTypeUID(BINDING_ID, T1A);
     public final static ThingTypeUID LYT_THING_TYPE = new ThingTypeUID(BINDING_ID, LYT);
     public final static ThingTypeUID T21_THING_TYPE = new ThingTypeUID(BINDING_ID, T21);
     public final static ThingTypeUID T22_THING_TYPE = new ThingTypeUID(BINDING_ID, T22);
@@ -89,11 +91,11 @@ public class SoulissBindingConstants {
     public final static ThingTypeUID TOPICS_THING_TYPE = new ThingTypeUID(BINDING_ID, TOPICS);
 
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Sets.newHashSet(GATEWAY_THING_TYPE,
-            T11_THING_TYPE, T12_THING_TYPE, T13_THING_TYPE, T14_THING_TYPE, T16_THING_TYPE, LYT_THING_TYPE,
-            T21_THING_TYPE, T22_THING_TYPE, T31_THING_TYPE, T41_THING_TYPE, T51_THING_TYPE, T52_THING_TYPE,
-            T53_THING_TYPE, T54_THING_TYPE, T55_THING_TYPE, T56_THING_TYPE, T57_THING_TYPE, T58_THING_TYPE,
-            T61_THING_TYPE, T62_THING_TYPE, T63_THING_TYPE, T64_THING_TYPE, T65_THING_TYPE, T66_THING_TYPE,
-            T67_THING_TYPE, T68_THING_TYPE, TOPICS_THING_TYPE);
+            T11_THING_TYPE, T12_THING_TYPE, T13_THING_TYPE, T14_THING_TYPE, T16_THING_TYPE, T1A_THING_TYPE,
+            LYT_THING_TYPE, T21_THING_TYPE, T22_THING_TYPE, T31_THING_TYPE, T41_THING_TYPE, T51_THING_TYPE,
+            T52_THING_TYPE, T53_THING_TYPE, T54_THING_TYPE, T55_THING_TYPE, T56_THING_TYPE, T57_THING_TYPE,
+            T58_THING_TYPE, T61_THING_TYPE, T62_THING_TYPE, T63_THING_TYPE, T64_THING_TYPE, T65_THING_TYPE,
+            T66_THING_TYPE, T67_THING_TYPE, T68_THING_TYPE, TOPICS_THING_TYPE);
 
     // List of all Channel ids
     public final static String ONOFF_CHANNEL = "onoff";
@@ -111,6 +113,15 @@ public class SoulissBindingConstants {
     public final static String ROLLERSHUTTER_MESSAGE_STATE_CLOSE_CHANNEL = "state_close";
     public final static String ROLLERSHUTTER_MESSAGE_NO_LIMITSWITCH_CHANNEL = "NoLimSwitch";
     public static final String ROLLERSHUTTER_MESSAGE_STOP_CHANNEL = "stop";
+
+    public final static String T1A_1_CHANNEL = "one";
+    public final static String T1A_2_CHANNEL = "two";
+    public final static String T1A_3_CHANNEL = "three";
+    public final static String T1A_4_CHANNEL = "four";
+    public final static String T1A_5_CHANNEL = "five";
+    public final static String T1A_6_CHANNEL = "six";
+    public final static String T1A_7_CHANNEL = "seven";
+    public final static String T1A_8_CHANNEL = "eight";
 
     public final static String T31_FAN_CHANNEL = "fan";
     public final static String T31_MODE_CHANNEL = "mode";

@@ -28,6 +28,7 @@ import org.openhab.binding.souliss.handler.SoulissT11Handler;
 import org.openhab.binding.souliss.handler.SoulissT12Handler;
 import org.openhab.binding.souliss.handler.SoulissT13Handler;
 import org.openhab.binding.souliss.handler.SoulissT14Handler;
+import org.openhab.binding.souliss.handler.SoulissT1AHandler;
 import org.openhab.binding.souliss.handler.SoulissT22Handler;
 import org.openhab.binding.souliss.handler.SoulissT31Handler;
 import org.openhab.binding.souliss.handler.SoulissT41Handler;
@@ -379,6 +380,11 @@ public class SoulissBindingUDPDecoder {
                                     logger.debug("Decoding " + SoulissBindingConstants.T14 + " packet");
                                     typicalState = getOHStateFromSoulissVal(sVal);
                                     ((SoulissT14Handler) typ.getHandler()).setState(typicalState);
+                                    break;
+                                case SoulissBindingConstants.T1A:
+                                    logger.debug("Decoding " + SoulissBindingConstants.T1A + " packet");
+                                    ((SoulissT1AHandler) typ.getHandler())
+                                            .setState(StringType.valueOf(String.valueOf(sVal)));
                                     break;
                                 case SoulissBindingConstants.T21:
                                 case SoulissBindingConstants.T22:

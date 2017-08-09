@@ -198,6 +198,10 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
                     thingUID = new ThingUID(SoulissBindingConstants.T16_THING_TYPE, sNodeId);
                     label = "T16: node " + node + ", slot " + slot;
                     break;
+                case SoulissBindingProtocolConstants.Souliss_T1A:
+                    thingUID = new ThingUID(SoulissBindingConstants.T1A_THING_TYPE, sNodeId);
+                    label = "T1A: node " + node + ", slot " + slot;
+                    break;
                 case SoulissBindingProtocolConstants.Souliss_T21:
                     thingUID = new ThingUID(SoulissBindingConstants.T21_THING_TYPE, sNodeId);
                     label = "T21: node " + node + ", slot " + slot;

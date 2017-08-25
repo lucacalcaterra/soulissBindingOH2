@@ -173,6 +173,7 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
         DiscoveryResult discoveryResult;
         SoulissGatewayHandler gw = (SoulissGatewayHandler) (SoulissBindingNetworkParameters
                 .getGateway(lastByteGatewayIP).getHandler());
+        gatewayUID = gw.getThing().getUID();
 
         if (lastByteGatewayIP == Byte.parseByte(gw.IPAddressOnLAN.split("\\.")[3])) {
 
@@ -274,9 +275,10 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
                     break;
             }
             if (thingUID != null) {
-                label = "[" + gatewayUID + "] " + label;
-                discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label).withBridge(gatewayUID)
-                        .build();
+
+                label = "[" + gw.getThing().getUID().getAsString() + "] " + label;
+                discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label)
+                        .withBridge(gw.getThing().getUID()).build();
                 thingDiscovered(discoveryResult);
             }
         }

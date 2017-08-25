@@ -399,46 +399,50 @@ public class SoulissBindingUDPDecoder {
                                         ((SoulissT22Handler) typ.getHandler()).setState_Message(
                                                 SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_CLOSING_CHANNEL);
                                     }
-                                    if (sVal == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Stop
-                                            || sVal == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Off
-                                            || sVal == SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Close
-                                            || sVal == SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Open
-                                            || sVal == SoulissBindingProtocolConstants.Souliss_T2n_NoLimSwitch
-                                            || sVal == SoulissBindingProtocolConstants.Souliss_T2n_Timer_Off
-                                            || sVal == SoulissBindingProtocolConstants.Souliss_T2n_State_Open
-                                            || sVal == SoulissBindingProtocolConstants.Souliss_T2n_State_Close) {
-                                        // ((SoulissT22Handler) typ.getHandler()).setState(PercentType.valueOf("50"));
+                                    // if (sVal == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Stop
+                                    // || sVal == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Off
+                                    // || sVal == SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Close
+                                    // || sVal == SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Open
+                                    // || sVal == SoulissBindingProtocolConstants.Souliss_T2n_NoLimSwitch
+                                    // || sVal == SoulissBindingProtocolConstants.Souliss_T2n_Timer_Off
+                                    // || sVal == SoulissBindingProtocolConstants.Souliss_T2n_State_Open
+                                    // || sVal == SoulissBindingProtocolConstants.Souliss_T2n_State_Close) {
+                                    // // ((SoulissT22Handler) typ.getHandler()).setState(PercentType.valueOf("50"));
 
-                                        switch (sVal) {
-                                            case SoulissBindingProtocolConstants.Souliss_T2n_Coil_Stop:
-                                                ((SoulissT22Handler) typ.getHandler()).setState_Message(
-                                                        SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_STOP_CHANNEL);
-                                                break;
-                                            case SoulissBindingProtocolConstants.Souliss_T2n_Coil_Off:
-                                                ((SoulissT22Handler) typ.getHandler()).setState_Message(
-                                                        SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_OPENING_CHANNEL);
-                                                break;
-                                            case SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Close:
-                                                ((SoulissT22Handler) typ.getHandler()).setState_Message(
-                                                        SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_LIMITSWITCH_CLOSE_CHANNEL);
-                                                break;
-                                            case SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Open:
-                                                ((SoulissT22Handler) typ.getHandler()).setState_Message(
-                                                        SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_LIMITSWITCH_OPEN_CHANNEL);
-                                                break;
-                                            case SoulissBindingProtocolConstants.Souliss_T2n_NoLimSwitch:
-                                                ((SoulissT22Handler) typ.getHandler()).setState_Message(
-                                                        SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_LIMITSWITCH_OPEN_CHANNEL);
-                                                break;
-                                            case SoulissBindingProtocolConstants.Souliss_T2n_State_Open:
-                                                ((SoulissT22Handler) typ.getHandler()).setState_Message(
-                                                        SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_STATE_OPEN_CHANNEL);
-                                                break;
-                                            case SoulissBindingProtocolConstants.Souliss_T2n_State_Close:
-                                                ((SoulissT22Handler) typ.getHandler()).setState_Message(
-                                                        SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_STATE_CLOSE_CHANNEL);
-                                                break;
-                                        }
+                                    switch (sVal) {
+                                        case SoulissBindingProtocolConstants.Souliss_T2n_Coil_Stop:
+                                            ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_STOP_CHANNEL);
+                                            break;
+                                        case SoulissBindingProtocolConstants.Souliss_T2n_Coil_Off:
+                                            ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_OPENING_CHANNEL);
+                                            break;
+                                        case SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Close:
+                                            ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_LIMITSWITCH_CLOSE_CHANNEL);
+                                            break;
+                                        case SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Open:
+                                            ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_LIMITSWITCH_OPEN_CHANNEL);
+                                            break;
+                                        case SoulissBindingProtocolConstants.Souliss_T2n_NoLimSwitch:
+                                            ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_LIMITSWITCH_OPEN_CHANNEL);
+                                            break;
+                                        case SoulissBindingProtocolConstants.Souliss_T2n_Timer_Off:
+                                            ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_TIMER_OFF);
+                                            break;
+                                        case SoulissBindingProtocolConstants.Souliss_T2n_State_Open:
+                                            ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_STATE_OPEN_CHANNEL);
+                                            break;
+                                        case SoulissBindingProtocolConstants.Souliss_T2n_State_Close:
+                                            ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_STATE_CLOSE_CHANNEL);
+                                            break;
+                                        // }
                                     }
                                     break;
                                 case SoulissBindingConstants.T31:

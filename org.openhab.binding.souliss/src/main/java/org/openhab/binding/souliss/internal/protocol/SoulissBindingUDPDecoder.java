@@ -12,7 +12,9 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
@@ -200,18 +202,17 @@ public class SoulissBindingUDPDecoder {
                     .getGateway(lastByteGatewayIP).getHandler();
             int typXnodo = gateway.getMaxTypicalXnode();
 
-            // logger.debug("Node: {} Nodes: {} Typicals x node: {}", tgtnode, numberOf, typXnodo);
             // creates Souliss nodes
             for (int j = 0; j < numberOf; j++) {
                 if (mac.get(5 + j) != 0) {// create only not-empty typicals
                     if (!(mac.get(5 + j) == SoulissBindingProtocolConstants.Souliss_T_related)) {
-                        // String hTyp = Integer.toHexString(mac.get(5 + j));
                         short typical = mac.get(5 + j);
                         short slot = (short) (j % typXnodo);
                         short node = (short) (j / typXnodo + tgtnode);
                         if (discoverResult != null) {
-                            // qui discovery è null. Come faccio?
-                            discoverResult.thingDetected(lastByteGatewayIP, typical, node, slot);
+                            logger.debug("Thing Detected. IP (last byte): {}, Typical: {}, Node: {}, Slot: {} ",
+                                    lastByteGatewayIP, typical, node, slot);
+                            discoverResult.thingDetected_Typicals(lastByteGatewayIP, typical, node, slot);
                         } else {
                             logger.debug("decodeTypRequest aborted. 'discoverResult' is null");
                         }
@@ -235,7 +236,7 @@ public class SoulissBindingUDPDecoder {
     private void decodeActionMessages(byte lastByteGatewayIP, ArrayList<Short> mac) {
         String sTopicNumber;
         String sTopicVariant;
-        float fRet;
+        float fRet = 0;
 
         try {
             // A 16-bit Topic Number: Define the topic itself
@@ -268,10 +269,27 @@ public class SoulissBindingUDPDecoder {
                 logger.debug("Topic Value (Payload 2 bytes): " + fRet);
             }
 
-            // here I have:
-            // sTopicNumber
-            // sTopicVariant
-            // fRet
+            Thing thing = null;
+            try {
+                ConcurrentHashMap<String, Thing> gwMaps = SoulissBindingNetworkParameters.getHashTableTopics();
+                Collection<Thing> gwMapsCollection = gwMaps.values();
+                SoulissTopicsHandler topicHandler;
+                boolean bIsPresent = false;
+
+                for (Thing t : gwMapsCollection) {
+                    if (t.getUID().toString().split(":")[2]
+                            .equals(sTopicNumber + SoulissBindingConstants.UUID_NODE_SLOT_SEPARATOR + sTopicVariant)) {
+                        topicHandler = (SoulissTopicsHandler) (t.getHandler());
+                        topicHandler.setState(DecimalType.valueOf(Float.toString(fRet)));
+                        bIsPresent = true;
+                    }
+                }
+                if (discoverResult != null && !bIsPresent) {
+                    discoverResult.thingDetected_ActionMessages(sTopicNumber, sTopicVariant);
+                }
+
+            } catch (Exception ex) {
+            }
 
         } catch (Exception uy) {
             logger.error("decodeActionMessages ERROR");
@@ -333,14 +351,16 @@ public class SoulissBindingUDPDecoder {
             while (thingsIterator.hasNext() && !bFound) {
                 typ = (Thing) thingsIterator.next();
                 String sUID_Array[] = typ.getUID().getAsString().split(":");
-                // execute only if binding is Souliss and update is for my Gateway
-                if (typ.getHandler() != null) {
+
+                if (typ.getHandler() != null) { // execute it only if binding is Souliss and update is for my Gateway
                     if (sUID_Array[0].equals(SoulissBindingConstants.BINDING_ID)
                             && Short.parseShort(((SoulissGenericTypical) typ.getHandler()).getGatewayIP().toString()
                                     .split("\\.")[3]) == lastByteGatewayIP) {
-                        // execute only if it is node to update
+
                         if (((SoulissGenericTypical) typ.getHandler()) != null
-                                && ((SoulissGenericTypical) typ.getHandler()).getNode() == tgtnode) {
+                                && ((SoulissGenericTypical) typ.getHandler()).getNode() == tgtnode) { // execute it only
+                                                                                                      // if it is node
+                                                                                                      // to update
                             // ...now check slot
                             int slot = ((SoulissGenericTypical) typ.getHandler()).getSlot();
                             // get typical value
@@ -610,6 +630,7 @@ public class SoulissBindingUDPDecoder {
                                         ((SoulissTopicsHandler) typ.getHandler()).setState(
                                                 DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
                                     }
+
                                     break;
                                 default:
                                     logger.debug("Unsupported typical");

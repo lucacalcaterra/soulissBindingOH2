@@ -59,7 +59,7 @@ public class SoulissBindingConstants {
     public final static String T66 = "t66";
     public final static String T67 = "t67";
     public final static String T68 = "t68";
-    public final static String TOPICS = "topics";
+    public final static String TOPICS = "topic";
 
     public final static ThingTypeUID T11_THING_TYPE = new ThingTypeUID(BINDING_ID, T11);
     public final static ThingTypeUID T12_THING_TYPE = new ThingTypeUID(BINDING_ID, T12);

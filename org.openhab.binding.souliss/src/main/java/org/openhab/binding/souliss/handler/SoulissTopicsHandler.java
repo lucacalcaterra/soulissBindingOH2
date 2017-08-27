@@ -18,13 +18,14 @@ import org.slf4j.LoggerFactory;
  * @author Luca Remigio - Initial contribution
  */
 
-public class SoulissTopicsHandler extends SoulissGenericTypical implements typicalCommonMethods {
+public class SoulissTopicsHandler extends SoulissGenericActionMessage implements typicalCommonMethods {
 
     private Logger logger = LoggerFactory.getLogger(SoulissTopicsHandler.class);
     private DecimalType _setPointValue = DecimalType.ZERO;
 
-    public SoulissTopicsHandler(Thing thing) {
-        super(thing);
+    public SoulissTopicsHandler(Thing _thing) {
+        super(_thing);
+        thing = _thing;
     }
 
     @Override
@@ -44,10 +45,7 @@ public class SoulissTopicsHandler extends SoulissGenericTypical implements typic
         this.setUpdateTimeNow();
 
         this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
-        if (!_setPointValue.equals(_state)) {
-            this.updateState(SoulissBindingConstants.FLOATING_POINT_CHANNEL, (DecimalType) _state);
-            _setPointValue = (DecimalType) _state;
-        }
+        this.updateState(SoulissBindingConstants.T5n_VALUE_CHANNEL, (DecimalType) _state);
     }
 
 }

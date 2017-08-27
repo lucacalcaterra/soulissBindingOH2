@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
 	<bridge-type id="gateway">
-		<label>Souliss Gateway</label>
+		<label>Gateway</label>
 		<description>Represents a Souliss Gateway.</description>
 
 		<config-description>
@@ -40,7 +40,7 @@
 			</parameter>
 			<parameter name="SUBSCRIBTION_INTERVAL" type="integer" min="1" max="60">
 				<label>Subscription interval</label>
-				<description>Interval in minutes to check for device presence.
+				<description>Interval in minutes to subcribe Souliss Gateway.
                 </description>
 				<default>2</default>
 				<advanced>true</advanced>
@@ -449,6 +449,18 @@
             <channel id="lastStatusStored" typeId="lastStatusStored" />
         </channels>
     </thing-type>
+    
+    <thing-type id="topic">
+        <label>Action Message</label>
+        <description>Look at: Souliss Wiki, Peer 2 Peer Communication. That are messages published in broadcast from souliss nodes in channels defined by two value: number and variant.</description>
+        <channels>
+            <channel id="value" typeId="float6n" />
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
+
+    </thing-type>
+    
+    
     
     <channel-type id="fan-channel">
     <item-type>String</item-type>

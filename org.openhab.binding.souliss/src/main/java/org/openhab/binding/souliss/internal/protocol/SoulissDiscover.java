@@ -43,7 +43,9 @@ public class SoulissDiscover extends Thread {
 
         void setGatewayUndetected();
 
-        void thingDetected(byte lastByteGatewayIP, short typical, short node, short slot);
+        void thingDetected_Typicals(byte lastByteGatewayIP, short typical, short node, short slot);
+
+        void thingDetected_ActionMessages(String sTopicNumber, String sTopicVariant);
 
         ThingUID getGatewayUID();
     }
@@ -137,7 +139,7 @@ public class SoulissDiscover extends Thread {
     @Override
     public void run() {
         // everytime user click on refresh Inbox > Souliss Binding > Search
-        ConcurrentHashMap<Byte, Thing> gwMaps = SoulissBindingNetworkParameters.getHashTableGateway();
+        ConcurrentHashMap<Byte, Thing> gwMaps = SoulissBindingNetworkParameters.getHashTableGateways();
         Collection<Thing> gwMapsCollection = gwMaps.values();
         for (Thing t : gwMapsCollection) {
             SoulissGatewayHandler gw = (SoulissGatewayHandler) t.getHandler();

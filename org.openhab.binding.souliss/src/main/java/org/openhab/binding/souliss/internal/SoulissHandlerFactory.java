@@ -108,6 +108,7 @@ public class SoulissHandlerFactory extends BaseThingHandlerFactory {
         } else if (thingTypeUID.equals(T68_THING_TYPE)) {
             return new SoulissT68Handler(thing);
         } else if (thingTypeUID.equals(TOPICS_THING_TYPE)) {
+            SoulissBindingNetworkParameters.addTopics(thing.getUID().getAsString().split(":")[2], thing);
             return new SoulissTopicsHandler(thing);
         }
 

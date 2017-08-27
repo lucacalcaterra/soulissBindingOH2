@@ -167,7 +167,21 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
     }
 
     @Override
-    public void thingDetected(byte lastByteGatewayIP, short typical, short node, short slot) {
+    public void thingDetected_ActionMessages(String TopicNumber, String sTopicVariant) {
+        ThingUID thingUID = null;
+        String label = "";
+        DiscoveryResult discoveryResult;
+        String sNodeID = TopicNumber + SoulissBindingConstants.UUID_NODE_SLOT_SEPARATOR + sTopicVariant;
+
+        thingUID = new ThingUID(SoulissBindingConstants.TOPICS_THING_TYPE, sNodeID);
+        label = "Topic. Number: " + TopicNumber + ", Variant: " + sTopicVariant;
+
+        discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label).build();
+        thingDiscovered(discoveryResult);
+    }
+
+    @Override
+    public void thingDetected_Typicals(byte lastByteGatewayIP, short typical, short node, short slot) {
         ThingUID thingUID = null;
         String label = "";
         DiscoveryResult discoveryResult;
@@ -243,7 +257,6 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
                     thingUID = new ThingUID(SoulissBindingConstants.T57_THING_TYPE, sNodeId);
                     label = "T57: node " + node + ", slot " + slot;
                     break;
-
                 case SoulissBindingProtocolConstants.Souliss_T62_TemperatureSensor:
                     thingUID = new ThingUID(SoulissBindingConstants.T62_THING_TYPE, sNodeId);
                     label = "T52: node " + node + ", slot " + slot;
@@ -267,11 +280,6 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
                 case SoulissBindingProtocolConstants.Souliss_T67_PowerSensor:
                     thingUID = new ThingUID(SoulissBindingConstants.T67_THING_TYPE, sNodeId);
                     label = "T67: node " + node + ", slot " + slot;
-                    break;
-
-                case SoulissBindingProtocolConstants.Souliss_Topics:
-                    thingUID = new ThingUID(SoulissBindingConstants.TOPICS_THING_TYPE, sNodeId);
-                    label = "TOPIC: node " + node + ", slot " + slot;
                     break;
             }
             if (thingUID != null) {

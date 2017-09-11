@@ -21,6 +21,7 @@ import org.eclipse.smarthome.core.thing.ThingStatusInfo;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
+import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
 import org.openhab.binding.souliss.internal.protocol.SoulissCommonCommands;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -180,7 +181,8 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
     }
 
     public DatagramSocket getDatagramSocket() {
-        return ((SoulissGatewayHandler) getBridge().getHandler()).datagramSocket;
+        return SoulissBindingNetworkParameters.getDatagramSocket();
+        // return ((SoulissGatewayHandler) getBridge().getHandler()).datagramSocket;
     }
 
 }

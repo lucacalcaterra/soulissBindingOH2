@@ -26,16 +26,21 @@ public class SoulissDatagramSocketFactory {
     // public static Integer serverPort;
     private static Logger logger = LoggerFactory.getLogger(SoulissDatagramSocketFactory.class);
 
+    public static DatagramSocket getSocketDatagram() {
+        return getSocketDatagram(0);
+    }
+
     public static DatagramSocket getSocketDatagram(int socketPortNumber) {
         // return DatagramSocket for packet trasmission
         DatagramSocket soulissDatagramSocket = null;
+        logger.debug("Setup socket");
         try {
             if (socketPortNumber != 0) {
                 soulissDatagramSocket = new DatagramSocket(socketPortNumber);
             } else {
                 soulissDatagramSocket = new DatagramSocket();
             }
-            logger.debug("Datagram Socket Created on port " + soulissDatagramSocket.getLocalPort());
+            logger.debug("Datagram Socket Created on port {}", soulissDatagramSocket.getLocalPort());
         } catch (SocketException e) {
             logger.error("Error on creation of Socket");
             logger.error(e.getMessage());
@@ -44,30 +49,4 @@ public class SoulissDatagramSocketFactory {
         return soulissDatagramSocket;
 
     }
-
-    // public static DatagramSocket getDatagram_for_broadcast() {
-    // if (soulissDatagramSocket_port230 == null) {
-    // try {
-    // soulissDatagramSocket_port230 = new DatagramSocket(
-    // SoulissBindingUDPConstants.SOULISS_GATEWAY_DEFAULT_PORT);
-    // soulissDatagramSocket_port230.setBroadcast(true);
-    // logger.debug("Datagram Socket Created on port (Souliss Default Port) "
-    // + soulissDatagramSocket_port230.getLocalPort());
-    // } catch (SocketException e) {
-    // logger.error("Error on creation of Socket on port 230");
-    // logger.error(e.getMessage());
-    // }
-    // }
-    // return soulissDatagramSocket_port230;
-    // }
-
-    // public static void doClose() {
-    // soulissDatagramSocket.close();
-    // soulissDatagramSocket = null;
-    // }
-    //
-    // public static void doClose_port230() {
-    // soulissDatagramSocket_port230.close();
-    // soulissDatagramSocket_port230 = null;
-    // }
 }

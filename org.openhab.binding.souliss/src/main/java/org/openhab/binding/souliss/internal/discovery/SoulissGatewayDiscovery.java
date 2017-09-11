@@ -21,7 +21,6 @@ import org.eclipse.smarthome.config.discovery.DiscoveryResultBuilder;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
-import org.openhab.binding.souliss.SoulissBindingUDPConstants;
 import org.openhab.binding.souliss.handler.SoulissGatewayHandler;
 import org.openhab.binding.souliss.internal.SoulissDatagramSocketFactory;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
@@ -43,7 +42,7 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
     private boolean bGatewayDetected = false;
     private ThingUID gatewayUID;
     // private ScheduledFuture<?> schedulerFuture;
-    private DatagramSocket datagramSocket_forBroadcasting;
+    private DatagramSocket datagramSocket;
     SoulissBindingUDPServerThread UDP_Server = null;
 
     // class DetectTask extends TimerTask {
@@ -56,7 +55,7 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
     private void startDiscoveryService() {
         if (soulissDiscoverThread == null) {
             try {
-                soulissDiscoverThread = new SoulissDiscover(datagramSocket_forBroadcasting, this,
+                soulissDiscoverThread = new SoulissDiscover(datagramSocket, this,
                         SoulissBindingConstants.DISCOVERY_resendTimeoutInMillis,
                         SoulissBindingConstants.DISCOVERY_resendAttempts);
             } catch (SocketException e) {
@@ -72,16 +71,21 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
                 false);
 
         SoulissBindingNetworkParameters.discoverResult = this;
-        // open socket on port 230
-        datagramSocket_forBroadcasting = SoulissDatagramSocketFactory
-                .getSocketDatagram(SoulissBindingUDPConstants.SOULISS_GATEWAY_DEFAULT_PORT);
-        if (datagramSocket_forBroadcasting != null) {
-            SoulissBindingNetworkParameters.setDatagramSocket(datagramSocket_forBroadcasting);
-            UDP_Server = new SoulissBindingUDPServerThread(datagramSocket_forBroadcasting,
-                    SoulissBindingNetworkParameters.discoverResult);
-            UDP_Server.start();
-        }
+        // open socket
+        logger.debug("Starting Servers");
 
+        datagramSocket = SoulissDatagramSocketFactory.getSocketDatagram();
+        if (datagramSocket != null) {
+            SoulissBindingNetworkParameters.setDatagramSocket(datagramSocket);
+
+            logger.debug("Starting UDP server on Preferred Local Port (random if it is zero)");
+            UDP_Server = new SoulissBindingUDPServerThread(datagramSocket,
+                    SoulissBindingNetworkParameters.discoverResult);
+            SoulissBindingNetworkParameters.setUDPServer(UDP_Server);
+            UDP_Server.start();
+        } else {
+            logger.debug("Error - datagramSocket is null - Server not started");
+        }
     }
 
     @Override
@@ -112,7 +116,7 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
      */
     @Override
     public void gatewayDetected(InetAddress addr, String id) {
-        logger.debug("souliss gateway found " + addr.getHostName() + " " + id);
+        logger.debug("Souliss gateway found " + addr.getHostName() + " " + id);
         gatewayUID = new ThingUID(SoulissBindingConstants.GATEWAY_THING_TYPE, id);
 
         String label = "Souliss Gateway " + id;
@@ -128,8 +132,7 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
 
     @Override
     protected void startScan() {
-        // schedulerFuture = scheduler.scheduleAtFixedRate(new DetectTask(), 50,
-        // SoulissBindingConstants.DISCOVERY_TimeoutInMillis, TimeUnit.MILLISECONDS);
+        logger.debug("Starting Scan Service");
         startDiscoveryService();
         soulissDiscoverThread.sendDiscover(scheduler);
 

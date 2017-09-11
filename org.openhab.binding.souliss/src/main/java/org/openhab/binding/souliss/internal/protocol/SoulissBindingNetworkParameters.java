@@ -39,20 +39,21 @@ public class SoulissBindingNetworkParameters {
     private static ConcurrentHashMap<Byte, Thing> hashTableGateways = new ConcurrentHashMap<Byte, Thing>();
     private static ConcurrentHashMap<String, Thing> hashTableTopics = new ConcurrentHashMap<String, Thing>();
 
-    private static DatagramSocket datagramSocketPort230;
+    private static DatagramSocket datagramSocket;
     public static DiscoverResult discoverResult;
+    private static SoulissBindingUDPServerThread UDP_Server;
 
     public static DatagramSocket getDatagramSocket() {
-        return datagramSocketPort230;
+        return datagramSocket;
     }
 
     public static void closeDatagramSocket() {
-        datagramSocketPort230.close();
-        datagramSocketPort230 = null;
+        datagramSocket.close();
+        datagramSocket = null;
     }
 
     public static void setDatagramSocket(DatagramSocket datagramSocket) {
-        SoulissBindingNetworkParameters.datagramSocketPort230 = datagramSocket;
+        SoulissBindingNetworkParameters.datagramSocket = datagramSocket;
     }
 
     public static void addGateway(byte lastByteGatewayIP, Thing thing) {
@@ -87,4 +88,12 @@ public class SoulissBindingNetworkParameters {
         hashTableTopics.remove(sUID);
     }
 
+    public static void setUDPServer(SoulissBindingUDPServerThread _UDP_Server) {
+        UDP_Server = _UDP_Server;
+
+    }
+
+    public static SoulissBindingUDPServerThread getUDPServer() {
+        return UDP_Server;
+    }
 }

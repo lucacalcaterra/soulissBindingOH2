@@ -56,42 +56,32 @@ public class SoulissBindingUDPServerThread extends Thread {
 
         // if (discoverResult != null) {
         decoder = new SoulissBindingUDPDecoder(discoverResult);
-        logger.info("Start UDPServerThread - Server in ascolto sulla porta " + soulissDatagramSocket.getLocalPort());
-        // } else {
-        // bExit = true;
-        // logger.info("Start UDPServerThread - Error - 'discoverResult' is null");
-        // }
-
+        logger.info("Starting UDP Server Thread - Server on port {}", soulissDatagramSocket.getLocalPort());
     }
-
-    // public void setResultClass(DiscoverResult _discoverResult) {
-    // this.discoverResult = _discoverResult;
-    // }
 
     @Override
     public void run() {
 
         while (!bExit) {
-            try {
-                byte[] buf = new byte[256];
-                // receive request
-                DatagramPacket packet = new DatagramPacket(buf, buf.length);
-                soulissDatagramSocket.receive(packet);
-                buf = packet.getData();
+            if (!soulissDatagramSocket.isClosed()) {
+                try {
+                    byte[] buf = new byte[256];
+                    // receive request
+                    DatagramPacket packet = new DatagramPacket(buf, buf.length);
+                    soulissDatagramSocket.receive(packet);
+                    buf = packet.getData();
 
-                // **************** DECODER ********************
-                logger.debug("Packet received " + MaCacoToString(buf));
-                decoder.decodeVNetDatagram(packet);
+                    // **************** DECODER ********************
+                    logger.debug("Packet received " + MaCacoToString(buf));
+                    decoder.decodeVNetDatagram(packet);
 
-            } catch (IOException e) {
-                e.printStackTrace();
-                logger.error(e.getMessage());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    logger.error(e.getMessage());
+                }
             }
         }
-        if (soulissDatagramSocket != null) {
-            soulissDatagramSocket.close();
-            soulissDatagramSocket = null;
-        }
+        logger.debug("UDP Server (port {}) stopped", soulissDatagramSocket.getLocalPort());
     }
 
     public void stopServer() {

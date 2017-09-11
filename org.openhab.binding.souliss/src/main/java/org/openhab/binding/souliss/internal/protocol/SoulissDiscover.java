@@ -51,7 +51,7 @@ public class SoulissDiscover extends Thread {
     }
 
     // private boolean willbeclosed = false;
-    private DatagramSocket datagramSocket_OnDefaultPort;
+    private DatagramSocket datagramSocket;
     SoulissBindingUDPServerThread UDP_Server_OnDefaultPort = null;
     ///// Debug
     private Logger logger = LoggerFactory.getLogger(SoulissDiscover.class);
@@ -63,11 +63,11 @@ public class SoulissDiscover extends Thread {
     final private int resendTimeoutInMillis;
     final private int resendAttempts;
 
-    public SoulissDiscover(DatagramSocket _datagramSocket_OnDefaultPort, DiscoverResult discoverResult,
-            int resendTimeoutInMillis, int resendAttempts) throws SocketException {
+    public SoulissDiscover(DatagramSocket _datagramSocket, DiscoverResult discoverResult, int resendTimeoutInMillis,
+            int resendAttempts) throws SocketException {
         this.resendAttempts = resendAttempts;
         this.resendTimeoutInMillis = resendTimeoutInMillis;
-        datagramSocket_OnDefaultPort = _datagramSocket_OnDefaultPort;
+        datagramSocket = _datagramSocket;
         this.discoverResult = discoverResult;
     }
 
@@ -100,7 +100,7 @@ public class SoulissDiscover extends Thread {
             try {
                 // ===============================================================================
                 // ===============================================================================
-                SoulissCommonCommands.sendBroadcastGatewayDiscover(datagramSocket_OnDefaultPort);
+                SoulissCommonCommands.sendBroadcastGatewayDiscover(datagramSocket);
                 // ===============================================================================
                 // ===============================================================================
                 logger.debug("Sent discovery packet");
@@ -143,7 +143,8 @@ public class SoulissDiscover extends Thread {
         Collection<Thing> gwMapsCollection = gwMaps.values();
         for (Thing t : gwMapsCollection) {
             SoulissGatewayHandler gw = (SoulissGatewayHandler) t.getHandler();
-            SoulissCommonCommands.sendDBStructFrame(gw.datagramSocket, gw.IPAddressOnLAN, gw.nodeIndex, gw.userIndex);
+            SoulissCommonCommands.sendDBStructFrame(SoulissBindingNetworkParameters.getDatagramSocket(),
+                    gw.IPAddressOnLAN, gw.nodeIndex, gw.userIndex);
         }
     }
 }

@@ -123,7 +123,7 @@ public abstract class SoulissGenericActionMessage extends BaseThingHandler {
     }
 
     public DatagramSocket getDatagramSocket() {
-        return ((SoulissGatewayHandler) getBridge().getHandler()).datagramSocket;
+        return ((SoulissGatewayHandler) getBridge().getHandler()).datagramSocket_defaultPort;
     }
 
 }

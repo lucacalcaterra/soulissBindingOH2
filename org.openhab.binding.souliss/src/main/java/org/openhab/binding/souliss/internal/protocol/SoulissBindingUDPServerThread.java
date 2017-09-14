@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
-import org.openhab.binding.souliss.internal.protocol.SoulissDiscover.DiscoverResult;
+import org.openhab.binding.souliss.internal.protocol.SoulissDiscoverThread.DiscoverResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -25,8 +25,8 @@ import org.openhab.binding.souliss.handler.SoulissGatewayHandler;
 import org.openhab.binding.souliss.internal.SoulissDatagramSocketFactory;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingUDPServerThread;
-import org.openhab.binding.souliss.internal.protocol.SoulissDiscover;
-import org.openhab.binding.souliss.internal.protocol.SoulissDiscover.DiscoverResult;
+import org.openhab.binding.souliss.internal.protocol.SoulissDiscoverThread;
+import org.openhab.binding.souliss.internal.protocol.SoulissDiscoverThread.DiscoverResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,8 +38,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements DiscoverResult {
     private Logger logger = LoggerFactory.getLogger(SoulissGatewayDiscovery.class);
-    private SoulissDiscover soulissDiscoverThread;
-    private boolean bGatewayDetected = false;
+    private SoulissDiscoverThread soulissDiscoverThread;
     private ThingUID gatewayUID;
     // private ScheduledFuture<?> schedulerFuture;
     private DatagramSocket datagramSocket;
@@ -55,14 +54,14 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
     private void startDiscoveryService() {
         if (soulissDiscoverThread == null) {
             try {
-                soulissDiscoverThread = new SoulissDiscover(datagramSocket, this,
+                soulissDiscoverThread = new SoulissDiscoverThread(datagramSocket, this,
                         SoulissBindingConstants.DISCOVERY_resendTimeoutInMillis,
                         SoulissBindingConstants.DISCOVERY_resendAttempts);
             } catch (SocketException e) {
                 logger.error("Opening the souliss discovery service failed. " + e.getLocalizedMessage());
                 return;
             }
-            soulissDiscoverThread.start();
+            soulissDiscoverThread.scan();
         }
     }
 
@@ -127,41 +126,22 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
         DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(gatewayUID).withLabel(label)
                 .withProperties(properties).build();
         thingDiscovered(discoveryResult);
-        setGatewayDetected();
     }
 
     @Override
     protected void startScan() {
         logger.debug("Starting Scan Service");
         startDiscoveryService();
-        soulissDiscoverThread.sendDiscover(scheduler);
+        soulissDiscoverThread.start();
 
     }
 
     @Override
     protected synchronized void stopScan() {
         if (soulissDiscoverThread != null) {
-            soulissDiscoverThread.stopResend();
-            soulissDiscoverThread.stopReceiving();
             soulissDiscoverThread = null;
         }
         super.stopScan();
-    }
-
-    @Override
-    public boolean isGatewayDetected() {
-        return bGatewayDetected;
-    }
-
-    @Override
-    public void setGatewayDetected() {
-        bGatewayDetected = true;
-    }
-
-    @Override
-    public void setGatewayUndetected() {
-        bGatewayDetected = false;
-
     }
 
     @Override

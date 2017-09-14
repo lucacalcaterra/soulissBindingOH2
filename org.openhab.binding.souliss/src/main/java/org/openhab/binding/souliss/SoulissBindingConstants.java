@@ -23,7 +23,7 @@ public class SoulissBindingConstants {
 
     public static final String BINDING_ID = "souliss";
 
-    public static final int DISCOVERY_resendTimeoutInMillis = 1;
+    public static final int DISCOVERY_resendTimeoutInMillis = 2000;
     public static final int DISCOVERY_resendAttempts = 10;
     public static final int DISCOVERY_TimeoutInSeconds = 15;
     // public static final int PING_resendTimeoutInSeconds = 5;

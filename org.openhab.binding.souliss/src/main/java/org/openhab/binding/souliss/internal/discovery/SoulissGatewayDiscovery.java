@@ -23,10 +23,9 @@ import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
 import org.openhab.binding.souliss.handler.SoulissGatewayHandler;
 import org.openhab.binding.souliss.internal.SoulissDatagramSocketFactory;
+import org.openhab.binding.souliss.internal.discovery.SoulissDiscoverThread.DiscoverResult;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingUDPServerThread;
-import org.openhab.binding.souliss.internal.protocol.SoulissDiscoverThread;
-import org.openhab.binding.souliss.internal.protocol.SoulissDiscoverThread.DiscoverResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

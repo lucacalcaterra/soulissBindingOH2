@@ -44,7 +44,7 @@ import org.openhab.binding.souliss.handler.SoulissT66Handler;
 import org.openhab.binding.souliss.handler.SoulissT67Handler;
 import org.openhab.binding.souliss.handler.SoulissT68Handler;
 import org.openhab.binding.souliss.handler.SoulissTopicsHandler;
-import org.openhab.binding.souliss.internal.protocol.SoulissDiscoverThread.DiscoverResult;
+import org.openhab.binding.souliss.internal.discovery.SoulissDiscoverThread.DiscoverResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -9,8 +9,6 @@ package org.openhab.binding.souliss.handler;
 
 import java.math.BigDecimal;
 import java.net.DatagramSocket;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import org.eclipse.smarthome.config.core.Configuration;
 import org.eclipse.smarthome.core.thing.Bridge;
@@ -41,25 +39,23 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
     public DatagramSocket datagramSocket_defaultPort;
     SoulissBindingUDPServerThread UDP_Server_DefaultPort = null;
 
-    private int countPING_KO = 0;
     boolean bGatewayDetected = false;
 
     Configuration gwConfigurationMap;
 
-    private int pingRefreshInterval;
-    private ScheduledFuture<?> pingTimer;
-    private ScheduledFuture<?> subscriptionTimer;
-    private int subscriptionRefreshInterval;
+    public int pingRefreshInterval;
+    public int subscriptionRefreshInterval;
     private Bridge bridge;
     public int preferred_local_port;
     public int souliss_gateway_port;
     public short userIndex;
     public short nodeIndex;
     public String IPAddressOnLAN;
-    private int nodes;
+    public int nodes;
     private int maxnodes;
     private int maxTypicalXnode;
     private int maxrequests;
+    private int countPING_KO = 0;
 
     public SoulissGatewayHandler(Bridge _bridge) {
         super(_bridge);
@@ -76,6 +72,7 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
     public void handleRemoval() {
         SoulissBindingNetworkParameters.removeGateway(Byte.parseByte(IPAddressOnLAN.split("\\.")[3]));
         UDP_Server_DefaultPort = null;
+        logger.debug("Gateway handler removing");
     }
 
     @Override
@@ -132,6 +129,22 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
             logger.debug("Set Node Index to {}", SoulissBindingUDPConstants.SOULISS_DEFAULT_NODE_INDEX);
         }
 
+        if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_NODE_INDEX) != null) {
+            nodeIndex = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_NODE_INDEX)).shortValue();
+            logger.debug("Get Node Index: {}", nodeIndex);
+        }
+
+        if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_PING_REFRESH) != null) {
+            pingRefreshInterval = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_PING_REFRESH))
+                    .intValue();
+            logger.debug("Get ping refresh interval: {}", pingRefreshInterval);
+        }
+        if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SUBSCRIPTION_REFRESH) != null) {
+            subscriptionRefreshInterval = ((BigDecimal) gwConfigurationMap
+                    .get(SoulissBindingConstants.CONFIG_SUBSCRIPTION_REFRESH)).intValue();
+            logger.debug("Get ping refresh interval: {}", pingRefreshInterval);
+        }
+
         // START SERVER ON DEFAULT PORT - Used for topics
         if (UDP_Server_DefaultPort == null) {
             logger.debug("Starting UDP server on Souliss Default Port for Topics (Publish&Subcribe)");
@@ -142,87 +155,15 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
                 UDP_Server_DefaultPort.start();
             }
         }
-        setupRefreshTimer();
 
-    }
-
-    private void sendPing() {
-        if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_IP_ADDRESS).toString().length() > 0) {
-            SoulissCommonCommands.sendPing(SoulissBindingNetworkParameters.getDatagramSocket(),
-                    gwConfigurationMap.get(SoulissBindingConstants.CONFIG_IP_ADDRESS).toString(),
-                    Short.parseShort(gwConfigurationMap.get(SoulissBindingConstants.CONFIG_NODE_INDEX).toString()),
-                    Short.parseShort(gwConfigurationMap.get(SoulissBindingConstants.CONFIG_USER_INDEX).toString()),
-                    (byte) 0, (byte) 0);
-            logger.debug("Sent ping packet");
-        }
-    }
-
-    private void sendSubscription() {
-        if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_IP_ADDRESS).toString().length() > 0) {
-            SoulissCommonCommands.sendSUBSCRIPTIONframe(SoulissBindingNetworkParameters.getDatagramSocket(),
-                    gwConfigurationMap.get(SoulissBindingConstants.CONFIG_IP_ADDRESS).toString(),
-                    Short.parseShort(gwConfigurationMap.get(SoulissBindingConstants.CONFIG_NODE_INDEX).toString()),
-                    Short.parseShort(gwConfigurationMap.get(SoulissBindingConstants.CONFIG_USER_INDEX).toString()),
-                    nodes);
-        }
+        SoulissGatewayThread soulissGWThread = new SoulissGatewayThread(bridge);
+        soulissGWThread.start();
     }
 
     @Override
     public void thingUpdated(Thing thing) {
+        logger.debug("Thing Updated: {}", thing.getThingTypeUID());
         this.thing = thing;
-    }
-
-    /**
-     * Sets up the periodically refresh via the scheduler. If the user set CONFIG_REFRESH to 0, no refresh will be
-     * done.
-     */
-    private void setupRefreshTimer() {
-
-        BigDecimal ping_interval_config = (BigDecimal) thing.getConfiguration()
-                .get(SoulissBindingConstants.CONFIG_PING_REFRESH);
-        BigDecimal subscription_interval_config = (BigDecimal) thing.getConfiguration()
-                .get(SoulissBindingConstants.CONFIG_SUBSCRIPTION_REFRESH);
-        if (ping_interval_config == null || ping_interval_config.intValue() == 0) {
-            pingRefreshInterval = 0;
-            return;
-        }
-
-        if (subscription_interval_config == null || subscription_interval_config.intValue() == 0) {
-            subscriptionRefreshInterval = 0;
-            return;
-        }
-
-        pingRefreshInterval = ping_interval_config.intValue();
-        subscriptionRefreshInterval = subscription_interval_config.intValue();
-        if (pingTimer != null) {
-            pingTimer.cancel(true);
-        }
-        if (subscriptionTimer != null) {
-            subscriptionTimer.cancel(true);
-        }
-        // This timer will do the state update periodically.
-        pingTimer = scheduler.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                sendPing();
-
-                if (++countPING_KO > 3) {
-                    // if GW do not respond to ping it is setted to OFFLINE
-                    logger.debug("Gateway do not respond to {} ping packet - setting OFFLINE", countPING_KO);
-                    updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE,
-                            "Gateway " + gwConfigurationMap.get(SoulissBindingConstants.CONFIG_ID).toString()
-                                    + " do not respond to " + countPING_KO + " ping");
-                }
-
-            }
-        }, 0, pingRefreshInterval, TimeUnit.SECONDS);
-
-        subscriptionTimer = scheduler.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                sendSubscription();
-            }
-        }, 0, subscriptionRefreshInterval, TimeUnit.MINUTES);
     }
 
     public void dbStructAnswerReceived() {
@@ -261,9 +202,20 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
      */
 
     public void gatewayDetected() {
-        logger.debug("Setting Gateway ONLINE", countPING_KO);
+        logger.debug("Setting Gateway ONLINE");
         updateStatus(ThingStatus.ONLINE);
         countPING_KO = 0; // reset counter
+    }
+
+    public void pingSent() {
+        if (++countPING_KO > 3) {
+            // if GW do not respond to ping it is setted to OFFLINE
+            logger.debug("Gateway do not respond to {} ping packet - setting OFFLINE", countPING_KO);
+
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE, "Gateway "
+                    + bridge.getHandler().getThing().getUID() + " do not respond to " + countPING_KO + " ping");
+        }
+
     }
 
 }

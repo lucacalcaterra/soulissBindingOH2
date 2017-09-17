@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.openhab.binding.souliss.internal.protocol;
+package org.openhab.binding.souliss.internal.discovery;
 
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -19,6 +19,9 @@ import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.handler.SoulissGatewayHandler;
+import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
+import org.openhab.binding.souliss.internal.protocol.SoulissBindingUDPServerThread;
+import org.openhab.binding.souliss.internal.protocol.SoulissCommonCommands;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

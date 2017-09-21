@@ -40,6 +40,7 @@ public class SoulissT31Handler extends SoulissGenericTypical implements typicalC
     StringType _lastModeState = StringType.EMPTY;
     StringType _modeStateValue = StringType.EMPTY;
     private Logger logger = LoggerFactory.getLogger(SoulissT11Handler.class);
+    DecimalType _setMeasuredValue = DecimalType.ZERO;
 
     public SoulissT31Handler(Thing _thing) {
         super(_thing);
@@ -126,12 +127,7 @@ public class SoulissT31Handler extends SoulissGenericTypical implements typicalC
 
         this.setUpdateTimeNow();
         this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
-        if (_state instanceof DecimalType) {
-            if (!_setPointValue.equals(_state)) {
-                this.updateState(SoulissBindingConstants.T31_SETPOINT_CHANNEL, (DecimalType) _state);
-                _setPointValue = (DecimalType) _state;
-            }
-        } else if (_state instanceof StringType) {
+        if (_state instanceof StringType) {
             switch (_state.toString()) {
                 case SoulissBindingConstants.T31_FANLOW_MESSAGE_CHANNEL:
                 case SoulissBindingConstants.T31_FANMEDIUM_MESSAGE_CHANNEL:
@@ -168,6 +164,26 @@ public class SoulissT31Handler extends SoulissGenericTypical implements typicalC
             }
         }
         this.updateThing(this.thing);
+    }
+
+    public void setMeasuredValue(DecimalType valueOf) {
+        if (valueOf instanceof DecimalType) {
+            if (!_setMeasuredValue.equals(valueOf)) {
+                this.updateState(SoulissBindingConstants.T31_VALUE_CHANNEL, valueOf);
+                _setMeasuredValue = valueOf;
+            }
+        }
+
+    }
+
+    public void setSetpointValue(DecimalType valueOf) {
+        if (valueOf instanceof DecimalType) {
+            if (!_setPointValue.equals(valueOf)) {
+                this.updateState(SoulissBindingConstants.T31_SETPOINT_CHANNEL, valueOf);
+                _setPointValue = valueOf;
+            }
+        }
+
     }
 
 }

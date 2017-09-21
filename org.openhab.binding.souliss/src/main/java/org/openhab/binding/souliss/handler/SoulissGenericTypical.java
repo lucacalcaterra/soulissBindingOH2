@@ -148,6 +148,7 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
 
     @Override
     public void thingUpdated(Thing _thing) {
+        updateThing(_thing);
         this.thing = _thing;
     }
 

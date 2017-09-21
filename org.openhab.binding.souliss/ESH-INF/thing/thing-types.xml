@@ -129,7 +129,7 @@
             <bridge-type-ref id="gateway" />
         </supported-bridge-type-refs>
         <label>T16</label>
-        <description>RGB Light</description>
+        <description>RGB LED Strip</description>
 
         <channels>
         <channel id="onoff" typeId="onoff"/>
@@ -151,6 +151,30 @@
         </config-description>
     </thing-type>
     
+    <thing-type id="t19">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway" />
+        </supported-bridge-type-refs>
+        <label>T19</label>
+        <description> Single Color LED Strip</description>
+
+        <channels>
+        <channel id="onoff" typeId="onoff"/>
+        <channel id="roller_brightness" typeId="roller_brightness"/>
+        <channel id="dimmer_brightness" typeId="dimmer_brightness"/>
+        <channel id="sleep" typeId="sleep" />    
+        <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
+
+        <config-description>
+            <parameter name="sleep" type="integer" min="1" max="1000">
+                <label>Sleep</label>
+                <description>Set sleep timer in cycles</description>
+                <required>false</required>
+                <default>5</default>
+            </parameter>
+        </config-description>
+    </thing-type>
     <thing-type id="t1A">
         <supported-bridge-type-refs>
             <bridge-type-ref id="gateway" />
@@ -222,13 +246,14 @@
         <channels>
             <channel id="fan" typeId="fan-channel" />
             <channel id="mode" typeId="mode-channel" />
-            <channel id="conditioning" typeId="buttonReadOnly">
+            <channel id="status" typeId="buttonReadOnly">
                 <label>Power</label>
             </channel>
-            <channel id="setPoint" typeId="float6n" />
-            <channel id="asMeasured" typeId="button">
+            <channel id="setpoint" typeId="float6n" />
+            <channel id="setAsMeasured" typeId="button">
                 <label>As measured</label>
             </channel>
+            <channel id="measured" typeId="temperature"/>
             <channel id="lastStatusStored" typeId="lastStatusStored" />
         </channels>
     </thing-type>

@@ -44,9 +44,11 @@ public class SoulissGatewayThread extends Thread {
 
     @Override
     public void run() {
+        long actualmillis;
         while (true) {
+            actualmillis = System.currentTimeMillis();
             // PING - refresh Interval in seconds
-            if (System.currentTimeMillis() - millis >= _pingRefreshInterval * 1000) {
+            if (actualmillis - millis >= _pingRefreshInterval * 1000) {
                 sendPing();
 
                 gw.pingSent();
@@ -54,7 +56,7 @@ public class SoulissGatewayThread extends Thread {
             }
 
             // SUBSCRIPTION - Value in minutes
-            if (System.currentTimeMillis() - millis >= _subscriptionRefreshInterval * 1000 * 60) {
+            if (actualmillis - millis >= _subscriptionRefreshInterval * 1000 * 60) {
                 sendSubscription();
             }
 

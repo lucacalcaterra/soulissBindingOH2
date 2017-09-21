@@ -30,6 +30,8 @@ import org.openhab.binding.souliss.handler.SoulissT11Handler;
 import org.openhab.binding.souliss.handler.SoulissT12Handler;
 import org.openhab.binding.souliss.handler.SoulissT13Handler;
 import org.openhab.binding.souliss.handler.SoulissT14Handler;
+import org.openhab.binding.souliss.handler.SoulissT16Handler;
+import org.openhab.binding.souliss.handler.SoulissT19Handler;
 import org.openhab.binding.souliss.handler.SoulissT1AHandler;
 import org.openhab.binding.souliss.handler.SoulissT22Handler;
 import org.openhab.binding.souliss.handler.SoulissT31Handler;
@@ -401,6 +403,21 @@ public class SoulissBindingUDPDecoder {
                                     typicalState = getOHStateFromSoulissVal(sVal);
                                     ((SoulissT14Handler) typ.getHandler()).setState(typicalState);
                                     break;
+                                case SoulissBindingConstants.T16:
+                                    logger.debug("Decoding " + SoulissBindingConstants.T16 + " packet");
+                                    typicalState = getOHStateFromSoulissVal(sVal);
+                                    ((SoulissT16Handler) typ.getHandler()).setState(typicalState);
+                                    ((SoulissT16Handler) typ.getHandler()).setStateRGB(getByteAtSlot(mac, slot + 1),
+                                            getByteAtSlot(mac, slot + 2), getByteAtSlot(mac, slot + 3));
+                                    break;
+
+                                case SoulissBindingConstants.T19:
+                                    logger.debug("Decoding " + SoulissBindingConstants.T19 + " packet");
+                                    typicalState = getOHStateFromSoulissVal(sVal);
+                                    ((SoulissT19Handler) typ.getHandler()).setState(typicalState);
+                                    ((SoulissT19Handler) typ.getHandler()).setDimmerValue(getByteAtSlot(mac, slot + 1));
+                                    break;
+
                                 case SoulissBindingConstants.T1A:
                                     logger.debug("Decoding " + SoulissBindingConstants.T1A + " packet");
                                     ((SoulissT1AHandler) typ.getHandler())
@@ -419,16 +436,6 @@ public class SoulissBindingUDPDecoder {
                                         ((SoulissT22Handler) typ.getHandler()).setState_Message(
                                                 SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_CLOSING_CHANNEL);
                                     }
-                                    // if (sVal == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Stop
-                                    // || sVal == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Off
-                                    // || sVal == SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Close
-                                    // || sVal == SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Open
-                                    // || sVal == SoulissBindingProtocolConstants.Souliss_T2n_NoLimSwitch
-                                    // || sVal == SoulissBindingProtocolConstants.Souliss_T2n_Timer_Off
-                                    // || sVal == SoulissBindingProtocolConstants.Souliss_T2n_State_Open
-                                    // || sVal == SoulissBindingProtocolConstants.Souliss_T2n_State_Close) {
-                                    // // ((SoulissT22Handler) typ.getHandler()).setState(PercentType.valueOf("50"));
-
                                     switch (sVal) {
                                         case SoulissBindingProtocolConstants.Souliss_T2n_Coil_Stop:
                                             ((SoulissT22Handler) typ.getHandler()).setState_Message(
@@ -531,11 +538,19 @@ public class SoulissBindingUDPDecoder {
                                             break;
                                     }
 
-                                    // SLOT 3-4: Temperature Setpoint Value
-                                    float val = getFloatAtSlot(mac, slot + 3);
-                                    ((SoulissT31Handler) typ.getHandler())
-                                            .setState(DecimalType.valueOf(String.valueOf(val)));
+                                    // SLOT 1-2: Temperature Value
+                                    float val = getFloatAtSlot(mac, slot + 1);
+                                    if (!Float.isNaN(val)) {
+                                        ((SoulissT31Handler) typ.getHandler())
+                                                .setMeasuredValue(DecimalType.valueOf(String.valueOf(val)));
+                                    }
 
+                                    // SLOT 3-4: Setpoint Value
+                                    val = getFloatAtSlot(mac, slot + 3);
+                                    if (!Float.isNaN(val)) {
+                                        ((SoulissT31Handler) typ.getHandler())
+                                                .setSetpointValue(DecimalType.valueOf(String.valueOf(val)));
+                                    }
                                     break;
                                 case SoulissBindingConstants.T41:
                                     switch (sVal) {

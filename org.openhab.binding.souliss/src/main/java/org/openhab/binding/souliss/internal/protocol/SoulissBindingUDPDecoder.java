@@ -31,6 +31,7 @@ import org.openhab.binding.souliss.handler.SoulissT12Handler;
 import org.openhab.binding.souliss.handler.SoulissT13Handler;
 import org.openhab.binding.souliss.handler.SoulissT14Handler;
 import org.openhab.binding.souliss.handler.SoulissT16Handler;
+import org.openhab.binding.souliss.handler.SoulissT18Handler;
 import org.openhab.binding.souliss.handler.SoulissT19Handler;
 import org.openhab.binding.souliss.handler.SoulissT1AHandler;
 import org.openhab.binding.souliss.handler.SoulissT22Handler;
@@ -411,6 +412,12 @@ public class SoulissBindingUDPDecoder {
                                             getByteAtSlot(mac, slot + 2), getByteAtSlot(mac, slot + 3));
                                     break;
 
+                                case SoulissBindingConstants.T18:
+                                    logger.debug("Decoding " + SoulissBindingConstants.T18 + " packet");
+                                    typicalState = getOHStateFromSoulissVal(sVal);
+                                    ((SoulissT18Handler) typ.getHandler()).setState(typicalState);
+                                    break;
+
                                 case SoulissBindingConstants.T19:
                                     logger.debug("Decoding " + SoulissBindingConstants.T19 + " packet");
                                     typicalState = getOHStateFromSoulissVal(sVal);
@@ -662,6 +669,10 @@ public class SoulissBindingUDPDecoder {
         if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil) {
             return OnOffType.ON;
         } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil) {
+            return OnOffType.OFF;
+        } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnFeedback) {
+            return OnOffType.ON;
+        } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffFeedback) {
             return OnOffType.OFF;
         }
         return null;

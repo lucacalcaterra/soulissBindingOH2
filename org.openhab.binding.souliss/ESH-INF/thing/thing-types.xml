@@ -151,6 +151,19 @@
         </config-description>
     </thing-type>
     
+    <thing-type id="t18">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway" />
+        </supported-bridge-type-refs>
+        <label>T18</label>
+        <description>Simple Light with feedback </description>
+
+        <channels>
+            <channel id="onoff" typeId="onoff" />
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+        </channels>
+    </thing-type>
+    
     <thing-type id="t19">
         <supported-bridge-type-refs>
             <bridge-type-ref id="gateway" />

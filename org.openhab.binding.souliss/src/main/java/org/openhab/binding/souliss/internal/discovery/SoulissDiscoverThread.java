@@ -38,7 +38,7 @@ public class SoulissDiscoverThread extends Thread {
 
         void gatewayDetected(InetAddress addr, String id);
 
-        void thingDetected_Typicals(byte lastByteGatewayIP, short typical, short node, short slot);
+        void thingDetected_Typicals(short lastByteGatewayIP, short typical, short node, short slot);
 
         void thingDetected_ActionMessages(String sTopicNumber, String sTopicVariant);
 
@@ -95,7 +95,7 @@ public class SoulissDiscoverThread extends Thread {
                 }
 
                 // everytime user click on refresh Inbox > Souliss Binding > Search
-                ConcurrentHashMap<Byte, Thing> gwMaps = SoulissBindingNetworkParameters.getHashTableGateways();
+                ConcurrentHashMap<Short, Thing> gwMaps = SoulissBindingNetworkParameters.getHashTableGateways();
                 Collection<Thing> gwMapsCollection = gwMaps.values();
                 for (Thing t : gwMapsCollection) {
                     SoulissGatewayHandler gw = (SoulissGatewayHandler) t.getHandler();

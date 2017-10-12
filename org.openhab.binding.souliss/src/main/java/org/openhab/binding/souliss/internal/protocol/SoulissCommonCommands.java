@@ -365,7 +365,7 @@ public class SoulissCommonCommands {
             short nodeIndex, short userIndex, int iNodes) {
 
         ArrayList<Byte> MACACOframe = new ArrayList<Byte>();
-        MACACOframe.add(SoulissBindingUDPConstants.Souliss_UDP_function_healthReq);
+        MACACOframe.add(SoulissBindingUDPConstants.Souliss_UDP_function_healthyReq);
 
         // PUTIN, STARTOFFEST, NUMBEROF
         MACACOframe.add((byte) 0x00);// PUTIN

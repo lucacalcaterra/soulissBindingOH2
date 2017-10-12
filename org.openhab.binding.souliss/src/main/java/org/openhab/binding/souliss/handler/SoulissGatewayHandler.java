@@ -9,6 +9,8 @@ package org.openhab.binding.souliss.handler;
 
 import java.math.BigDecimal;
 import java.net.DatagramSocket;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.eclipse.smarthome.config.core.Configuration;
 import org.eclipse.smarthome.core.thing.Bridge;
@@ -45,13 +47,14 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
 
     public int pingRefreshInterval;
     public int subscriptionRefreshInterval;
+    public int healthRefreshInterval;
     private Bridge bridge;
     public int preferred_local_port;
     public int souliss_gateway_port;
     public short userIndex;
     public short nodeIndex;
     public String IPAddressOnLAN;
-    public int nodes;
+    private int nodes;
     private int maxnodes;
     private int maxTypicalXnode;
     private int maxrequests;
@@ -144,6 +147,11 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
                     .get(SoulissBindingConstants.CONFIG_SUBSCRIPTION_REFRESH)).intValue();
             logger.debug("Get ping refresh interval: {}", pingRefreshInterval);
         }
+        if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_HEALTHY_REFRESH) != null) {
+            healthRefreshInterval = ((BigDecimal) gwConfigurationMap
+                    .get(SoulissBindingConstants.CONFIG_HEALTHY_REFRESH)).intValue();
+            logger.debug("Get health refresh interval: {}", healthRefreshInterval);
+        }
 
         // START SERVER ON DEFAULT PORT - Used for topics
         if (UDP_Server_DefaultPort == null) {
@@ -177,6 +185,25 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
 
     public void setNodes(int nodes) {
         this.nodes = nodes;
+    }
+
+    public int getNodes() {
+        Thing _thing;
+        ArrayList<String> listaNodi = new ArrayList<String>();
+        Iterator<Thing> _iterator = bridge.getThings().iterator();
+        while (_iterator.hasNext()) {
+            _thing = _iterator.next();
+            String[] _uuidStrings = _thing.getUID().getAsString()
+                    .split(SoulissBindingConstants.UUID_NODE_SLOT_SEPARATOR);
+            String[] _uuidNodeNumber = _uuidStrings[0].split(SoulissBindingConstants.UUID_ELEMENTS_SEPARATOR);
+            if (!listaNodi.contains(_uuidNodeNumber[2])) {
+                // se il numero non è contenuto nella lista allora lo aggiungo
+                listaNodi.add(_uuidNodeNumber[2]);
+            }
+            // alla fine la lunghezza della lista sarà uguale al numero di nodi presenti
+
+        }
+        return listaNodi.size();
     }
 
     public void setMaxnodes(int maxnodes) {

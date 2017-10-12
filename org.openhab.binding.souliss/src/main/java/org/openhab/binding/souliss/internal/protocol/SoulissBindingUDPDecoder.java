@@ -91,7 +91,7 @@ public class SoulissBindingUDPDecoder {
      *
      * @param macacoPck
      */
-    private void decodeMacaco(byte lastByteGatewayIP, ArrayList<Short> macacoPck) {
+    private void decodeMacaco(short lastByteGatewayIP, ArrayList<Short> macacoPck) {
         int functionalCode = macacoPck.get(0);
         switch (functionalCode) {
 
@@ -123,12 +123,11 @@ public class SoulissBindingUDPDecoder {
                 decodeTypRequest(lastByteGatewayIP, macacoPck);
                 break;
 
-            // case (byte) ConstantsUDP.Souliss_UDP_function_health_resp:// Answer
-            // // nodes
-            // // healty
-            // logger.debug("function_health_resp");
-            // decodeHealthRequest(macacoPck);
-            // break;
+            case SoulissBindingUDPConstants.Souliss_UDP_function_healthy_resp:// Answer
+                // nodes healty
+                logger.debug("Received functional code: 0x" + Integer.toHexString(functionalCode) + " - Nodes Healthy");
+                decodeHealthyRequest(lastByteGatewayIP, macacoPck);
+                break;
 
             case (byte) SoulissBindingUDPConstants.Souliss_UDP_function_db_struct_resp:
                 logger.debug("Received functional code: 0x" + Integer.toHexString(functionalCode)
@@ -160,7 +159,7 @@ public class SoulissBindingUDPDecoder {
     /**
      * @param mac
      */
-    private void decodePing(byte lastByteGatewayIP, ArrayList<Short> mac) {
+    private void decodePing(short lastByteGatewayIP, ArrayList<Short> mac) {
         int putIn_1 = mac.get(1); // not used
         int putIn_2 = mac.get(2); // not used
         logger.debug("decodePing: putIn code: {}, {}", putIn_1, putIn_2);
@@ -196,7 +195,7 @@ public class SoulissBindingUDPDecoder {
      *
      * @param mac
      */
-    private void decodeTypRequest(byte lastByteGatewayIP, ArrayList<Short> mac) {
+    private void decodeTypRequest(short lastByteGatewayIP, ArrayList<Short> mac) {
         try {
             short tgtnode = mac.get(3);
             int numberOf = mac.get(4);
@@ -236,7 +235,7 @@ public class SoulissBindingUDPDecoder {
      *
      * @param mac
      */
-    private void decodeActionMessages(byte lastByteGatewayIP, ArrayList<Short> mac) {
+    private void decodeActionMessages(short lastByteGatewayIP, ArrayList<Short> mac) {
         String sTopicNumber;
         String sTopicVariant;
         float fRet = 0;
@@ -313,7 +312,7 @@ public class SoulissBindingUDPDecoder {
      *
      * @param mac
      */
-    private void decodeDBStructRequest(byte lastByteGatewayIP, ArrayList<Short> mac) {
+    private void decodeDBStructRequest(short lastByteGatewayIP, ArrayList<Short> mac) {
         try {
             int nodes = mac.get(5);
             int maxnodes = mac.get(6);
@@ -335,7 +334,31 @@ public class SoulissBindingUDPDecoder {
         }
     }
 
-    private void decodeStateRequest(byte lastByteGatewayIP, ArrayList<Short> mac) {
+    /**
+     * Decodes a souliss nodes health request
+     *
+     * @param macaco
+     *            packet
+     */
+    private void decodeHealthyRequest(short lastByteGatewayIP, ArrayList<Short> mac) {
+        int numberOf = mac.get(4);
+        try {
+            SoulissGatewayHandler gateway = null;
+            gateway = (SoulissGatewayHandler) SoulissBindingNetworkParameters.getGateway(lastByteGatewayIP)
+                    .getHandler();
+        } catch (Exception ex) {
+        }
+
+        // build an array containing healths
+        for (int i = 5; i < 5 + numberOf; i++) {
+            // healths.add(Short.valueOf(mac.get(i)));
+            // SoulissTServiceUpdater.updateHEALTY(soulissTypicalsRecipients,
+            // i - 5, Short.valueOf(mac.get(i)));
+            FARE LA SCANSINOE DEGLI ITEM ED AGGIORNARE LA HEALTHY
+        }
+    }
+
+    private void decodeStateRequest(short lastByteGatewayIP, ArrayList<Short> mac) {
         boolean bDecoded_forLOG = false;
         int tgtnode = mac.get(3);
         SoulissGatewayHandler gateway = null;

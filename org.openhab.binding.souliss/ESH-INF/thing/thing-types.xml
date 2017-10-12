@@ -45,6 +45,13 @@
 				<default>2</default>
 				<advanced>true</advanced>
 			</parameter>
+			 <parameter name="HEALTHY_INTERVAL" type="integer" min="1" max="60">
+                <label>Healthy interval</label>
+                <description>Interval in seconds to send nodes healthy.
+                </description>
+                <default>35</default>
+                <advanced>true</advanced>
+            </parameter>
 
 			<parameter name="USER_INDEX" type="integer" required="true">
 				<label>User Index</label>

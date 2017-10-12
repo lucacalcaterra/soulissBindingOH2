@@ -24,9 +24,11 @@ public class SoulissGatewayThread extends Thread {
     private short _userIndex;
     private short _nodeIndex;
     private int _nodes;
-    private long millis;
+    private double millisTime1, millisTime2;
+    private double millisTime3;
     private int _pingRefreshInterval;
     private int _subscriptionRefreshInterval;
+    private int _healthRefreshInterval;
     private String _gwID;
     private SoulissGatewayHandler gw;
 
@@ -35,34 +37,49 @@ public class SoulissGatewayThread extends Thread {
         _iPAddressOnLAN = gw.IPAddressOnLAN;
         _userIndex = gw.userIndex;
         _nodeIndex = gw.nodeIndex;
-        _nodes = gw.nodes;
+        // _nodes = gw.nodes;
         _pingRefreshInterval = gw.pingRefreshInterval;
         _subscriptionRefreshInterval = gw.subscriptionRefreshInterval;
+        _healthRefreshInterval = gw.healthRefreshInterval;
         _gwID = gw.getThing().getUID().getAsString();
 
     }
 
     @Override
     public void run() {
-        long actualmillis;
+        double actualmillis;
         while (true) {
             actualmillis = System.currentTimeMillis();
             // PING - refresh Interval in seconds
-            if (actualmillis - millis >= _pingRefreshInterval * 1000) {
+            if (actualmillis - millisTime1 >= _pingRefreshInterval * 1000) {
                 sendPing();
 
                 gw.pingSent();
-
+                millisTime1 = System.currentTimeMillis();
             }
 
             // SUBSCRIPTION - Value in minutes
-            if (actualmillis - millis >= _subscriptionRefreshInterval * 1000 * 60) {
+            if (actualmillis - millisTime2 >= _subscriptionRefreshInterval * 1000 * 60) {
                 sendSubscription();
+                millisTime2 = System.currentTimeMillis();
+            }
+            // HEALT - Value in seconds
+            if (actualmillis - millisTime3 >= _healthRefreshInterval * 1000) {
+                sendHEALTHY_REQUEST();
+                millisTime3 = System.currentTimeMillis();
             }
 
-            millis = System.currentTimeMillis();
         }
 
+    }
+
+    private void sendHEALTHY_REQUEST() {
+        logger.debug("Sending healthy packet");
+        if (_iPAddressOnLAN.length() > 0) {
+            SoulissCommonCommands.sendHEALTY_REQUESTframe(SoulissBindingNetworkParameters.getDatagramSocket(),
+                    _iPAddressOnLAN, _nodeIndex, _userIndex, gw.getNodes());
+            logger.debug("Sent healthy packet");
+        }
     }
 
     private void sendPing() {

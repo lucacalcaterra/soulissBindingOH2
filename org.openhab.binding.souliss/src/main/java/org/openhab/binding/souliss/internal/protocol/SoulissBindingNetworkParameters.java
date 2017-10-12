@@ -36,7 +36,7 @@ public class SoulissBindingNetworkParameters {
     public static long SECURE_SEND_TIMEOUT_TO_REMOVE_PACKET = presetTime;
     private static Logger logger = LoggerFactory.getLogger(SoulissBindingNetworkParameters.class);
 
-    private static ConcurrentHashMap<Byte, Thing> hashTableGateways = new ConcurrentHashMap<Byte, Thing>();
+    private static ConcurrentHashMap<Short, Thing> hashTableGateways = new ConcurrentHashMap<Short, Thing>();
     private static ConcurrentHashMap<String, Thing> hashTableTopics = new ConcurrentHashMap<String, Thing>();
 
     private static DatagramSocket datagramSocket;
@@ -56,7 +56,7 @@ public class SoulissBindingNetworkParameters {
         SoulissBindingNetworkParameters.datagramSocket = datagramSocket;
     }
 
-    public static void addGateway(byte lastByteGatewayIP, Thing thing) {
+    public static void addGateway(short lastByteGatewayIP, Thing thing) {
         hashTableGateways.put(lastByteGatewayIP, thing);
     }
 
@@ -64,7 +64,7 @@ public class SoulissBindingNetworkParameters {
         hashTableTopics.put(sUID, thing);
     }
 
-    public static ConcurrentHashMap<Byte, Thing> getHashTableGateways() {
+    public static ConcurrentHashMap<Short, Thing> getHashTableGateways() {
         return hashTableGateways;
     }
 
@@ -76,11 +76,11 @@ public class SoulissBindingNetworkParameters {
         return hashTableTopics.get(sUID);
     }
 
-    public static Bridge getGateway(byte lastByteGatewayIP) {
+    public static Bridge getGateway(short lastByteGatewayIP) {
         return (Bridge) hashTableGateways.get(lastByteGatewayIP);
     }
 
-    public static void removeGateway(byte lastByteGatewayIP) {
+    public static void removeGateway(short lastByteGatewayIP) {
         hashTableGateways.remove(lastByteGatewayIP);
     }
 

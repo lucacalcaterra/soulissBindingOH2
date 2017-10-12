@@ -163,7 +163,7 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
     }
 
     @Override
-    public void thingDetected_Typicals(byte lastByteGatewayIP, short typical, short node, short slot) {
+    public void thingDetected_Typicals(short lastByteGatewayIP, short typical, short node, short slot) {
         ThingUID thingUID = null;
         String label = "";
         DiscoveryResult discoveryResult;

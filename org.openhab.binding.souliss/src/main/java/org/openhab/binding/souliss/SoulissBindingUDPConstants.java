@@ -36,8 +36,8 @@ public class SoulissBindingUDPConstants {
     public static final byte Souliss_UDP_function_poll_resp = 0x37;
     public static final byte Souliss_UDP_function_typreq = 0x22;
     public static final byte Souliss_UDP_function_typreq_resp = 0x32;
-    public static final byte Souliss_UDP_function_healthReq = 0x25;
-    public static final byte Souliss_UDP_function_health_resp = 0x35;
+    public static final byte Souliss_UDP_function_healthyReq = 0x25;
+    public static final byte Souliss_UDP_function_healthy_resp = 0x35;
 
     public static final byte Souliss_UDP_function_ping = 0x8;
     public static final byte Souliss_UDP_function_ping_resp = 0x18;

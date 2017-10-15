@@ -81,7 +81,7 @@ public class SoulissBindingUDPDecoder {
         }
         // Last number of IP of Original Destination Address (2 byte)
 
-        decodeMacaco(packet.getData()[5], mac);
+        decodeMacaco((short) (packet.getData()[5] & 0xFF), mac);
     }
 
     /**
@@ -354,7 +354,7 @@ public class SoulissBindingUDPDecoder {
             // healths.add(Short.valueOf(mac.get(i)));
             // SoulissTServiceUpdater.updateHEALTY(soulissTypicalsRecipients,
             // i - 5, Short.valueOf(mac.get(i)));
-            FARE LA SCANSINOE DEGLI ITEM ED AGGIORNARE LA HEALTHY
+            // FARE LA SCANSINOE DEGLI ITEM ED AGGIORNARE LA HEALTHY
         }
     }
 
@@ -370,7 +370,7 @@ public class SoulissBindingUDPDecoder {
 
         Iterator thingsIterator;
         if (gateway != null && gateway.IPAddressOnLAN != null
-                && Byte.parseByte(gateway.IPAddressOnLAN.split("\\.")[3]) == lastByteGatewayIP) {
+                && Short.parseShort(gateway.IPAddressOnLAN.split("\\.")[3]) == lastByteGatewayIP) {
             thingsIterator = gateway.getThing().getThings().iterator();
             boolean bFound = false;
             Thing typ = null;

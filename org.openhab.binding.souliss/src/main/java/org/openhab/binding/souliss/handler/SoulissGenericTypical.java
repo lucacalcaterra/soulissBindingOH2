@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.eclipse.smarthome.core.library.types.DateTimeType;
+import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -60,7 +61,6 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
 
     private int iSlot;
     private int iNode;
-
     private String timestamp;
     private static Logger logger = LoggerFactory.getLogger(SoulissGenericTypical.class);
 
@@ -121,19 +121,6 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
                 getGatewayUserIndex(), this.getNode(), this.getSlot(), B1, B2);
     }
 
-    public DateTimeType getLastUpdateTime() {
-        if (timestamp != null) {
-            return DateTimeType.valueOf(timestamp);
-        } else {
-            return null;
-        }
-    }
-
-    public void setUpdateTimeNow() {
-        timestamp = getTimestamp();
-
-    }
-
     /**
      * Create a time stamp as "yyyy-MM-dd'T'HH:mm:ssz"
      *
@@ -186,4 +173,11 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
         // return ((SoulissGatewayHandler) getBridge().getHandler()).datagramSocket;
     }
 
+    public void setHealty(short _shHealty) {
+        this.updateState(SoulissBindingConstants.HEALTY_CHANNEL, new DecimalType(_shHealty));
+    }
+
+    public void setBase() {
+        this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, DateTimeType.valueOf(getTimestamp()));
+    }
 }

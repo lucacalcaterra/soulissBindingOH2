@@ -245,7 +245,7 @@ public class SoulissCommonCommands {
 
         frame.add((byte) 23);// Port
 
-        frame.add(dude[3]);// es 192.168.1.XX BOARD
+        frame.add((byte) (dude[3] & 0xFF));// es 192.168.1.XX BOARD
 
         // n broadcast : La comunicazione avviene utilizzando l'indirizzo IP
         // 255.255.255.255 a cui associare l'indirizzo vNet 0xFFFF.

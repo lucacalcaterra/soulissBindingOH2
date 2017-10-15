@@ -44,11 +44,6 @@ public class SoulissT22Handler extends SoulissGenericTypical implements typicalC
                 case SoulissBindingConstants.ROLLERSHUTTER_CHANNEL:
                     // updateState(channelUID, T2nState);
                     break;
-                case SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL:
-                    if (this.getLastUpdateTime() != null) {
-                        updateState(channelUID, this.getLastUpdateTime());
-                    }
-                    break;
             }
         } else {
             switch (channelUID.getId()) {
@@ -81,8 +76,7 @@ public class SoulissT22Handler extends SoulissGenericTypical implements typicalC
     @Override
     public void setState(PrimitiveType _state) {
 
-        this.setUpdateTimeNow();
-        this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
+        super.setBase();
 
         if (_state instanceof UpDownType) {
             this.updateState(SoulissBindingConstants.ROLLERSHUTTER_CHANNEL, (UpDownType) _state);
@@ -95,7 +89,8 @@ public class SoulissT22Handler extends SoulissGenericTypical implements typicalC
     }
 
     public void setState_Message(String rollershutterMessage) {
-        this.updateState(SoulissBindingConstants.ROLLERSHUTTER_STATE_CHANNEL_CHANNEL, StringType.valueOf(rollershutterMessage));
+        this.updateState(SoulissBindingConstants.ROLLERSHUTTER_STATE_CHANNEL_CHANNEL,
+                StringType.valueOf(rollershutterMessage));
         this.updateThing(this.thing);
 
     }

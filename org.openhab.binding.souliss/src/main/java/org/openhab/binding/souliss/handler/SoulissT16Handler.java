@@ -57,11 +57,6 @@ public class SoulissT16Handler extends SoulissGenericTypical implements typicalC
                             PercentType.valueOf(hsbState.getBrightness().toString()));
                     updateState(channelUID, hsbState);
                     break;
-                case SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL:
-                    if (this.getLastUpdateTime() != null) {
-                        updateState(channelUID, this.getLastUpdateTime());
-                    }
-                    break;
             }
         } else {
             switch (channelUID.getId()) {
@@ -151,7 +146,7 @@ public class SoulissT16Handler extends SoulissGenericTypical implements typicalC
 
     @Override
     public void setState(PrimitiveType _state) {
-        updateTimestamp();
+        super.setBase();
         updateState(SoulissBindingConstants.SLEEP_CHANNEL, OnOffType.OFF);
 
         if (((OnOffType) _state) != this.T1nState) {
@@ -161,12 +156,6 @@ public class SoulissT16Handler extends SoulissGenericTypical implements typicalC
             this.T1nState = (OnOffType) _state;
 
         }
-    }
-
-    private void updateTimestamp() {
-        this.setUpdateTimeNow();
-        this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
-
     }
 
     public void setStateRGB(short _stateRED, short _stateGREEN, short _stateBLU) {

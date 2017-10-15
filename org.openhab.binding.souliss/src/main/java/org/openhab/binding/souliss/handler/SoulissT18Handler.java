@@ -42,11 +42,6 @@ public class SoulissT18Handler extends SoulissGenericTypical implements typicalC
                 case SoulissBindingConstants.PULSE_CHANNEL:
                     updateState(channelUID, T1nState);
                     break;
-                case SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL:
-                    updateState(channelUID, this.getLastUpdateTime());
-                    // set Off
-                    updateState(channelUID, OnOffType.OFF);
-                    break;
             }
         } else {
             switch (channelUID.getId()) {
@@ -65,8 +60,7 @@ public class SoulissT18Handler extends SoulissGenericTypical implements typicalC
 
     @Override
     public void setState(PrimitiveType _state) {
-        this.setUpdateTimeNow();
-        this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
+        super.setBase();
 
         if (((OnOffType) _state) != this.T1nState) {
             this.updateState(SoulissBindingConstants.ONOFF_CHANNEL, (OnOffType) _state);

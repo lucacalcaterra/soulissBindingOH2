@@ -55,11 +55,6 @@ public class SoulissT19Handler extends SoulissGenericTypical implements typicalC
                     updateState(SoulissBindingConstants.DIMMER_BRIGHTNESS_CHANNEL,
                             PercentType.valueOf(String.valueOf((Math.round((dimmerValue / 254) * 100)))));
                     break;
-                case SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL:
-                    if (this.getLastUpdateTime() != null) {
-                        updateState(channelUID, this.getLastUpdateTime());
-                    }
-                    break;
             }
         } else {
             switch (channelUID.getId()) {
@@ -126,7 +121,7 @@ public class SoulissT19Handler extends SoulissGenericTypical implements typicalC
 
     @Override
     public void setState(PrimitiveType _state) {
-        updateTimestamp();
+        super.setBase();
         updateState(SoulissBindingConstants.SLEEP_CHANNEL, OnOffType.OFF);
 
         if (((OnOffType) _state) != this.T1nState) {
@@ -135,12 +130,6 @@ public class SoulissT19Handler extends SoulissGenericTypical implements typicalC
             this.updateThing(this.thing);
             this.T1nState = (OnOffType) _state;
         }
-    }
-
-    private void updateTimestamp() {
-        this.setUpdateTimeNow();
-        this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
-
     }
 
     public void setDimmerValue(float _dimmerValue) {

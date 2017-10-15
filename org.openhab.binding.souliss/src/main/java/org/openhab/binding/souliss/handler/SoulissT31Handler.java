@@ -125,8 +125,8 @@ public class SoulissT31Handler extends SoulissGenericTypical implements typicalC
 
         this.updateState(SoulissBindingConstants.T31_BUTTON_CHANNEL, OnOffType.OFF);
 
-        this.setUpdateTimeNow();
-        this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
+        super.setBase();
+
         if (_state instanceof StringType) {
             switch (_state.toString()) {
                 case SoulissBindingConstants.T31_FANLOW_MESSAGE_CHANNEL:

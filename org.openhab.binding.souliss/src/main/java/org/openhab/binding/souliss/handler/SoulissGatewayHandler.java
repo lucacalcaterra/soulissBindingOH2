@@ -9,7 +9,6 @@ package org.openhab.binding.souliss.handler;
 
 import java.math.BigDecimal;
 import java.net.DatagramSocket;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.smarthome.config.core.Configuration;
@@ -191,21 +190,20 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
 
     public int getNodes() {
         Thing _thing;
-        ArrayList<String> listaNodi = new ArrayList<String>();
+        int maxNode = 0;
         Iterator<Thing> _iterator = bridge.getThings().iterator();
         while (_iterator.hasNext()) {
             _thing = _iterator.next();
             String[] _uuidStrings = _thing.getUID().getAsString()
                     .split(SoulissBindingConstants.UUID_NODE_SLOT_SEPARATOR);
             String[] _uuidNodeNumber = _uuidStrings[0].split(SoulissBindingConstants.UUID_ELEMENTS_SEPARATOR);
-            if (!listaNodi.contains(_uuidNodeNumber[2])) {
-                // se il numero non è contenuto nella lista allora lo aggiungo
-                listaNodi.add(_uuidNodeNumber[2]);
+            if (Integer.parseInt(_uuidNodeNumber[2]) > maxNode) {
+                maxNode = Integer.parseInt(_uuidNodeNumber[2]);
             }
             // alla fine la lunghezza della lista sarà uguale al numero di nodi presenti
 
         }
-        return listaNodi.size();
+        return maxNode + 1;
     }
 
     public void setMaxnodes(int maxnodes) {

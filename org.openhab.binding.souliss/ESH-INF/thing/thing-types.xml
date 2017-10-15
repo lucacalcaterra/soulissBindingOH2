@@ -81,6 +81,7 @@
 			<channel id="onoff" typeId="onoff" />
 			<channel id="sleep" typeId="sleep" />
 			<channel id="lastStatusStored" typeId="lastStatusStored" />
+			<channel id="healty" typeId="healty" />
 		</channels>
 
 		<config-description>
@@ -103,6 +104,7 @@
 			<channel id="onoff" typeId="onoff" />
 			<channel id="automode" typeId="automode"/>
 			<channel id="lastStatusStored" typeId="lastStatusStored" />
+			<channel id="healty" typeId="healty" />
 		</channels>
 	</thing-type>
 
@@ -116,6 +118,7 @@
 		<channels>
 			<channel id="stateOnOff" typeId="stateOnOff" />
 			<channel id="lastStatusStored" typeId="lastStatusStored" />
+			<channel id="healty" typeId="healty" />
 		</channels>
 	</thing-type>
 
@@ -128,6 +131,7 @@
 		<channels>
 			<channel id="pulse" typeId="pulse" />
 			<channel id="lastStatusStored" typeId="lastStatusStored" />
+			<channel id="healty" typeId="healty" />
 		</channels>
 	</thing-type>
 
@@ -146,6 +150,7 @@
         <channel id="ledcolor" typeId="ledcolor"/>
         <channel id="sleep" typeId="sleep" />    
         <channel id="lastStatusStored" typeId="lastStatusStored" />
+        <channel id="healty" typeId="healty" />
         </channels>
 
         <config-description>
@@ -168,6 +173,7 @@
         <channels>
             <channel id="onoff" typeId="onoff" />
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
         </channels>
     </thing-type>
     
@@ -184,6 +190,7 @@
         <channel id="dimmer_brightness" typeId="dimmer_brightness"/>
         <channel id="sleep" typeId="sleep" />    
         <channel id="lastStatusStored" typeId="lastStatusStored" />
+        <channel id="healty" typeId="healty" />
         </channels>
 
         <config-description>
@@ -228,6 +235,7 @@
                 <label>8</label>
             </channel>
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
         </channels>                     
     </thing-type>
 
@@ -241,6 +249,7 @@
             <channel id="onoff" typeId="onoff" />
             <channel id="rollershutter_state" typeId="rollershutter_state" />
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
         </channels>
     </thing-type>
     
@@ -254,6 +263,7 @@
             <channel id="rollershutter" typeId="rollershutter" />
             <channel id="rollershutter_state" typeId="rollershutter_state" />
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
         </channels>
     </thing-type>
 
@@ -275,6 +285,7 @@
             </channel>
             <channel id="measured" typeId="temperature"/>
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
         </channels>
     </thing-type>
     
@@ -298,6 +309,8 @@
 <!--                 <label>Reset Alarm</label> -->
 <!--             </channel> -->
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
+            
         </channels>
     </thing-type>
 
@@ -311,6 +324,7 @@
 <channels>
             <channel id="value" typeId="float"/>
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
         </channels>
     </thing-type>
 
@@ -324,6 +338,7 @@
         <channels>
             <channel id="value" typeId="temperature"/>
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
         </channels>
 	</thing-type>
 
@@ -336,6 +351,7 @@
         <channels>
             <channel id="value" typeId="humidity"/>
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
         </channels>
 	</thing-type>
 
@@ -348,6 +364,7 @@
         <channels>
             <channel id="value" typeId="voltage"/>
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
         </channels>
     </thing-type>
 
@@ -360,7 +377,9 @@
 <channels>
             <channel id="value" typeId="voltage"/>
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
         </channels>
+        
 	</thing-type>
 
 	<thing-type id="t56">
@@ -372,6 +391,7 @@
 <channels>
             <channel id="value" typeId="ampere"/>
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
         </channels>
 	</thing-type>
 
@@ -384,6 +404,7 @@
 <channels>
             <channel id="value" typeId="power"/>
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
         </channels>
 	</thing-type>
 
@@ -396,6 +417,7 @@
 <channels>
             <channel id="value" typeId="power"/>
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
         </channels>
     </thing-type>
 
@@ -444,6 +466,7 @@
         <channels>
             <channel id="value" typeId="float6n" />
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
         </channels>
     </thing-type>
     
@@ -456,6 +479,7 @@
         <channels>
             <channel id="value" typeId="float6n" />
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
         </channels>
     </thing-type>
     
@@ -468,6 +492,7 @@
         <channels>
             <channel id="value" typeId="float6n" />
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
         </channels>
     </thing-type>
     
@@ -480,6 +505,7 @@
         <channels>
             <channel id="value" typeId="float6n" />
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
         </channels>
     </thing-type>
     
@@ -492,6 +518,7 @@
         <channels>
             <channel id="value" typeId="float6n" />
             <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
         </channels>
     </thing-type>
     
@@ -640,6 +667,17 @@
 		<state readOnly="true" />
 	</channel-type>
 	
+	<channel-type id="healty">
+        <item-type>Number</item-type>
+        <label>Healty</label>
+        <description>Souliss Healty</description>
+          <tags>
+      <tag>QualityOfService</tag>
+    </tags>
+        <state readOnly="true" pattern="%.0f">
+        </state>
+    </channel-type>
+	
 	<channel-type id="float">
         <item-type>Number</item-type>
         <label>Value</label>
@@ -773,4 +811,5 @@
         <state readOnly="false" />
     </channel-type>
 </thing:thing-descriptions>
+
 

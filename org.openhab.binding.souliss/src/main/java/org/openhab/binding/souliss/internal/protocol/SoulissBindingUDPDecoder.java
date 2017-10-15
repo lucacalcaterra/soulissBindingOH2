@@ -14,6 +14,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.smarthome.core.library.types.DecimalType;
@@ -342,19 +343,25 @@ public class SoulissBindingUDPDecoder {
      */
     private void decodeHealthyRequest(short lastByteGatewayIP, ArrayList<Short> mac) {
         int numberOf = mac.get(4);
+        SoulissGatewayHandler gateway = null;
         try {
-            SoulissGatewayHandler gateway = null;
+
             gateway = (SoulissGatewayHandler) SoulissBindingNetworkParameters.getGateway(lastByteGatewayIP)
                     .getHandler();
         } catch (Exception ex) {
         }
 
-        // build an array containing healths
         for (int i = 5; i < 5 + numberOf; i++) {
-            // healths.add(Short.valueOf(mac.get(i)));
-            // SoulissTServiceUpdater.updateHEALTY(soulissTypicalsRecipients,
-            // i - 5, Short.valueOf(mac.get(i)));
-            // FARE LA SCANSINOE DEGLI ITEM ED AGGIORNARE LA HEALTHY
+
+            // build an array containing healths
+            List<Thing> listaThings = gateway.getThing().getThings();
+            for (Thing thing : listaThings) {
+                int tgtnode = i - 5;
+                if (((SoulissGenericTypical) thing.getHandler()).getNode() == tgtnode) {
+                    ((SoulissGenericTypical) thing.getHandler()).setHealty(Short.valueOf(mac.get(i)));
+                }
+
+            }
         }
     }
 

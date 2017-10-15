@@ -171,7 +171,7 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
                 .getGateway(lastByteGatewayIP).getHandler());
         gatewayUID = gw.getThing().getUID();
 
-        if (lastByteGatewayIP == Byte.parseByte(gw.IPAddressOnLAN.split("\\.")[3])) {
+        if (lastByteGatewayIP == Short.parseShort(gw.IPAddressOnLAN.split("\\.")[3])) {
 
             String sNodeId = node + SoulissBindingConstants.UUID_NODE_SLOT_SEPARATOR + slot;
             switch (typical) {

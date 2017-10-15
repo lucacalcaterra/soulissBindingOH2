@@ -34,8 +34,8 @@ public class SoulissT13Handler extends SoulissGenericTypical implements typicalC
 
     @Override
     public void setState(PrimitiveType _state) {
-        this.setUpdateTimeNow();
-        this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
+        super.setBase();
+
         if (((OnOffType) _state) != this.T1nState) {
             this.updateState(SoulissBindingConstants.STATEONOFF_CHANNEL, (OnOffType) _state);
             this.updateThing(this.thing);

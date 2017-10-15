@@ -48,9 +48,8 @@ public class SoulissT6nHandler extends SoulissGenericTypical implements typicalC
 
     @Override
     public void setState(PrimitiveType _state) {
-        this.setUpdateTimeNow();
+        super.setBase();
 
-        this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
         if (!_setPointValue.equals(_state)) {
             this.updateState(SoulissBindingConstants.T6n_VALUE_CHANNEL, (DecimalType) _state);
             _setPointValue = (DecimalType) _state;

@@ -52,9 +52,7 @@ public class SoulissT5nHandler extends SoulissGenericTypical implements typicalC
 
     @Override
     public void setState(PrimitiveType state) {
-        this.setUpdateTimeNow();
-
-        this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
+        super.setBase();
         this.updateState(SoulissBindingConstants.T5n_VALUE_CHANNEL, (DecimalType) state);
     }
 }

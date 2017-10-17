@@ -214,7 +214,7 @@ public class SoulissBindingUDPDecoder {
                         short node = (short) (j / typXnodo + tgtnode);
                         if (discoverResult != null) {
                             logger.debug("Thing Detected. IP (last byte): {}, Typical: {}, Node: {}, Slot: {} ",
-                                    lastByteGatewayIP, typical, node, slot);
+                                    lastByteGatewayIP, Integer.toHexString(typical), node, slot);
                             discoverResult.thingDetected_Typicals(lastByteGatewayIP, typical, node, slot);
                         } else {
                             logger.debug("decodeTypRequest aborted. 'discoverResult' is null");

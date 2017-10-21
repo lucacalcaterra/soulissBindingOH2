@@ -76,7 +76,7 @@ public class SoulissT19Handler extends SoulissGenericTypical implements typicalC
                         // updateState(SoulissBindingConstants.DIMMER_BRIGHTNESS_CHANNEL,
                         /// PercentType.valueOf(hsbState.getBrightness().toString()));
                         commandSEND(SoulissBindingProtocolConstants.Souliss_T1n_Set,
-                                Short.parseShort(String.valueOf(dimmerValue)));
+                                Short.parseShort(String.valueOf(dimmerValue * 255 / 100)));
 
                     } else if (command instanceof OnOffType) {
                         if (command.equals(OnOffType.ON)) {

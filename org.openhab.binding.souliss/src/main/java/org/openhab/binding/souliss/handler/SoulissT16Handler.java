@@ -53,9 +53,10 @@ public class SoulissT16Handler extends SoulissGenericTypical implements typicalC
                     updateState(channelUID, T1nState);
                     break;
                 case SoulissBindingConstants.LED_COLOR_CHANNEL:
-                    updateState(SoulissBindingConstants.DIMMER_BRIGHTNESS_CHANNEL,
-                            PercentType.valueOf(hsbState.getBrightness().toString()));
                     updateState(channelUID, hsbState);
+                    break;
+                case SoulissBindingConstants.DIMMER_BRIGHTNESS_CHANNEL:
+                    updateState(channelUID, PercentType.valueOf(hsbState.getBrightness().toString()));
                     break;
             }
         } else {
@@ -93,8 +94,10 @@ public class SoulissT16Handler extends SoulissGenericTypical implements typicalC
                         updateState(SoulissBindingConstants.LED_COLOR_CHANNEL, hsbState);
                         // updateState(SoulissBindingConstants.DIMMER_BRIGHTNESS_CHANNEL,
                         /// PercentType.valueOf(hsbState.getBrightness().toString()));
-                        commandSEND_RGB(SoulissBindingProtocolConstants.Souliss_T1n_Set, hsbState.getRed().shortValue(),
-                                hsbState.getGreen().shortValue(), hsbState.getBlue().shortValue());
+                        commandSEND_RGB(SoulissBindingProtocolConstants.Souliss_T1n_Set,
+                                (short) (hsbState.getRed().shortValue() * (255.00 / 100)),
+                                (short) (hsbState.getGreen().shortValue() * (255.00 / 100)),
+                                (short) (hsbState.getBlue().shortValue() * (255.00 / 100)));
 
                     } else if (command instanceof OnOffType) {
                         if (command.equals(OnOffType.ON)) {
@@ -122,8 +125,10 @@ public class SoulissT16Handler extends SoulissGenericTypical implements typicalC
 
                         updateState(SoulissBindingConstants.DIMMER_BRIGHTNESS_CHANNEL,
                                 PercentType.valueOf(hsbState.getBrightness().toString()));
-                        commandSEND_RGB(SoulissBindingProtocolConstants.Souliss_T1n_Set, hsbState.getRed().shortValue(),
-                                hsbState.getGreen().shortValue(), hsbState.getBlue().shortValue());
+                        commandSEND_RGB(SoulissBindingProtocolConstants.Souliss_T1n_Set,
+                                (short) (hsbState.getRed().shortValue() * 255.00 / 100),
+                                (short) (hsbState.getGreen().shortValue() * 255.00 / 100),
+                                (short) (hsbState.getBlue().shortValue() * 255.00 / 100));
                     }
                     break;
 

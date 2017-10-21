@@ -55,6 +55,7 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
             try {
                 soulissDiscoverThread = new SoulissDiscoverThread(datagramSocket, this,
                         SoulissBindingConstants.DISCOVERY_resendTimeoutInMillis,
+                        SoulissBindingConstants.DISCOVERY_TimeoutInSeconds,
                         SoulissBindingConstants.DISCOVERY_resendAttempts);
             } catch (SocketException e) {
                 logger.error("Opening the souliss discovery service failed. " + e.getLocalizedMessage());
@@ -198,6 +199,10 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
                 case SoulissBindingProtocolConstants.Souliss_T18:
                     thingUID = new ThingUID(SoulissBindingConstants.T18_THING_TYPE, sNodeId);
                     label = "T18: node " + node + ", slot " + slot;
+                    break;
+                case SoulissBindingProtocolConstants.Souliss_T19:
+                    thingUID = new ThingUID(SoulissBindingConstants.T19_THING_TYPE, sNodeId);
+                    label = "T19: node " + node + ", slot " + slot;
                     break;
                 case SoulissBindingProtocolConstants.Souliss_T1A:
                     thingUID = new ThingUID(SoulissBindingConstants.T1A_THING_TYPE, sNodeId);

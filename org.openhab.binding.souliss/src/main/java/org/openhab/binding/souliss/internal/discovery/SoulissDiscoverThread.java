@@ -17,7 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingUID;
-import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.handler.SoulissGatewayHandler;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingUDPServerThread;
@@ -60,11 +59,13 @@ public class SoulissDiscoverThread extends Thread {
     private int resendCounter = 0;
     private boolean doResend = true;
     private long millisStartThread;
+    private long timeoutInSeconds;
 
     public SoulissDiscoverThread(DatagramSocket _datagramSocket, DiscoverResult discoverResult,
-            int resendTimeoutInMillis, int resendAttempts) throws SocketException {
-        this.resendAttempts = resendAttempts;
-        this.resendTimeoutInMillis = resendTimeoutInMillis;
+            int _resendTimeoutInMillis, int _timeoutInSeconds, int _resendAttempts) throws SocketException {
+        this.resendAttempts = _resendAttempts;
+        this.resendTimeoutInMillis = _resendTimeoutInMillis;
+        this.timeoutInSeconds = _timeoutInSeconds;
         datagramSocket = _datagramSocket;
         this.discoverResult = discoverResult;
     }
@@ -72,9 +73,9 @@ public class SoulissDiscoverThread extends Thread {
     @Override
     public void run() {
         while (doResend) {
-            if (System.currentTimeMillis() - millis >= SoulissBindingConstants.DISCOVERY_resendTimeoutInMillis) {
-                if (resendCounter++ >= resendAttempts || (System.currentTimeMillis()
-                        - millisStartThread) >= SoulissBindingConstants.DISCOVERY_TimeoutInSeconds * 1000) {
+            if (System.currentTimeMillis() - millis >= resendTimeoutInMillis) {
+                if (resendCounter++ >= resendAttempts
+                        || (System.currentTimeMillis() - millisStartThread) >= timeoutInSeconds * 1000) {
                     doResend = false;
                 }
 

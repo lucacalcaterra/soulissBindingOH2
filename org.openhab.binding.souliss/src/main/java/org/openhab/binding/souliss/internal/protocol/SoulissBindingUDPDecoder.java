@@ -213,7 +213,7 @@ public class SoulissBindingUDPDecoder {
                         short slot = (short) (j % typXnodo);
                         short node = (short) (j / typXnodo + tgtnode);
                         if (discoverResult != null) {
-                            logger.debug("Thing Detected. IP (last byte): {}, Typical: {}, Node: {}, Slot: {} ",
+                            logger.debug("Thing Detected. IP (last byte): {}, Typical: 0x{}, Node: {}, Slot: {} ",
                                     lastByteGatewayIP, Integer.toHexString(typical), node, slot);
                             discoverResult.thingDetected_Typicals(lastByteGatewayIP, typical, node, slot);
                         } else {

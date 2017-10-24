@@ -76,7 +76,7 @@ public class SoulissT22Handler extends SoulissGenericTypical implements typicalC
     @Override
     public void setState(PrimitiveType _state) {
 
-        super.setBase();
+        super.setLastStatusStored();
 
         if (_state instanceof UpDownType) {
             this.updateState(SoulissBindingConstants.ROLLERSHUTTER_CHANNEL, (UpDownType) _state);

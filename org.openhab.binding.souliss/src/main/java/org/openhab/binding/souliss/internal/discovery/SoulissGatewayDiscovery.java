@@ -279,6 +279,8 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
                 discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(label)
                         .withBridge(gw.getThing().getUID()).build();
                 thingDiscovered(discoveryResult);
+                gw.setThereIsAThingDetection();
+
             }
         }
     }

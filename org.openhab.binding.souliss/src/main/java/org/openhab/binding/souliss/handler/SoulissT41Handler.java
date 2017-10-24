@@ -100,7 +100,7 @@ public class SoulissT41Handler extends SoulissGenericTypical implements typicalC
         // // Resetto il tasto di rearm. Questo perchè se premuto non torna da solo in off
         this.updateState(SoulissBindingConstants.T41_REARMALARM_CHANNEL, OnOffType.OFF);
 
-        super.setBase();
+        super.setLastStatusStored();
 
         this.updateThing(this.thing);
     }

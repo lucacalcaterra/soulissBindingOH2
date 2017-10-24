@@ -23,14 +23,15 @@ public class SoulissGatewayThread extends Thread {
     private String _iPAddressOnLAN;
     private short _userIndex;
     private short _nodeIndex;
-    private int _nodes;
     private double millisTime1, millisTime2;
-    private double millisTime3;
+    private double millisTime3, millisTime4;
     private int _pingRefreshInterval;
     private int _subscriptionRefreshInterval;
+    private int _afterThingDetection_subscriptionRefreshInterval;
     private int _healthRefreshInterval;
     private String _gwID;
     private SoulissGatewayHandler gw;
+    int sCount = 10;
 
     public SoulissGatewayThread(Bridge bridge) {
         gw = (SoulissGatewayHandler) bridge.getHandler();
@@ -40,6 +41,7 @@ public class SoulissGatewayThread extends Thread {
         // _nodes = gw.nodes;
         _pingRefreshInterval = gw.pingRefreshInterval;
         _subscriptionRefreshInterval = gw.subscriptionRefreshInterval;
+        _afterThingDetection_subscriptionRefreshInterval = gw.afterThingDetection_subscriptionRefreshInterval;
         _healthRefreshInterval = gw.healthRefreshInterval;
         _gwID = gw.getThing().getUID().getAsString();
 
@@ -53,7 +55,6 @@ public class SoulissGatewayThread extends Thread {
             // PING - refresh Interval in seconds
             if (actualmillis - millisTime1 >= _pingRefreshInterval * 1000) {
                 sendPing();
-
                 gw.pingSent();
                 millisTime1 = System.currentTimeMillis();
             }
@@ -63,6 +64,18 @@ public class SoulissGatewayThread extends Thread {
                 sendSubscription();
                 millisTime2 = System.currentTimeMillis();
             }
+            // SUBSCRIPTION after Thing detection - Value in millis
+            if (gw.thereIsAThingDetection
+                    && actualmillis - millisTime4 >= _afterThingDetection_subscriptionRefreshInterval) {
+                sendSubscription();
+                millisTime4 = System.currentTimeMillis();
+                if (--sCount <= 0) {
+                    gw.resetThereIsAThingDetection();
+                    sCount = 10;
+                }
+
+            }
+
             // HEALT - Value in seconds
             if (actualmillis - millisTime3 >= _healthRefreshInterval * 1000) {
                 sendHEALTHY_REQUEST();
@@ -92,11 +105,6 @@ public class SoulissGatewayThread extends Thread {
     }
 
     private void sendSubscription() {
-        logger.debug("Sending subscription packet");
-        if (_iPAddressOnLAN.length() > 0) {
-            SoulissCommonCommands.sendSUBSCRIPTIONframe(SoulissBindingNetworkParameters.getDatagramSocket(),
-                    _iPAddressOnLAN, _nodeIndex, _userIndex, _nodes);
-        }
-        logger.debug("Sent subscription packet");
+        gw.sendSubscription();
     }
 }

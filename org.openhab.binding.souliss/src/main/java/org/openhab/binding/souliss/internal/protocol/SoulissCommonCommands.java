@@ -351,8 +351,7 @@ public class SoulissCommonCommands {
         MACACOframe.add((byte) 0x00);// PUTIN
         MACACOframe.add((byte) 0x00);
 
-        MACACOframe.add((byte) iNodes); // Start Offset (is the first node to
-                                        // consider
+        MACACOframe.add((byte) iNodes);
         logger.debug("sendSUBSCRIPTIONframe - {}, IP: {} - port: {}", MaCacoToString(MACACOframe),
                 soulissNodeIPAddressOnLAN, datagramSocket.getLocalPort());
         send(datagramSocket, MACACOframe, soulissNodeIPAddressOnLAN, nodeIndex, userIndex);

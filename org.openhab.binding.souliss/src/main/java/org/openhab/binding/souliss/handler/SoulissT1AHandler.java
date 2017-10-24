@@ -45,7 +45,7 @@ public class SoulissT1AHandler extends SoulissGenericTypical implements typicalC
 
     @Override
     public void setState(PrimitiveType _state) {
-        super.setBase();
+        super.setLastStatusStored();
         int valore = Integer.parseInt(_state.toString());
         this.updateState(SoulissBindingConstants.T1A_1_CHANNEL, getTypeFromBool(getBitState(valore, 0)));
         this.updateState(SoulissBindingConstants.T1A_2_CHANNEL, getTypeFromBool(getBitState(valore, 1)));

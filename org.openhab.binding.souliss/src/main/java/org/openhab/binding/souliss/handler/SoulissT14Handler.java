@@ -60,7 +60,7 @@ public class SoulissT14Handler extends SoulissGenericTypical implements typicalC
 
     @Override
     public void setState(PrimitiveType _state) {
-        super.setBase();
+        super.setLastStatusStored();
 
         if (((OnOffType) _state) != this.T1nState) {
             this.updateState(SoulissBindingConstants.PULSE_CHANNEL, (OnOffType) _state);

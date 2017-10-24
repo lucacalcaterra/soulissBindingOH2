@@ -39,6 +39,7 @@ public class SoulissT11Handler extends SoulissGenericTypical implements typicalC
     public SoulissT11Handler(Thing _thing) {
         super(_thing);
         thing = _thing;
+
     }
 
     // called on every status change or change request
@@ -98,7 +99,7 @@ public class SoulissT11Handler extends SoulissGenericTypical implements typicalC
 
     @Override
     public void setState(PrimitiveType _state) {
-        super.setBase();
+        super.setLastStatusStored();
 
         updateState(SoulissBindingConstants.SLEEP_CHANNEL, OnOffType.OFF);
 

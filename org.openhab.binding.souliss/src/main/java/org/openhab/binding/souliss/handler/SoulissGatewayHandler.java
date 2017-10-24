@@ -46,6 +46,8 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
 
     public int pingRefreshInterval;
     public int subscriptionRefreshInterval;
+    public int afterThingDetection_subscriptionRefreshInterval = 5000; // millis
+    public boolean thereIsAThingDetection = true;
     public int healthRefreshInterval;
     private Bridge bridge;
     public int preferred_local_port;
@@ -201,7 +203,6 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
                 maxNode = Integer.parseInt(_uuidNodeNumber[2]);
             }
             // alla fine la lunghezza della lista sarà uguale al numero di nodi presenti
-
         }
         return maxNode + 1;
     }
@@ -230,8 +231,14 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
 
     public void gatewayDetected() {
         logger.debug("Setting Gateway ONLINE");
-        updateStatus(ThingStatus.ONLINE);
+        try {
+            updateStatus(ThingStatus.ONLINE);
+        } catch (Exception e) {
+            logger.debug("Illegal status transition to ONLINE");
+        }
+
         countPING_KO = 0; // reset counter
+
     }
 
     public void pingSent() {
@@ -243,6 +250,24 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
                     + bridge.getHandler().getThing().getUID() + " do not respond to " + countPING_KO + " ping");
         }
 
+    }
+
+    public void sendSubscription() {
+        // logger.debug("Sending subscription packet");
+        if (IPAddressOnLAN.length() > 0) {
+            SoulissCommonCommands.sendSUBSCRIPTIONframe(SoulissBindingNetworkParameters.getDatagramSocket(),
+                    IPAddressOnLAN, nodeIndex, userIndex, getNodes());
+        }
+        logger.debug("Sent subscription packet");
+
+    }
+
+    public void setThereIsAThingDetection() {
+        thereIsAThingDetection = true;
+    }
+
+    public void resetThereIsAThingDetection() {
+        thereIsAThingDetection = false;
     }
 
 }

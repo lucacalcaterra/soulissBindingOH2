@@ -12,6 +12,7 @@ import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.PrimitiveType;
+import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.handler.SoulissGenericTypical.typicalCommonMethods;
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ public class SoulissT13Handler extends SoulissGenericTypical implements typicalC
 
     @Override
     public void setState(PrimitiveType _state) {
-        super.setBase();
+        super.setLastStatusStored();
 
         if (((OnOffType) _state) != this.T1nState) {
             this.updateState(SoulissBindingConstants.STATEONOFF_CHANNEL, (OnOffType) _state);
@@ -46,7 +47,13 @@ public class SoulissT13Handler extends SoulissGenericTypical implements typicalC
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-        // TODO Auto-generated method stub
+        if (command instanceof RefreshType) {
+            switch (channelUID.getId()) {
+                case SoulissBindingConstants.STATEONOFF_CHANNEL:
+                    updateState(channelUID, T1nState);
+                    break;
+            }
+        }
 
     }
 }

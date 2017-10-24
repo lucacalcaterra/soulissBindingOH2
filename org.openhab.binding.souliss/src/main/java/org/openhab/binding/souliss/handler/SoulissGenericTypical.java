@@ -61,7 +61,6 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
 
     private int iSlot;
     private int iNode;
-    private String timestamp;
     private static Logger logger = LoggerFactory.getLogger(SoulissGenericTypical.class);
 
     public SoulissGenericTypical(Thing _thing) {
@@ -177,7 +176,8 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
         this.updateState(SoulissBindingConstants.HEALTY_CHANNEL, new DecimalType(_shHealty));
     }
 
-    public void setBase() {
+    public void setLastStatusStored() {
         this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, DateTimeType.valueOf(getTimestamp()));
     }
+
 }

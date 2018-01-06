@@ -12,8 +12,12 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 import org.openhab.binding.souliss.SoulissBindingUDPConstants;
 import org.slf4j.Logger;
@@ -209,22 +213,51 @@ public class SoulissCommonCommands {
 
         short iUserIndex = SoulissBindingNetworkParameters.defaultUserIndex;
         short iNodeIndex = SoulissBindingNetworkParameters.defaultNodeIndex;
-        InetAddress serverAddr;
-        try {
 
-            ArrayList<Byte> buf = buildVNetFrame(MACACOframe, "255.255.255.255", iUserIndex, iNodeIndex);
-            byte[] merd = toByteArray(buf);
-            serverAddr = InetAddress.getByName("255.255.255.255");
-            DatagramPacket packet = new DatagramPacket(merd, merd.length, serverAddr,
-                    SoulissBindingUDPConstants.SOULISS_GATEWAY_DEFAULT_PORT);
-            socket.send(packet);
-            // SoulissBindingSendDispatcher.put(socket, packet);
-        } catch (UnknownHostException e) {
+        // Broadcast the message over all the network interfaces
+        Enumeration<NetworkInterface> interfaces;
+        try {
+            interfaces = NetworkInterface.getNetworkInterfaces();
+
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = interfaces.nextElement();
+                if (networkInterface.isLoopback() || !networkInterface.isUp()) {
+                    continue;
+                }
+                for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {
+                    InetAddress[] broadcast = new InetAddress[3];
+                    broadcast[0] = InetAddress.getByName("224.0.0.1");
+                    broadcast[1] = InetAddress.getByName("255.255.255.255");
+                    broadcast[2] = interfaceAddress.getBroadcast();
+                    for (InetAddress bc : broadcast) {
+                        // Send the broadcast package!
+                        if (bc != null) {
+                            try {
+
+                                ArrayList<Byte> buf = buildVNetFrame(MACACOframe, "255.255.255.255", iUserIndex,
+                                        iNodeIndex);
+                                byte[] merd = toByteArray(buf);
+                                DatagramPacket packet = new DatagramPacket(merd, merd.length, bc,
+                                        SoulissBindingUDPConstants.SOULISS_GATEWAY_DEFAULT_PORT);
+                                socket.send(packet);
+
+                            } catch (IOException e) {
+                                logger.debug("IO error: {}", e.getMessage());
+                            } catch (Exception e) {
+                                logger.debug("{}", e.getMessage(), e);
+                            }
+                            logger.debug("Request packet sent to: {} Interface: {}", bc.getHostAddress(),
+                                    networkInterface.getDisplayName());
+                        }
+                    }
+                }
+            }
+        } catch (SocketException e1) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
+            e1.printStackTrace();
+        } catch (UnknownHostException e1) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            e1.printStackTrace();
         }
     }
 

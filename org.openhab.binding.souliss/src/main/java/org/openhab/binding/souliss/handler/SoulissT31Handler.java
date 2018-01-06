@@ -155,7 +155,7 @@ public class SoulissT31Handler extends SoulissGenericTypical implements typicalC
                         this.updateState(SoulissBindingConstants.T31_CONDITIONING_CHANNEL, OnOffType.OFF);
                     }
                     break;
-                case "POWERON":
+                case SoulissBindingConstants.T31_POWERON_MESSAGE_CHANNEL:
                     if (!_powerState.equals(StringType.valueOf("POWERON"))) {
                         this.updateState(SoulissBindingConstants.T31_CONDITIONING_CHANNEL, OnOffType.ON);
                         _powerState = (StringType) _state;
@@ -163,7 +163,7 @@ public class SoulissT31Handler extends SoulissGenericTypical implements typicalC
                     break;
             }
         }
-        this.updateThing(this.thing);
+        // this.updateThing(this.thing);
     }
 
     public void setMeasuredValue(DecimalType valueOf) {

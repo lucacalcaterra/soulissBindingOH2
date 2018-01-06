@@ -117,6 +117,7 @@
 
 		<channels>
 			<channel id="stateOnOff" typeId="stateOnOff" />
+			<channel id="stateOpenClose" typeId="stateOpenClose" />
 			<channel id="lastStatusStored" typeId="lastStatusStored" />
 			<channel id="healty" typeId="healty" />
 		</channels>
@@ -623,6 +624,12 @@
 		<description>Light on/off</description>
 		<state readOnly="true" />
 	</channel-type>
+	<channel-type id="stateOpenClose">
+        <item-type>Contact</item-type>
+        <label>State Open/Closed</label>
+        <description>Contact Open/Closed</description>
+        <state readOnly="true" />
+    </channel-type>
 
     <channel-type id="rollershutter">
         <item-type>Rollershutter</item-type>

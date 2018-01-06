@@ -103,10 +103,12 @@ public class SoulissBindingConstants {
 
     // List of all Channel ids
     public final static String ONOFF_CHANNEL = "onoff";
+
     public final static String PULSE_CHANNEL = "pulse";
     public final static String SLEEP_CHANNEL = "sleep";
     public final static String AUTOMODE_CHANNEL = "automode";
     public final static String STATEONOFF_CHANNEL = "stateOnOff";
+    public final static String STATEOPENCLOSE_CHANNEL = "stateOpenClose";
     public final static String ROLLERSHUTTER_CHANNEL = "rollershutter";
     public final static String ROLLERSHUTTER_STATE_CHANNEL_CHANNEL = "rollershutter_state";
     public final static String ROLLERSHUTTER_MESSAGE_OPENING_CHANNEL = "opening";
@@ -186,5 +188,4 @@ public class SoulissBindingConstants {
     public static final String UUID_NODE_SLOT_SEPARATOR = "-";
 
     public static final String UUID_ELEMENTS_SEPARATOR = ":";
-
 }

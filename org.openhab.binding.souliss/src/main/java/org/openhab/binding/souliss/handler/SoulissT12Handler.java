@@ -86,7 +86,7 @@ public class SoulissT12Handler extends SoulissGenericTypical implements typicalC
 
         if (((OnOffType) _state) != this.T1nState) {
             this.updateState(SoulissBindingConstants.ONOFF_CHANNEL, (OnOffType) _state);
-            this.updateThing(this.thing);
+            // this.updateThing(this.thing);
             this.T1nState = (OnOffType) _state;
         }
     }
@@ -96,7 +96,7 @@ public class SoulissT12Handler extends SoulissGenericTypical implements typicalC
 
         if (((OnOffType) _state) != this.T1nAutomodeState) {
             this.updateState(SoulissBindingConstants.AUTOMODE_CHANNEL, (OnOffType) _state);
-            this.updateThing(this.thing);
+            // this.updateThing(this.thing);
             this.T1nAutomodeState = (OnOffType) _state;
         }
     }

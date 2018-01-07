@@ -19,9 +19,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
+import org.eclipse.smarthome.core.library.types.OpenClosedType;
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.library.types.UpDownType;
 import org.eclipse.smarthome.core.thing.Thing;
+import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
 import org.openhab.binding.souliss.SoulissBindingUDPConstants;
@@ -351,17 +353,28 @@ public class SoulissBindingUDPDecoder {
         } catch (Exception ex) {
         }
 
-        for (int i = 5; i < 5 + numberOf; i++) {
+        if (gateway != null) {
+            for (int i = 5; i < 5 + numberOf; i++) {
 
-            // build an array containing healths
-            List<Thing> listaThings = gateway.getThing().getThings();
-            for (Thing thing : listaThings) {
-                int tgtnode = i - 5;
-                if (((SoulissGenericTypical) thing.getHandler()).getNode() == tgtnode) {
-                    ((SoulissGenericTypical) thing.getHandler()).setHealty(Short.valueOf(mac.get(i)));
+                // build an array containing healths
+                List<Thing> listaThings = gateway.getThing().getThings();
+                ThingHandler handler = null;
+                for (Thing thing : listaThings) {
+                    if (thing != null) {
+                        handler = thing.getHandler();
+                        if (handler != null) {
+                            int tgtnode = i - 5;
+                            if (((SoulissGenericTypical) handler).getNode() == tgtnode) {
+                                ((SoulissGenericTypical) handler).setHealty(Short.valueOf(mac.get(i)));
+                            }
+                        } else {
+                            logger.debug("decode Healthy Request Warning. Thing handler is null");
+                        }
+                    }
                 }
-
             }
+        } else {
+            logger.debug("decode Healthy Request Warning. Gateway is null");
         }
     }
 
@@ -384,18 +397,21 @@ public class SoulissBindingUDPDecoder {
             while (thingsIterator.hasNext() && !bFound) {
                 typ = (Thing) thingsIterator.next();
                 String sUID_Array[] = typ.getUID().getAsString().split(":");
-
-                if (typ.getHandler() != null) { // execute it only if binding is Souliss and update is for my Gateway
+                ThingHandler handler = typ.getHandler();
+                if (handler != null) { // execute it only if binding is Souliss and update is for my
+                                       // Gateway
                     if (sUID_Array[0].equals(SoulissBindingConstants.BINDING_ID)
-                            && Short.parseShort(((SoulissGenericTypical) typ.getHandler()).getGatewayIP().toString()
+                            && Short.parseShort(((SoulissGenericTypical) handler).getGatewayIP().toString()
                                     .split("\\.")[3]) == lastByteGatewayIP) {
 
-                        if (((SoulissGenericTypical) typ.getHandler()) != null
-                                && ((SoulissGenericTypical) typ.getHandler()).getNode() == tgtnode) { // execute it only
-                                                                                                      // if it is node
-                                                                                                      // to update
+                        if (((SoulissGenericTypical) handler) != null
+                                && ((SoulissGenericTypical) handler).getNode() == tgtnode) { // execute it
+                                                                                             // only
+                                                                                             // if it is
+                                                                                             // node
+                                                                                             // to update
                             // ...now check slot
-                            int slot = ((SoulissGenericTypical) typ.getHandler()).getSlot();
+                            int slot = ((SoulissGenericTypical) handler).getSlot();
                             // get typical value
                             short sVal = getByteAtSlot(mac, slot);
                             OnOffType typicalState = null;
@@ -403,107 +419,108 @@ public class SoulissBindingUDPDecoder {
                             switch (sUID_Array[1]) {
                                 case SoulissBindingConstants.T11:
                                     logger.debug("Decoding " + SoulissBindingConstants.T11 + " packet");
-                                    typicalState = getOHStateFromSoulissVal(sVal);
-                                    ((SoulissT11Handler) typ.getHandler()).setState(typicalState);
+                                    typicalState = getOHState_OnOff_FromSoulissVal(sVal);
+                                    ((SoulissT11Handler) handler).setState(typicalState);
                                     // cercare di capire come forzare un update
                                     break;
                                 case SoulissBindingConstants.T12:
                                     logger.debug("Decoding " + SoulissBindingConstants.T12 + " packet");
                                     if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil_Auto) {
-                                        ((SoulissT12Handler) typ.getHandler()).setState(OnOffType.ON);
-                                        ((SoulissT12Handler) typ.getHandler()).setState_Automode(OnOffType.ON);
+                                        ((SoulissT12Handler) handler).setState(OnOffType.ON);
+                                        ((SoulissT12Handler) handler).setState_Automode(OnOffType.ON);
                                     } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil_Auto) {
-                                        ((SoulissT12Handler) typ.getHandler()).setState(OnOffType.OFF);
-                                        ((SoulissT12Handler) typ.getHandler()).setState_Automode(OnOffType.ON);
+                                        ((SoulissT12Handler) handler).setState(OnOffType.OFF);
+                                        ((SoulissT12Handler) handler).setState_Automode(OnOffType.ON);
 
                                     } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil) {
-                                        ((SoulissT12Handler) typ.getHandler()).setState(OnOffType.ON);
-                                        ((SoulissT12Handler) typ.getHandler()).setState_Automode(OnOffType.OFF);
+                                        ((SoulissT12Handler) handler).setState(OnOffType.ON);
+                                        ((SoulissT12Handler) handler).setState_Automode(OnOffType.OFF);
                                     } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil) {
-                                        ((SoulissT12Handler) typ.getHandler()).setState(OnOffType.OFF);
-                                        ((SoulissT12Handler) typ.getHandler()).setState_Automode(OnOffType.OFF);
+                                        ((SoulissT12Handler) handler).setState(OnOffType.OFF);
+                                        ((SoulissT12Handler) handler).setState_Automode(OnOffType.OFF);
                                     }
                                     break;
                                 case SoulissBindingConstants.T13:
                                     logger.debug("Decoding " + SoulissBindingConstants.T13 + " packet");
-                                    typicalState = getOHStateFromSoulissVal(sVal);
-                                    ((SoulissT13Handler) typ.getHandler()).setState(typicalState);
+                                    typicalState = getOHState_OnOff_FromSoulissVal(sVal);
+                                    ((SoulissT13Handler) handler).setState(typicalState);
+                                    ((SoulissT13Handler) handler).setState(getOHState_OpenClose_FromSoulissVal(sVal));
+
                                     break;
                                 case SoulissBindingConstants.T14:
                                     logger.debug("Decoding " + SoulissBindingConstants.T14 + " packet");
-                                    typicalState = getOHStateFromSoulissVal(sVal);
-                                    ((SoulissT14Handler) typ.getHandler()).setState(typicalState);
+                                    typicalState = getOHState_OnOff_FromSoulissVal(sVal);
+                                    ((SoulissT14Handler) handler).setState(typicalState);
                                     break;
                                 case SoulissBindingConstants.T16:
                                     logger.debug("Decoding " + SoulissBindingConstants.T16 + " packet");
-                                    typicalState = getOHStateFromSoulissVal(sVal);
-                                    ((SoulissT16Handler) typ.getHandler()).setState(typicalState);
-                                    ((SoulissT16Handler) typ.getHandler()).setStateRGB(getByteAtSlot(mac, slot + 1),
+                                    typicalState = getOHState_OnOff_FromSoulissVal(sVal);
+                                    ((SoulissT16Handler) handler).setState(typicalState);
+                                    ((SoulissT16Handler) handler).setStateRGB(getByteAtSlot(mac, slot + 1),
                                             getByteAtSlot(mac, slot + 2), getByteAtSlot(mac, slot + 3));
                                     break;
 
                                 case SoulissBindingConstants.T18:
                                     logger.debug("Decoding " + SoulissBindingConstants.T18 + " packet");
-                                    typicalState = getOHStateFromSoulissVal(sVal);
-                                    ((SoulissT18Handler) typ.getHandler()).setState(typicalState);
+                                    typicalState = getOHState_OnOff_FromSoulissVal(sVal);
+                                    ((SoulissT18Handler) handler).setState(typicalState);
                                     break;
 
                                 case SoulissBindingConstants.T19:
                                     logger.debug("Decoding " + SoulissBindingConstants.T19 + " packet");
-                                    typicalState = getOHStateFromSoulissVal(sVal);
-                                    ((SoulissT19Handler) typ.getHandler()).setState(typicalState);
-                                    ((SoulissT19Handler) typ.getHandler()).setDimmerValue(getByteAtSlot(mac, slot + 1));
+                                    typicalState = getOHState_OnOff_FromSoulissVal(sVal);
+                                    ((SoulissT19Handler) handler).setState(typicalState);
+                                    ((SoulissT19Handler) handler).setDimmerValue(getByteAtSlot(mac, slot + 1));
                                     break;
 
                                 case SoulissBindingConstants.T1A:
                                     logger.debug("Decoding " + SoulissBindingConstants.T1A + " packet");
-                                    ((SoulissT1AHandler) typ.getHandler())
-                                            .setState(StringType.valueOf(String.valueOf(sVal)));
+                                    ((SoulissT1AHandler) handler).setState(StringType.valueOf(String.valueOf(sVal)));
                                     break;
                                 case SoulissBindingConstants.T21:
                                 case SoulissBindingConstants.T22:
                                     logger.debug("Decoding " + SoulissBindingConstants.T21 + "/"
                                             + SoulissBindingConstants.T21 + " packet");
                                     if (sVal == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Open) {
-                                        ((SoulissT22Handler) typ.getHandler()).setState(UpDownType.UP);
-                                        ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                        ((SoulissT22Handler) handler).setState(UpDownType.UP);
+                                        ((SoulissT22Handler) handler).setState_Message(
                                                 SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_OPENING_CHANNEL);
                                     } else if (sVal == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Close) {
-                                        ((SoulissT22Handler) typ.getHandler()).setState(UpDownType.DOWN);
-                                        ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                        ((SoulissT22Handler) handler).setState(UpDownType.DOWN);
+                                        ((SoulissT22Handler) handler).setState_Message(
                                                 SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_CLOSING_CHANNEL);
                                     }
                                     switch (sVal) {
                                         case SoulissBindingProtocolConstants.Souliss_T2n_Coil_Stop:
-                                            ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                            ((SoulissT22Handler) handler).setState_Message(
                                                     SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_STOP_CHANNEL);
                                             break;
                                         case SoulissBindingProtocolConstants.Souliss_T2n_Coil_Off:
-                                            ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                            ((SoulissT22Handler) handler).setState_Message(
                                                     SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_OPENING_CHANNEL);
                                             break;
                                         case SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Close:
-                                            ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                            ((SoulissT22Handler) handler).setState_Message(
                                                     SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_LIMITSWITCH_CLOSE_CHANNEL);
                                             break;
                                         case SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Open:
-                                            ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                            ((SoulissT22Handler) handler).setState_Message(
                                                     SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_LIMITSWITCH_OPEN_CHANNEL);
                                             break;
                                         case SoulissBindingProtocolConstants.Souliss_T2n_NoLimSwitch:
-                                            ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                            ((SoulissT22Handler) handler).setState_Message(
                                                     SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_LIMITSWITCH_OPEN_CHANNEL);
                                             break;
                                         case SoulissBindingProtocolConstants.Souliss_T2n_Timer_Off:
-                                            ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                            ((SoulissT22Handler) handler).setState_Message(
                                                     SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_TIMER_OFF);
                                             break;
                                         case SoulissBindingProtocolConstants.Souliss_T2n_State_Open:
-                                            ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                            ((SoulissT22Handler) handler).setState_Message(
                                                     SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_STATE_OPEN_CHANNEL);
                                             break;
                                         case SoulissBindingProtocolConstants.Souliss_T2n_State_Close:
-                                            ((SoulissT22Handler) typ.getHandler()).setState_Message(
+                                            ((SoulissT22Handler) handler).setState_Message(
                                                     SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_STATE_CLOSE_CHANNEL);
                                             break;
                                         // }
@@ -522,18 +539,18 @@ public class SoulissBindingUDPDecoder {
 
                                     switch (getBitState(sVal, 0)) {
                                         case 0:
-                                            ((SoulissT31Handler) typ.getHandler()).setState(StringType
+                                            ((SoulissT31Handler) handler).setState(StringType
                                                     .valueOf(SoulissBindingConstants.T31_POWEREDOFF_MESSAGE_CHANNEL));
                                             break;
                                         case 1:
                                             switch (getBitState(sVal, 7)) {
                                                 case 0:
-                                                    ((SoulissT31Handler) typ.getHandler()).setState(StringType.valueOf(
+                                                    ((SoulissT31Handler) handler).setState(StringType.valueOf(
                                                             SoulissBindingConstants.T31_HEATINGMODE_MESSAGE_CHANNEL));
 
                                                     break;
                                                 case 1:
-                                                    ((SoulissT31Handler) typ.getHandler()).setState(StringType.valueOf(
+                                                    ((SoulissT31Handler) handler).setState(StringType.valueOf(
                                                             SoulissBindingConstants.T31_COOLINGMODE_MESSAGE_CHANNEL));
                                                     break;
                                             }
@@ -543,12 +560,12 @@ public class SoulissBindingUDPDecoder {
                                     // button indicante se il sistema sta andando o meno
                                     switch (getBitState(sVal, 1) + getBitState(sVal, 2)) {
                                         case 0:
-                                            ((SoulissT31Handler) typ.getHandler()).setState(StringType
+                                            ((SoulissT31Handler) handler).setState(StringType
                                                     .valueOf(SoulissBindingConstants.T31_POWEROFF_MESSAGE_CHANNEL));
                                             break;
 
                                         case 1:
-                                            ((SoulissT31Handler) typ.getHandler()).setState(StringType
+                                            ((SoulissT31Handler) handler).setState(StringType
                                                     .valueOf(SoulissBindingConstants.T31_POWERON_MESSAGE_CHANNEL));
                                             break;
                                     }
@@ -556,20 +573,20 @@ public class SoulissBindingUDPDecoder {
                                     // FAN SPEED
                                     switch (getBitState(sVal, 3) + getBitState(sVal, 4) + getBitState(sVal, 5)) {
                                         case 0:
-                                            ((SoulissT31Handler) typ.getHandler()).setState(StringType
+                                            ((SoulissT31Handler) handler).setState(StringType
                                                     .valueOf(SoulissBindingConstants.T31_FANOFF_MESSAGE_CHANNEL));
 
                                             break;
                                         case 1:
-                                            ((SoulissT31Handler) typ.getHandler()).setState(StringType
+                                            ((SoulissT31Handler) handler).setState(StringType
                                                     .valueOf(SoulissBindingConstants.T31_FANLOW_MESSAGE_CHANNEL));
                                             break;
                                         case 2:
-                                            ((SoulissT31Handler) typ.getHandler()).setState(StringType
+                                            ((SoulissT31Handler) handler).setState(StringType
                                                     .valueOf(SoulissBindingConstants.T31_FANMEDIUM_MESSAGE_CHANNEL));
                                             break;
                                         case 3:
-                                            ((SoulissT31Handler) typ.getHandler()).setState(StringType
+                                            ((SoulissT31Handler) handler).setState(StringType
                                                     .valueOf(SoulissBindingConstants.T31_FANHIGH_MESSAGE_CHANNEL));
 
                                             break;
@@ -578,31 +595,31 @@ public class SoulissBindingUDPDecoder {
                                     // SLOT 1-2: Temperature Value
                                     float val = getFloatAtSlot(mac, slot + 1);
                                     if (!Float.isNaN(val)) {
-                                        ((SoulissT31Handler) typ.getHandler())
+                                        ((SoulissT31Handler) handler)
                                                 .setMeasuredValue(DecimalType.valueOf(String.valueOf(val)));
                                     }
 
                                     // SLOT 3-4: Setpoint Value
                                     val = getFloatAtSlot(mac, slot + 3);
                                     if (!Float.isNaN(val)) {
-                                        ((SoulissT31Handler) typ.getHandler())
+                                        ((SoulissT31Handler) handler)
                                                 .setSetpointValue(DecimalType.valueOf(String.valueOf(val)));
                                     }
                                     break;
                                 case SoulissBindingConstants.T41:
                                     switch (sVal) {
                                         case SoulissBindingProtocolConstants.Souliss_T4n_NoAntitheft:
-                                            ((SoulissT41Handler) typ.getHandler()).setState(OnOffType.OFF);
-                                            ((SoulissT41Handler) typ.getHandler()).setState(StringType
+                                            ((SoulissT41Handler) handler).setState(OnOffType.OFF);
+                                            ((SoulissT41Handler) handler).setState(StringType
                                                     .valueOf(SoulissBindingConstants.T41_ALARMOFF_MESSAGE_CHANNEL));
                                             break;
                                         case SoulissBindingProtocolConstants.Souliss_T4n_Antitheft:
-                                            ((SoulissT41Handler) typ.getHandler()).setState(OnOffType.ON);
-                                            ((SoulissT41Handler) typ.getHandler()).setState(StringType
+                                            ((SoulissT41Handler) handler).setState(OnOffType.ON);
+                                            ((SoulissT41Handler) handler).setState(StringType
                                                     .valueOf(SoulissBindingConstants.T41_ALARMOFF_MESSAGE_CHANNEL));
                                             break;
                                         case SoulissBindingProtocolConstants.Souliss_T4n_InAlarm:
-                                            ((SoulissT41Handler) typ.getHandler()).setState(StringType
+                                            ((SoulissT41Handler) handler).setState(StringType
                                                     .valueOf(SoulissBindingConstants.T41_ALARMON_MESSAGE_CHANNEL));
                                             break;
                                     }
@@ -616,62 +633,62 @@ public class SoulissBindingUDPDecoder {
                                 case SoulissBindingConstants.T57:
                                 case SoulissBindingConstants.T58:
                                     logger.debug("Decoding T5n packet");
-                                    ((SoulissT5nHandler) typ.getHandler())
+                                    ((SoulissT5nHandler) handler)
                                             .setState(DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
                                     break;
                                 case SoulissBindingConstants.T61:
                                     logger.debug("Decoding " + SoulissBindingConstants.T61 + " packet");
                                     if (getFloatAtSlot(mac, slot) != Float.NaN) {
-                                        ((SoulissT61Handler) typ.getHandler()).setState(
+                                        ((SoulissT61Handler) handler).setState(
                                                 DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
                                     }
                                     break;
                                 case SoulissBindingConstants.T62:
                                     logger.debug("Decoding " + SoulissBindingConstants.T62 + " packet");
                                     if (getFloatAtSlot(mac, slot) != Float.NaN) {
-                                        ((SoulissT62Handler) typ.getHandler()).setState(
+                                        ((SoulissT62Handler) handler).setState(
                                                 DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
                                     }
                                     break;
                                 case SoulissBindingConstants.T63:
                                     logger.debug("Decoding " + SoulissBindingConstants.T63 + " packet");
                                     if (getFloatAtSlot(mac, slot) != Float.NaN) {
-                                        ((SoulissT63Handler) typ.getHandler()).setState(
+                                        ((SoulissT63Handler) handler).setState(
                                                 DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
                                     }
                                     break;
                                 case SoulissBindingConstants.T64:
                                     logger.debug("Decoding " + SoulissBindingConstants.T64 + " packet");
                                     if (getFloatAtSlot(mac, slot) != Float.NaN) {
-                                        ((SoulissT64Handler) typ.getHandler()).setState(
+                                        ((SoulissT64Handler) handler).setState(
                                                 DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
                                     }
                                     break;
                                 case SoulissBindingConstants.T65:
                                     logger.debug("Decoding " + SoulissBindingConstants.T65 + " packet");
                                     if (getFloatAtSlot(mac, slot) != Float.NaN) {
-                                        ((SoulissT65Handler) typ.getHandler()).setState(
+                                        ((SoulissT65Handler) handler).setState(
                                                 DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
                                     }
                                     break;
                                 case SoulissBindingConstants.T66:
                                     logger.debug("Decoding " + SoulissBindingConstants.T66 + " packet");
                                     if (getFloatAtSlot(mac, slot) != Float.NaN) {
-                                        ((SoulissT66Handler) typ.getHandler()).setState(
+                                        ((SoulissT66Handler) handler).setState(
                                                 DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
                                     }
                                     break;
                                 case SoulissBindingConstants.T67:
                                     logger.debug("Decoding " + SoulissBindingConstants.T67 + " packet");
                                     if (getFloatAtSlot(mac, slot) != Float.NaN) {
-                                        ((SoulissT67Handler) typ.getHandler()).setState(
+                                        ((SoulissT67Handler) handler).setState(
                                                 DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
                                     }
                                     break;
                                 case SoulissBindingConstants.T68:
                                     logger.debug("Decoding " + SoulissBindingConstants.T68 + " packet");
                                     if (getFloatAtSlot(mac, slot) != Float.NaN) {
-                                        ((SoulissT68Handler) typ.getHandler()).setState(
+                                        ((SoulissT68Handler) handler).setState(
                                                 DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
                                     }
                                     break;
@@ -679,7 +696,7 @@ public class SoulissBindingUDPDecoder {
                                 case SoulissBindingConstants.TOPICS:
                                     logger.debug("Decoding " + SoulissBindingConstants.TOPICS + " packet");
                                     if (getFloatAtSlot(mac, slot) != Float.NaN) {
-                                        ((SoulissTopicsHandler) typ.getHandler()).setState(
+                                        ((SoulissTopicsHandler) handler).setState(
                                                 DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
                                     }
 
@@ -695,7 +712,7 @@ public class SoulissBindingUDPDecoder {
         }
     }
 
-    private OnOffType getOHStateFromSoulissVal(short sVal) {
+    private OnOffType getOHState_OnOff_FromSoulissVal(short sVal) {
         if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil) {
             return OnOffType.ON;
         } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil) {
@@ -704,6 +721,15 @@ public class SoulissBindingUDPDecoder {
             return OnOffType.ON;
         } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffFeedback) {
             return OnOffType.OFF;
+        }
+        return null;
+    }
+
+    private OpenClosedType getOHState_OpenClose_FromSoulissVal(short sVal) {
+        if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil) {
+            return OpenClosedType.CLOSED;
+        } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil) {
+            return OpenClosedType.OPEN;
         }
         return null;
     }

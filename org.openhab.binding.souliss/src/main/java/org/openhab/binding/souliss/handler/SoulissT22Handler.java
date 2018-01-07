@@ -80,18 +80,18 @@ public class SoulissT22Handler extends SoulissGenericTypical implements typicalC
 
         if (_state instanceof UpDownType) {
             this.updateState(SoulissBindingConstants.ROLLERSHUTTER_CHANNEL, (UpDownType) _state);
-            this.updateThing(this.thing);
+            // this.updateThing(this.thing);
         } else if (_state instanceof StopMoveType) {
             this.updateState(SoulissBindingConstants.ROLLERSHUTTER_CHANNEL, (State) _state);
-            this.updateThing(this.thing);
+            // this.updateThing(this.thing);
         }
-        this.updateThing(this.thing);
+        // this.updateThing(this.thing);
     }
 
     public void setState_Message(String rollershutterMessage) {
         this.updateState(SoulissBindingConstants.ROLLERSHUTTER_STATE_CHANNEL_CHANNEL,
                 StringType.valueOf(rollershutterMessage));
-        this.updateThing(this.thing);
+        // this.updateThing(this.thing);
 
     }
 

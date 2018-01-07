@@ -105,7 +105,7 @@ public class SoulissT11Handler extends SoulissGenericTypical implements typicalC
 
         if (((OnOffType) _state) != this.T1nState) {
             this.updateState(SoulissBindingConstants.ONOFF_CHANNEL, (OnOffType) _state);
-            this.updateThing(this.thing);
+            // this.updateThing(this.thing);
             this.T1nState = (OnOffType) _state;
         }
     }

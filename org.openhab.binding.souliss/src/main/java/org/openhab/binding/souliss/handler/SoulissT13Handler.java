@@ -29,7 +29,7 @@ public class SoulissT13Handler extends SoulissGenericTypical implements typicalC
 
     private Logger logger = LoggerFactory.getLogger(SoulissT13Handler.class);
     OnOffType T1n_ONOFF_State = OnOffType.OFF;
-    OpenClosedType T1n_OPENCLOSE_State = OpenClosedType.CLOSED;
+    OpenClosedType T1n_OPENCLOSE_State = OpenClosedType.OPEN;
 
     public SoulissT13Handler(Thing thing) {
         super(thing);
@@ -39,17 +39,19 @@ public class SoulissT13Handler extends SoulissGenericTypical implements typicalC
     public void setState(PrimitiveType _state) {
         super.setLastStatusStored();
 
-        if (((OnOffType) _state) != this.T1n_ONOFF_State) {
-            this.updateState(SoulissBindingConstants.STATEONOFF_CHANNEL, (OnOffType) _state);
-            this.updateThing(this.thing);
-            this.T1n_ONOFF_State = (OnOffType) _state;
-        }
-        if (((OpenClosedType) _state) != this.T1n_OPENCLOSE_State) {
-            this.updateState(SoulissBindingConstants.STATEOPENCLOSE_CHANNEL, (OpenClosedType) _state);
-            this.updateThing(this.thing);
-            this.T1n_OPENCLOSE_State = (OpenClosedType) _state;
+        if (_state instanceof OnOffType) {
+            if (((OnOffType) _state) != this.T1n_ONOFF_State) {
+                this.updateState(SoulissBindingConstants.STATEONOFF_CHANNEL, (OnOffType) _state);
+                this.T1n_ONOFF_State = (OnOffType) _state;
+            }
         }
 
+        if (_state instanceof OpenClosedType) {
+            if (((OpenClosedType) _state) != this.T1n_OPENCLOSE_State) {
+                this.updateState(SoulissBindingConstants.STATEOPENCLOSE_CHANNEL, (OpenClosedType) _state);
+                this.T1n_OPENCLOSE_State = (OpenClosedType) _state;
+            }
+        }
     }
 
     @Override

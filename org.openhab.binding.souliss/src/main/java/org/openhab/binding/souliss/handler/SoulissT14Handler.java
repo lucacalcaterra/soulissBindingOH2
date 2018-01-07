@@ -64,7 +64,7 @@ public class SoulissT14Handler extends SoulissGenericTypical implements typicalC
 
         if (((OnOffType) _state) != this.T1nState) {
             this.updateState(SoulissBindingConstants.PULSE_CHANNEL, (OnOffType) _state);
-            this.updateThing(this.thing);
+            // this.updateThing(this.thing);
             this.T1nState = (OnOffType) _state;
         }
 

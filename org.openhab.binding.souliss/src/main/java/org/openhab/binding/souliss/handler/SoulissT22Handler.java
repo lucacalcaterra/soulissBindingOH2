@@ -77,13 +77,14 @@ public class SoulissT22Handler extends SoulissGenericTypical implements typicalC
     public void setState(PrimitiveType _state) {
 
         super.setLastStatusStored();
-
-        if (_state instanceof UpDownType) {
-            this.updateState(SoulissBindingConstants.ROLLERSHUTTER_CHANNEL, (UpDownType) _state);
-            // this.updateThing(this.thing);
-        } else if (_state instanceof StopMoveType) {
-            this.updateState(SoulissBindingConstants.ROLLERSHUTTER_CHANNEL, (State) _state);
-            // this.updateThing(this.thing);
+        if (_state != null) {
+            if (_state instanceof UpDownType) {
+                this.updateState(SoulissBindingConstants.ROLLERSHUTTER_CHANNEL, (UpDownType) _state);
+                // this.updateThing(this.thing);
+            } else if (_state instanceof StopMoveType) {
+                this.updateState(SoulissBindingConstants.ROLLERSHUTTER_CHANNEL, (State) _state);
+                // this.updateThing(this.thing);
+            }
         }
         // this.updateThing(this.thing);
     }

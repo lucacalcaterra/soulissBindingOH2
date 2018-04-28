@@ -46,16 +46,17 @@ public class SoulissT1AHandler extends SoulissGenericTypical implements typicalC
     @Override
     public void setState(PrimitiveType _state) {
         super.setLastStatusStored();
-        int valore = Integer.parseInt(_state.toString());
-        this.updateState(SoulissBindingConstants.T1A_1_CHANNEL, getTypeFromBool(getBitState(valore, 0)));
-        this.updateState(SoulissBindingConstants.T1A_2_CHANNEL, getTypeFromBool(getBitState(valore, 1)));
-        this.updateState(SoulissBindingConstants.T1A_3_CHANNEL, getTypeFromBool(getBitState(valore, 2)));
-        this.updateState(SoulissBindingConstants.T1A_4_CHANNEL, getTypeFromBool(getBitState(valore, 3)));
-        this.updateState(SoulissBindingConstants.T1A_5_CHANNEL, getTypeFromBool(getBitState(valore, 4)));
-        this.updateState(SoulissBindingConstants.T1A_6_CHANNEL, getTypeFromBool(getBitState(valore, 5)));
-        this.updateState(SoulissBindingConstants.T1A_7_CHANNEL, getTypeFromBool(getBitState(valore, 6)));
-        this.updateState(SoulissBindingConstants.T1A_8_CHANNEL, getTypeFromBool(getBitState(valore, 7)));
-        ;
+        if (_state != null) {
+            int valore = Integer.parseInt(_state.toString());
+            this.updateState(SoulissBindingConstants.T1A_1_CHANNEL, getTypeFromBool(getBitState(valore, 0)));
+            this.updateState(SoulissBindingConstants.T1A_2_CHANNEL, getTypeFromBool(getBitState(valore, 1)));
+            this.updateState(SoulissBindingConstants.T1A_3_CHANNEL, getTypeFromBool(getBitState(valore, 2)));
+            this.updateState(SoulissBindingConstants.T1A_4_CHANNEL, getTypeFromBool(getBitState(valore, 3)));
+            this.updateState(SoulissBindingConstants.T1A_5_CHANNEL, getTypeFromBool(getBitState(valore, 4)));
+            this.updateState(SoulissBindingConstants.T1A_6_CHANNEL, getTypeFromBool(getBitState(valore, 5)));
+            this.updateState(SoulissBindingConstants.T1A_7_CHANNEL, getTypeFromBool(getBitState(valore, 6)));
+            this.updateState(SoulissBindingConstants.T1A_8_CHANNEL, getTypeFromBool(getBitState(valore, 7)));
+        }
     }
 
     private OnOffType getTypeFromBool(boolean value) {

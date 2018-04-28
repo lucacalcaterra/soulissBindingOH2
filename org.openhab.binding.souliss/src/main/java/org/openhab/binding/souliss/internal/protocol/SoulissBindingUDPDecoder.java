@@ -221,7 +221,6 @@ public class SoulissBindingUDPDecoder {
                         } else {
                             logger.debug("decodeTypRequest aborted. 'discoverResult' is null");
                         }
-
                     }
                 }
             }

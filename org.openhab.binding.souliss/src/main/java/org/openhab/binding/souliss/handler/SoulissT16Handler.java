@@ -153,13 +153,13 @@ public class SoulissT16Handler extends SoulissGenericTypical implements typicalC
     public void setState(PrimitiveType _state) {
         super.setLastStatusStored();
         updateState(SoulissBindingConstants.SLEEP_CHANNEL, OnOffType.OFF);
-
-        if (((OnOffType) _state) != this.T1nState) {
-            logger.debug("T16, setting state to {}", _state.toFullString());
-            this.updateState(SoulissBindingConstants.ONOFF_CHANNEL, (OnOffType) _state);
-            // this.updateThing(this.thing);
-            this.T1nState = (OnOffType) _state;
-
+        if (_state != null) {
+            if (((OnOffType) _state) != this.T1nState) {
+                logger.debug("T16, setting state to {}", _state.toFullString());
+                this.updateState(SoulissBindingConstants.ONOFF_CHANNEL, (OnOffType) _state);
+                // this.updateThing(this.thing);
+                this.T1nState = (OnOffType) _state;
+            }
         }
     }
 

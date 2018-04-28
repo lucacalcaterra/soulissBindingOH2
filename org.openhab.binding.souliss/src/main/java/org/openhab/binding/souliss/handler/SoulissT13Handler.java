@@ -38,18 +38,19 @@ public class SoulissT13Handler extends SoulissGenericTypical implements typicalC
     @Override
     public void setState(PrimitiveType _state) {
         super.setLastStatusStored();
-
-        if (_state instanceof OnOffType) {
-            if (((OnOffType) _state) != this.T1n_ONOFF_State) {
-                this.updateState(SoulissBindingConstants.STATEONOFF_CHANNEL, (OnOffType) _state);
-                this.T1n_ONOFF_State = (OnOffType) _state;
+        if (_state != null) {
+            if (_state instanceof OnOffType) {
+                if (((OnOffType) _state) != this.T1n_ONOFF_State) {
+                    this.updateState(SoulissBindingConstants.STATEONOFF_CHANNEL, (OnOffType) _state);
+                    this.T1n_ONOFF_State = (OnOffType) _state;
+                }
             }
-        }
 
-        if (_state instanceof OpenClosedType) {
-            if (((OpenClosedType) _state) != this.T1n_OPENCLOSE_State) {
-                this.updateState(SoulissBindingConstants.STATEOPENCLOSE_CHANNEL, (OpenClosedType) _state);
-                this.T1n_OPENCLOSE_State = (OpenClosedType) _state;
+            if (_state instanceof OpenClosedType) {
+                if (((OpenClosedType) _state) != this.T1n_OPENCLOSE_State) {
+                    this.updateState(SoulissBindingConstants.STATEOPENCLOSE_CHANNEL, (OpenClosedType) _state);
+                    this.T1n_OPENCLOSE_State = (OpenClosedType) _state;
+                }
             }
         }
     }

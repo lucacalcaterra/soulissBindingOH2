@@ -81,23 +81,24 @@ public class SoulissT12Handler extends SoulissGenericTypical implements typicalC
 
     @Override
     public void setState(PrimitiveType _state) {
-
         super.setLastStatusStored();
-
-        if (((OnOffType) _state) != this.T1nState) {
-            this.updateState(SoulissBindingConstants.ONOFF_CHANNEL, (OnOffType) _state);
-            // this.updateThing(this.thing);
-            this.T1nState = (OnOffType) _state;
+        if (_state != null) {
+            if (((OnOffType) _state) != this.T1nState) {
+                this.updateState(SoulissBindingConstants.ONOFF_CHANNEL, (OnOffType) _state);
+                // this.updateThing(this.thing);
+                this.T1nState = (OnOffType) _state;
+            }
         }
     }
 
     public void setState_Automode(PrimitiveType _state) {
         super.setLastStatusStored();
-
-        if (((OnOffType) _state) != this.T1nAutomodeState) {
-            this.updateState(SoulissBindingConstants.AUTOMODE_CHANNEL, (OnOffType) _state);
-            // this.updateThing(this.thing);
-            this.T1nAutomodeState = (OnOffType) _state;
+        if (_state != null) {
+            if (((OnOffType) _state) != this.T1nAutomodeState) {
+                this.updateState(SoulissBindingConstants.AUTOMODE_CHANNEL, (OnOffType) _state);
+                // this.updateThing(this.thing);
+                this.T1nAutomodeState = (OnOffType) _state;
+            }
         }
     }
 

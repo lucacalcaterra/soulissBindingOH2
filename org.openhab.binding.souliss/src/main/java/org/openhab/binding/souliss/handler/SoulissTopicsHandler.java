@@ -35,7 +35,6 @@ public class SoulissTopicsHandler extends SoulissGenericActionMessage implements
 
     @Override
     public void initialize() {
-
         // status online
         updateStatus(ThingStatus.ONLINE);
     }
@@ -43,9 +42,9 @@ public class SoulissTopicsHandler extends SoulissGenericActionMessage implements
     @Override
     public void setState(PrimitiveType _state) {
         this.setUpdateTimeNow();
-
-        this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
-        this.updateState(SoulissBindingConstants.T5n_VALUE_CHANNEL, (DecimalType) _state);
+        if (_state != null) {
+            this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
+            this.updateState(SoulissBindingConstants.T5n_VALUE_CHANNEL, (DecimalType) _state);
+        }
     }
-
 }

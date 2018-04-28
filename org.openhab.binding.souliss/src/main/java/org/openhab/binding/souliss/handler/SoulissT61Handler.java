@@ -13,6 +13,5 @@ public class SoulissT61Handler extends SoulissT6nHandler {
     // constructor
     public SoulissT61Handler(Thing _thing) {
         super(_thing);
-        // TODO Auto-generated constructor stub
     }
 }

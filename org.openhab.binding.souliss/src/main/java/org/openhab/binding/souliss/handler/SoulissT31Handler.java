@@ -111,13 +111,7 @@ public class SoulissT31Handler extends SoulissGenericTypical implements typicalC
 
     @Override
     public void initialize() {
-        // TODO: Initialize the thing. If done set status to ONLINE to indicate proper working.
-        // Long running initialization should be done asynchronously in background.
-
         updateStatus(ThingStatus.ONLINE);
-
-        // gwConfigurationMap = thing.getConfiguration();
-
     }
 
     @Override
@@ -126,44 +120,44 @@ public class SoulissT31Handler extends SoulissGenericTypical implements typicalC
         this.updateState(SoulissBindingConstants.T31_BUTTON_CHANNEL, OnOffType.OFF);
 
         super.setLastStatusStored();
+        if (_state != null) {
+            if (_state instanceof StringType) {
+                switch (_state.toString()) {
+                    case SoulissBindingConstants.T31_FANLOW_MESSAGE_CHANNEL:
+                    case SoulissBindingConstants.T31_FANMEDIUM_MESSAGE_CHANNEL:
+                    case SoulissBindingConstants.T31_FANHIGH_MESSAGE_CHANNEL:
+                    case SoulissBindingConstants.T31_FANAUTO_MESSAGE_CHANNEL:
+                    case SoulissBindingConstants.T31_FANOFF_MESSAGE_CHANNEL:
+                        if (!_fanStateValue.equals(_state)) {
+                            this.updateState(SoulissBindingConstants.T31_FAN_CHANNEL, (StringType) _state);
+                            _fanStateValue = (StringType) _state;
+                        }
+                        break;
 
-        if (_state instanceof StringType) {
-            switch (_state.toString()) {
-                case SoulissBindingConstants.T31_FANLOW_MESSAGE_CHANNEL:
-                case SoulissBindingConstants.T31_FANMEDIUM_MESSAGE_CHANNEL:
-                case SoulissBindingConstants.T31_FANHIGH_MESSAGE_CHANNEL:
-                case SoulissBindingConstants.T31_FANAUTO_MESSAGE_CHANNEL:
-                case SoulissBindingConstants.T31_FANOFF_MESSAGE_CHANNEL:
-                    if (!_fanStateValue.equals(_state)) {
-                        this.updateState(SoulissBindingConstants.T31_FAN_CHANNEL, (StringType) _state);
-                        _fanStateValue = (StringType) _state;
-                    }
-                    break;
+                    case SoulissBindingConstants.T31_HEATINGMODE_MESSAGE_CHANNEL:
+                    case SoulissBindingConstants.T31_COOLINGMODE_MESSAGE_CHANNEL:
+                    case SoulissBindingConstants.T31_POWEREDOFF_MESSAGE_CHANNEL:
+                        if (!_modeStateValue.equals(_state)) {
+                            this.updateState(SoulissBindingConstants.T31_MODE_CHANNEL, (StringType) _state);
+                            _modeStateValue = (StringType) _state;
+                        }
+                        break;
 
-                case SoulissBindingConstants.T31_HEATINGMODE_MESSAGE_CHANNEL:
-                case SoulissBindingConstants.T31_COOLINGMODE_MESSAGE_CHANNEL:
-                case SoulissBindingConstants.T31_POWEREDOFF_MESSAGE_CHANNEL:
-                    if (!_modeStateValue.equals(_state)) {
-                        this.updateState(SoulissBindingConstants.T31_MODE_CHANNEL, (StringType) _state);
-                        _modeStateValue = (StringType) _state;
-                    }
-                    break;
-
-                case SoulissBindingConstants.T31_POWEROFF_MESSAGE_CHANNEL:
-                    if (!_powerState.equals(StringType.valueOf("POWEROFF"))) {
-                        _powerState = (StringType) _state;
-                        this.updateState(SoulissBindingConstants.T31_CONDITIONING_CHANNEL, OnOffType.OFF);
-                    }
-                    break;
-                case SoulissBindingConstants.T31_POWERON_MESSAGE_CHANNEL:
-                    if (!_powerState.equals(StringType.valueOf("POWERON"))) {
-                        this.updateState(SoulissBindingConstants.T31_CONDITIONING_CHANNEL, OnOffType.ON);
-                        _powerState = (StringType) _state;
-                    }
-                    break;
+                    case SoulissBindingConstants.T31_POWEROFF_MESSAGE_CHANNEL:
+                        if (!_powerState.equals(StringType.valueOf("POWEROFF"))) {
+                            _powerState = (StringType) _state;
+                            this.updateState(SoulissBindingConstants.T31_CONDITIONING_CHANNEL, OnOffType.OFF);
+                        }
+                        break;
+                    case SoulissBindingConstants.T31_POWERON_MESSAGE_CHANNEL:
+                        if (!_powerState.equals(StringType.valueOf("POWERON"))) {
+                            this.updateState(SoulissBindingConstants.T31_CONDITIONING_CHANNEL, OnOffType.ON);
+                            _powerState = (StringType) _state;
+                        }
+                        break;
+                }
             }
         }
-        // this.updateThing(this.thing);
     }
 
     public void setMeasuredValue(DecimalType valueOf) {

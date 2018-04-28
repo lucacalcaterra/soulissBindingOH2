@@ -7,10 +7,7 @@
  */
 package org.openhab.binding.souliss.handler;
 
-import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.types.Command;
-import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.handler.SoulissGenericTypical.typicalCommonMethods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,15 +26,4 @@ public class SoulissT58Handler extends SoulissT5nHandler implements typicalCommo
         super(thing);
     }
 
-    @Override
-    public void handleCommand(ChannelUID channelUID, Command command) {
-        if (channelUID.getId().equals(SoulissBindingConstants.ONOFF_CHANNEL)) {
-            // TODO: handle command
-
-            // Note: if communication with thing fails for some reason,
-            // indicate that by setting the status with detail information
-            // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
-            // "Could not control device at IP address x.x.x.x");
-        }
-    }
 }

@@ -24,13 +24,16 @@ This binding does not require any special configuration.
 This binding can automatically discover devices. First Gateway Node, then Peer Nodes. 
 
 ## Supported Things
-In Souliss Framework a Typical is one of predefined logic dedicated to smart home devices like lights, heating or antitheft.  `<Typical>` can be one of T11, T12, T13, T14, T16, T18, T1A, T22, T51, T52, T53, T57. `<Typical>`s are defined [here](https://github.com/souliss/souliss/wiki/Typicals).
+In Souliss Framework a Typical is one of predefined logic dedicated to smart home devices like lights, heating or antitheft. 
+Typical can be one of T11, T12, T13, T14, etc... 
+It are defined [here](https://github.com/souliss/souliss/wiki/Typicals).
 Typicals match directly with openHAB items. 
 
-That are actually supported typicals.
+That are the supported typicals
 To do consider that not only tipicals are fully tested.
  
 |Souliss Typical|Things Name|
+|---------|-------------------------------|
 |T11|souliss:t11|
 |T12|souliss:t12|
 |T13|souliss:t13|

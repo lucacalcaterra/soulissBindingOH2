@@ -75,10 +75,10 @@ English Group, [here](https://groups.google.com/forum/#!forum/souliss)
 
 Italian Group, [here](https://groups.google.com/forum/#!forum/souliss-it)
 
-##Manual Things Configuration
+## Manual Things Configuration
 
 ..wiki work in progress..
 
-##Download 
+## Download 
 
 To download latest compiled binding: [here](https://drive.google.com/open?id=0BzYvfLL0ppGAalRxLVhjZ1hXVW8)

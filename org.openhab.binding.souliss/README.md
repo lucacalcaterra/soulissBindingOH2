@@ -68,6 +68,81 @@ To do consider that not only tipicals are fully tested.
 |T68|souliss:t68|
 |Action Message|souliss:topic|
 
+## Manual Things Configuration
+
+If after discovery your thing is not listed you can add it manually.
+You havo to choice to disponible items. Firts gateway, after items!
+To configure Gateway you can leave default value on Thing ID and write your value on "IP or Host Name" and "Gateway port"
+
+To configure a typical (items) you have to choice your "Name" and "Location", you have to choice your "Gateway" and insert correct "Thing ID".
+
+Thing ID is node-slot
+For example, if you have two nodes and you want configure a typical on seconds node at slot seven, you must write Thing ID: 2-7
+
+## Basic UI and Classic UI
+Examples to configure items in Basic UI and Classic UI
+
+The syntax for .things files is defined as follows (parts in <..> are required):
+```
+Thing <binding_id>:<type_id>:<thing_id> "Label" @ "Location" [ <parameters> ]
+```
+souliss.things:
+```
+Thing souliss:gateway:105 "Souliss Gateway TEST" [GATEWAY_IP_ADDRESS="192.168.1.105", GATEWAY_PORT_NUMBER=230, PREFERRED_LOCAL_PORT_NUMBER=0, PING_INTERVAL=30, SUBSCRIBTION_INTERVAL=2, HEALTHY_INTERVAL=33, USER_INDEX=71, NODE_INDEX=20]
+```
+You havo to write your Gateway IP Number and leave all other to default values
+
+
+default.items:
+
+```
+Group    Home                     "Tonino"        <house>
+Group    FamilyRoom               "Soggiorno"     <parents_2_4>   (Home)
+Group    Outside         "Esterno"   <garden>   (Home)
+Group    HomePower
+Group Diagnostic
+
+Switch   tettoia  "Tettoia"  <light>    (Outside)   ["Lighting"]   {channel="souliss:t11:1-0:onoff"}
+Switch   portoncino         "Portoncino"          <light>         (FamilyRoom)         ["Lighting"]   {autoupdate="false",channel="souliss:t14:1-6:pulse"}
+Switch   cancello         "Cancello"          <light>         (FamilyRoom)         ["Lighting"]   {autoupdate="false",channel="souliss:t14:1-7:pulse"}
+Number   Power      "Power [%.1f W]"       <energy>      (FamilyRoom, HomePower)                     {channel="souliss:t57:1-4:value"}
+Number   FamilyRoom_Temperature   "Temperatura [%.1f °C]"   <temperature>  (FamilyRoom)                  {channel="souliss:t31:6-0:measured"}
+Number   FamilyRoom_Humidity      "Umidità [%.1f %%]"       <humidity>      (FamilyRoom)                     {channel="souliss:t53:6-7:value"}
+String	UpdateNode1	"Power update [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (FamilyRoom, Diagnostic)  {channel="souliss:t57:1-4:lastStatusStored"}
+```
+
+default.sitemap:
+
+```
+sitemap default label="Tonino" {
+    Frame {
+        Text label="Rientro casa" icon="light" {
+           Switch item=portoncino mappings=[ON="Open"]
+           Switch item=cancello mappings=[ON="Open"]
+        }
+    }     
+     Frame {
+        Group item=Outside
+    }
+        
+Frame {
+        Text label="Temperature and Humidity" icon="temperature" {
+            Default item=FamilyRoom_Temperature label="Temp."
+            Default item=FamilyRoom_Humidity label="Hum."
+            Default item=AggiornamentoNodo6 icon="icon16x16"
+        }
+        Text item=FamilyRoom_Temperature label="Temp. [%.1f °C]"
+        Text item=FamilyRoom_Humidity label="Hum. [%.1f %%]"
+        
+        Text item=Power label="Hum. [%.1f W]"
+        Text item=UpdateNode1
+    }
+   
+}
+    
+```
+
+
 
 ## Community
 
@@ -84,9 +159,7 @@ Spanish Group, [here] (https://groups.google.com/forum/#!forum/souliss-es)
 ## Contribution
 Officiale repository for contribution in souliss github area: [here](https://github.com/souliss)
 
-## Manual Things Configuration
 
-..wiki work in progress..
 
 ## Download 
 

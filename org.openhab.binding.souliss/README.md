@@ -90,4 +90,4 @@ Officiale repository for contribution in souliss github area: [here](https://git
 
 ## Download 
 
-To download latest compiled binding: [here](https://drive.google.com/open?id=0BzYvfLL0ppGAalRxLVhjZ1hXVW8)
+To download latest compiled binding go to releases tab: [here](https://github.com/fazioa/soulissBindingOH2/releases)

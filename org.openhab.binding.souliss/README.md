@@ -69,6 +69,8 @@ To do consider that not only tipicals are fully tested.
 |Action Message|souliss:topic|
 
 
+##Community
+
 Souliss is a small community and actualy it don't have sufficient human resource to be more active on Openhab official community
 
 These are some very popular forum:
@@ -78,6 +80,9 @@ English Group, [here](https://groups.google.com/forum/#!forum/souliss)
 Italian Group, [here](https://groups.google.com/forum/#!forum/souliss-it)
 
 Spanish Group, [here] (https://groups.google.com/forum/#!forum/souliss-es)
+
+##Contribution
+Officiale repository for contribution in souliss github area: [here](https://github.com/souliss)
 
 ## Manual Things Configuration
 

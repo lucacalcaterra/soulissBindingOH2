@@ -30,54 +30,56 @@ Typical can be one of T11, T12, T13, T14, etc...
 
 It are defined [here](https://github.com/souliss/souliss/wiki/Typicals).
 
-Typicals match directly with openHAB items. 
+Typicals match directly with openHAB Thing type. 
+|Device type |Typical Code | Thing type | 
 
-That are the supported typicals.
-
-To do consider that not only tipicals are fully tested.
- 
-|Souliss Typical|Things Name|
-|---------|-------------------------------|
-|T11|souliss:t11|
-|T12|souliss:t12|
-|T13|souliss:t13|
-|T14|souliss:t14|
-|T16|souliss:t16|
-|T18|souliss:t18|
-|T19|souliss:t19|
-|T1A|souliss:t1A|
-|T21|souliss:t21|
-|T22|souliss:t22|
-|T31|souliss:t31|
-|T41|souliss:t41|
-|T51|souliss:t51|
-|T52|souliss:t52|
-|T53|souliss:t53|
-|T53|souliss:t54|
-|T55|souliss:t55|
-|T56|souliss:t56|
-|T57|souliss:t57|
-|T58|souliss:t58|
-|T61|souliss:t61|
-|T62|souliss:t62|
-|T63|souliss:t63|
-|T64|souliss:t64|
-|T65|souliss:t65|
-|T66|souliss:t66|
-|T67|souliss:t67|
-|T68|souliss:t68|
-|Action Message|souliss:topic|
+|------------|---------|-------------------------------|
+|ON/OFF Digital Output with Timer Option|T11|souliss:t11|
+|ON/OFF Digital Output with AUTO mode|T12|souliss:t12|
+|Digital Input Value|T13|souliss:t13|
+|Pulse Digital Output|T14|souliss:t14|
+|RGB LED Strip|T16|souliss:t16|
+|ON/OFF Digital Output|T18|souliss:t18|
+|Single Color LED Strip|T19|souliss:t19|
+|Digital Input Pass Through|T1A|souliss:t1A|
+|Motorized devices with limit switches|T21|souliss:t21|
+|Motorized devices with limit switches and middle position|T22|souliss:t22|
+|Temperature control|T31|souliss:t31|
+|Anti-theft integration (Main)|T41|souliss:t41|
+|Analog input, half-precision floating point|T51|souliss:t51|
+|Temperature measure (-20, +50) °C|T52|souliss:t52|
+|Humidity measure (0, 100) %|T53|souliss:t53|
+|Light Sensor (0, 40) kLux|T54|souliss:t54|
+|Voltage (0, 400) V|T55|souliss:t55|
+|Current (0, 25)  A|T56|souliss:t56|
+|Power (0, 6500)  W|T57|souliss:t57|
+|Pressure measure (0, 1500) hPa|T58|souliss:t58|
+|Analog Setpoint|T61|souliss:t61|
+|Analog Setpoint-Temperature measure (-20, +50) °CT62|souliss:t62|
+|Analog Setpoint-Humidity measure (0, 100) %|T63|souliss:t63|
+|Analog Setpoint-Light Sensor (0, 40) kLux|T64|souliss:t64|
+|Analog Setpoint-Voltage (0, 400) V|T65|souliss:t65|
+|Analog Setpoint-Current (0, 25)  A|T66|souliss:t66|
+|Analog Setpoint-Power (0, 6500)  W|T67|souliss:t67|
+|Analog Setpoint-Pressure measure (0, 1500) hPa|T68|souliss:t68|
+|Broadcast messages|Action Message|souliss:topic|
+|------------|---------|-------------------------------|
 
 ## Manual Things Configuration
 
 If after discovery your thing is not listed you can add it manually.
-You havo to choice to disponible items. Firts gateway, after items!
-To configure Gateway you can leave default value on Thing ID and write your value on "IP or Host Name" and "Gateway port"
+You have to choice it from disponible items. Firts gateway, after items!
+To configure Gateway you can leave default value on Thing ID and write your value on "IP or Host Name" and "Gateway port".
 
 To configure a typical (items) you have to choice your "Name" and "Location", you have to choice your "Gateway" and insert correct "Thing ID".
 
-Thing ID is node-slot
-For example, if you have two nodes and you want configure a typical on seconds node at slot seven, you must write Thing ID: 2-7
+Thing ID is [node]-[slot]
+For example, if you have two nodes and you want configure a typical on second node at slot seven, you must write 
+Thing ID: 
+```
+2-7
+```
+
 
 ## Basic UI and Classic UI
 Examples to configure items in Basic UI and Classic UI

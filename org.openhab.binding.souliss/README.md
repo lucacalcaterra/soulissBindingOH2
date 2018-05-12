@@ -30,9 +30,9 @@ Typical can be one of T11, T12, T13, T14, etc...
 
 It are defined [here](https://github.com/souliss/souliss/wiki/Typicals).
 
-Typicals match directly with openHAB Thing type. 
-|Device type |Typical Code | Thing type | 
+Typicals match directly with openHAB Thing type.
 
+|Device type |Typical Code | Thing type | 
 |------------|---------|-------------------------------|
 |ON/OFF Digital Output with Timer Option|T11|souliss:t11|
 |ON/OFF Digital Output with AUTO mode|T12|souliss:t12|
@@ -63,7 +63,7 @@ Typicals match directly with openHAB Thing type.
 |Analog Setpoint-Power (0, 6500)  W|T67|souliss:t67|
 |Analog Setpoint-Pressure measure (0, 1500) hPa|T68|souliss:t68|
 |Broadcast messages|Action Message|souliss:topic|
-|------------|---------|-------------------------------|
+
 
 ## Manual Things Configuration
 

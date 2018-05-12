@@ -65,6 +65,44 @@ Typicals match directly with openHAB Thing type.
 |Broadcast messages|Action Message|souliss:topic|
 
 
+The following matrix lists the capabilities (channels) for each type:
+
+|Thing type |onoff | sleep | lastStatusStored | healty |automode|stateOnOff|stateOpenClose|pulse|whitemode|roller_brightness|dimmer_brightness|ledcolor|one|two|three|four|five|six|seven|eight|rollershutter_state|rollershutter_state|mode|status|setpoint|setAsMeasured|measured|statusAlarm|onOffAlarm|rearmAlarm|
+|-- |-- | -- | -- | -- |--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
+|souliss:t11|x|x|x|x||||
+|souliss:t12|x| |x|x|||||
+|souliss:t13|||x|x|x|x|x||
+|souliss:t14|||x|x||||x|
+|souliss:t16||x|x|x|||||||x|x|x|
+|souliss:t18|x||x|x|||||||||
+|souliss:t19|||x|x|x|||||x|x|
+|souliss:t1A|||x|x||||||||||x|x|x|x|x|x|x|x|
+|souliss:t21|x||x|x|||||||||||||||||x||
+|souliss:t22|x||x|x|||||||||||||||||x|x|
+|souliss:t31|||x|x|||||||||||||||||||x|x|x|x|x|
+|souliss:t41|||x|x||||||||||||||||||||||||x|x|x|
+
+
+
+
+|Analog input, half-precision floating point|T51|souliss:t51|
+|Temperature measure (-20, +50) °C|T52|souliss:t52|
+|Humidity measure (0, 100) %|T53|souliss:t53|
+|Light Sensor (0, 40) kLux|T54|souliss:t54|
+|Voltage (0, 400) V|T55|souliss:t55|
+|Current (0, 25)  A|T56|souliss:t56|
+|Power (0, 6500)  W|T57|souliss:t57|
+|Pressure measure (0, 1500) hPa|T58|souliss:t58|
+|Analog Setpoint|T61|souliss:t61|
+|Analog Setpoint-Temperature measure (-20, +50) °CT62|souliss:t62|
+|Analog Setpoint-Humidity measure (0, 100) %|T63|souliss:t63|
+|Analog Setpoint-Light Sensor (0, 40) kLux|T64|souliss:t64|
+|Analog Setpoint-Voltage (0, 400) V|T65|souliss:t65|
+|Analog Setpoint-Current (0, 25)  A|T66|souliss:t66|
+|Analog Setpoint-Power (0, 6500)  W|T67|souliss:t67|
+|Analog Setpoint-Pressure measure (0, 1500) hPa|T68|souliss:t68|
+|Broadcast messages|Action Message|souliss:topic|
+
 ## Manual Things Configuration
 
 If after discovery your thing is not listed you can add it manually.

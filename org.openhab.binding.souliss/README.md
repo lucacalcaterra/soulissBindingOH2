@@ -55,7 +55,7 @@ Typicals match directly with openHAB Thing type.
 |Power (0, 6500)  W|T57|souliss:t57|
 |Pressure measure (0, 1500) hPa|T58|souliss:t58|
 |Analog Setpoint|T61|souliss:t61|
-|Analog Setpoint-Temperature measure (-20, +50) °CT62|souliss:t62|
+|Analog Setpoint-Temperature measure (-20, +50) °C|T62|souliss:t62|
 |Analog Setpoint-Humidity measure (0, 100) %|T63|souliss:t63|
 |Analog Setpoint-Light Sensor (0, 40) kLux|T64|souliss:t64|
 |Analog Setpoint-Voltage (0, 400) V|T65|souliss:t65|

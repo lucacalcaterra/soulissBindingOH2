@@ -140,7 +140,11 @@ Thing <type_id> <thing_id>  [ <parameters> ]
 
 souliss.things:
 ```
-Thing souliss:gateway:105 "Souliss Gateway TEST" [GATEWAY_IP_ADDRESS="192.168.1.105", GATEWAY_PORT_NUMBER=230, PREFERRED_LOCAL_PORT_NUMBER=0, PING_INTERVAL=30, SUBSCRIBTION_INTERVAL=2, HEALTHY_INTERVAL=33, USER_INDEX=71, NODE_INDEX=20]
+Bridge souliss:gateway:105 "Souliss Gateway '- 105" [GATEWAY_IP_ADDRESS="192.168.1.105", GATEWAY_PORT_NUMBER=230, PREFERRED_LOCAL_PORT_NUMBER=0, PING_INTERVAL=30, SUBSCRIBTION_INTERVAL=2, HEALTHY_INTERVAL=33, USER_INDEX=71, NODE_INDEX=20]
+{  
+Thing t11 12-0 [sleep=20]
+Thing t31 6-0
+}
 ```
 You have to write your Gateway IP Number and leave all other to default values
 

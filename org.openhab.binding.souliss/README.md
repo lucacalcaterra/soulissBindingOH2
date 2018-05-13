@@ -67,41 +67,46 @@ Typicals match directly with openHAB Thing type.
 
 The following matrix lists the capabilities (channels) for each type:
 
-|Thing type |onoff | sleep | lastStatusStored | healty |automode|stateOnOff|stateOpenClose|pulse|whitemode|roller_brightness|dimmer_brightness|ledcolor|one|two|three|four|five|six|seven|eight|rollershutter_state|rollershutter_state|mode|status|setpoint|setAsMeasured|measured|statusAlarm|onOffAlarm|rearmAlarm|
-|-- |-- | -- | -- | -- |--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
+|Thing type |onoff | sleep | lastStatusStored | healty |automode|stateOnOff|stateOpenClose|pulse|whitemode|roller_brightness|dimmer_brightness|ledcolor|one|two|three|four|five|six|seven|eight|
+|-- |-- | -- | -- | -- |--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|
 |souliss:t11|x|x|x|x||||
-|souliss:t12|x| |x|x|||||
-|souliss:t13|||x|x|x|x|x||
+|souliss:t12|x| |x|x|x||||
+|souliss:t13|||x|x||x|x||
 |souliss:t14|||x|x||||x|
-|souliss:t16||x|x|x|||||||x|x|x|
+|souliss:t16|x|x|x|x|||||x|x|x|x||
 |souliss:t18|x||x|x|||||||||
-|souliss:t19|||x|x|x|||||x|x|
-|souliss:t1A|||x|x||||||||||x|x|x|x|x|x|x|x|
-|souliss:t21|x||x|x|||||||||||||||||x||
-|souliss:t22|x||x|x|||||||||||||||||x|x|
-|souliss:t31|||x|x|||||||||||||||||||x|x|x|x|x|
-|souliss:t41|||x|x||||||||||||||||||||||||x|x|x|
+|souliss:t19|x|x|x|x||||||x|x|
+|souliss:t1A|||x|x|||||||||x|x|x|x|x|x|x|x|
 
+|Thing type | lastStatusStored | healty|rollershutter|rollershutter_state|mode|status|setpoint|setAsMeasured|measured|statusAlarm|onOffAlarm|rearmAlarm|
+|-- |-- | -- | -- | -- |--|--|--|--|--|--|--|--|
+|souliss:t21|x|x||x|
+|souliss:t22|x|x|x|x|
+|souliss:t31|x|x|||x|x|x|x|x|
+|souliss:t41|x|x||||||||x|x|x|
 
+|Thing type | lastStatusStored | healty|value|
+|-- |-- | -- | --|
+|souliss:t51|x|x|x|
+|souliss:t52|x|x|x|
+|souliss:t53|x|x|x|
+|souliss:t54|x|x|x|
+|souliss:t55|x|x|x|
+|souliss:t56|x|x|x|
+|souliss:t57|x|x|x|
+|souliss:t58|x|x|x|
 
-
-|Analog input, half-precision floating point|T51|souliss:t51|
-|Temperature measure (-20, +50) °C|T52|souliss:t52|
-|Humidity measure (0, 100) %|T53|souliss:t53|
-|Light Sensor (0, 40) kLux|T54|souliss:t54|
-|Voltage (0, 400) V|T55|souliss:t55|
-|Current (0, 25)  A|T56|souliss:t56|
-|Power (0, 6500)  W|T57|souliss:t57|
-|Pressure measure (0, 1500) hPa|T58|souliss:t58|
-|Analog Setpoint|T61|souliss:t61|
-|Analog Setpoint-Temperature measure (-20, +50) °CT62|souliss:t62|
-|Analog Setpoint-Humidity measure (0, 100) %|T63|souliss:t63|
-|Analog Setpoint-Light Sensor (0, 40) kLux|T64|souliss:t64|
-|Analog Setpoint-Voltage (0, 400) V|T65|souliss:t65|
-|Analog Setpoint-Current (0, 25)  A|T66|souliss:t66|
-|Analog Setpoint-Power (0, 6500)  W|T67|souliss:t67|
-|Analog Setpoint-Pressure measure (0, 1500) hPa|T68|souliss:t68|
-|Broadcast messages|Action Message|souliss:topic|
+|Thing type | lastStatusStored | healty|value|
+|-- |-- | -- | --|
+|souliss:t61|x|x|x|
+|souliss:t62|x|x|x|
+|souliss:t63|x|x|x|
+|souliss:t64|x|x|x|
+|souliss:t65|x|x|x|
+|souliss:t66|x|x|x|
+|souliss:t67|x|x|x|
+|souliss:t68|x|x|x|
+|souliss:topic|x||x|
 
 ## Manual Things Configuration
 
@@ -121,11 +126,18 @@ Thing ID:
 
 ## Basic UI and Classic UI
 Examples to configure items in Basic UI and Classic UI
-
-The syntax for .things files is defined as follows (parts in <..> are required):
-```
 Thing <binding_id>:<type_id>:<thing_id> "Label" @ "Location" [ <parameters> ]
+    
+The general syntax for .things files is defined as follows (parts in <..> are required):
 ```
+Bridge <binding_id>:<type_id>:<bridge_id> "<Souliss Gateway Name>" [ <parameters> ]
+{  
+Thing <type_id> <thing_id>  [ <parameters> ]
+}
+
+```
+
+
 souliss.things:
 ```
 Thing souliss:gateway:105 "Souliss Gateway TEST" [GATEWAY_IP_ADDRESS="192.168.1.105", GATEWAY_PORT_NUMBER=230, PREFERRED_LOCAL_PORT_NUMBER=0, PING_INTERVAL=30, SUBSCRIBTION_INTERVAL=2, HEALTHY_INTERVAL=33, USER_INDEX=71, NODE_INDEX=20]

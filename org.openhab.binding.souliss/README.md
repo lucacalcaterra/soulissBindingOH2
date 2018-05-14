@@ -64,7 +64,7 @@ Typicals match directly with openHAB Thing type.
 |Analog Setpoint-Pressure measure (0, 1500) hPa|T68|souliss:t68|
 |Broadcast messages|Action Message|souliss:topic|
 
-
+### Channels
 The following matrix lists the capabilities (channels) for each type:
 
 |Thing type |onoff | sleep | lastStatusStored | healty |automode|stateOnOff|stateOpenClose|pulse|whitemode|roller_brightness|dimmer_brightness|ledcolor|one|two|three|four|five|six|seven|eight|
@@ -107,6 +107,16 @@ The following matrix lists the capabilities (channels) for each type:
 |souliss:t67|x|x|x|
 |souliss:t68|x|x|x|
 |souliss:topic|x||x|
+
+### Parameters
+|Thing type | Parameters Name and Default Value| Description|
+|-- |-- |-- |
+|Gateway|GATEWAY_IP_ADDRESS="" |Will be resolved by discovery if auto configured|
+||GATEWAY_PORT_NUMBER=230 ||
+||PREFERRED_LOCAL_PORT_NUMBER=0 |Default port is 0. It means that it is random|
+||PING_INTERVAL=30 |Interval in seconds to check for device presence|
+||SUBSCRIBTION_INTERVAL=2|Interval in minutes to subcribe Souliss Gateway|
+
 
 ## Manual Things Configuration
 

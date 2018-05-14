@@ -79,10 +79,10 @@ The following matrix lists the capabilities (channels) for each type:
 |souliss:t1A|||x|x|||||||||x|x|x|x|x|x|x|x|
 
 |Thing type | DateTime lastStatusStored | Number healty |Rollershutter rollershutter|(see down) rollershutter_state|(see down) mode|(see down) fan|Switch status|Number setpoint|Switch setAsMeasured|Switch measured|Switch statusAlarm|Switch onOffAlarm|Switch rearmAlarm|
-|-- |-- | -- | -- | -- |--|--|--|--|--|--|--|--|
+|-- |-- | --|- | -- | -- |--|--|--|--|--|--|--|--|
 |souliss:t21|x|x||x|
 |souliss:t22|x|x|x|x|
-|souliss:t31|x|x|||x|x|x|x|x|
+|souliss:t31|x|x|||x|x|x|x|x|x|
 |souliss:t41|x|x|||||||||x|x|x|
 
 rollershutter_state = Stop, Closing, Limit Switch Open, Limit Switch Close, State Open, State Close, No Limit Switch

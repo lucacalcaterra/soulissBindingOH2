@@ -67,7 +67,7 @@ Typicals match directly with openHAB Thing type.
 ### Channels
 The following matrix lists the capabilities (channels) for each type:
 
-|Thing type |onoff | sleep | lastStatusStored | healty |automode|stateOnOff|stateOpenClose|pulse|whitemode|roller_brightness|dimmer_brightness|ledcolor|one|two|three|four|five|six|seven|eight|
+|Thing type |Switch onoff | Switch sleep | DateTime lastStatusStored | Number healty |Switch automode|Contact stateOnOff|Contact stateOpenClose|Switch pulse|Switch whitemode|Rollershutter roller_brightness|Dimmer dimmer_brightness|Color ledcolor|Switch one|Switch two|Switch three|Switch four|Switch five|Switch six|Switch seven|Switch eight|
 |-- |-- | -- | -- | -- |--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|
 |souliss:t11|x|x|x|x||||
 |souliss:t12|x| |x|x|x||||
@@ -78,14 +78,20 @@ The following matrix lists the capabilities (channels) for each type:
 |souliss:t19|x|x|x|x||||||x|x|
 |souliss:t1A|||x|x|||||||||x|x|x|x|x|x|x|x|
 
-|Thing type | lastStatusStored | healty|rollershutter|rollershutter_state|mode|status|setpoint|setAsMeasured|measured|statusAlarm|onOffAlarm|rearmAlarm|
+|Thing type | DateTime lastStatusStored | Number healty |Rollershutter rollershutter|(see down) rollershutter_state|(see down) mode|Switch status|Number setpoint|Switch setAsMeasured|Switch measured|Switch statusAlarm|Switch onOffAlarm|Switch rearmAlarm|
 |-- |-- | -- | -- | -- |--|--|--|--|--|--|--|--|
 |souliss:t21|x|x||x|
 |souliss:t22|x|x|x|x|
 |souliss:t31|x|x|||x|x|x|x|x|
 |souliss:t41|x|x||||||||x|x|x|
 
-|Thing type | lastStatusStored | healty|value|
+rollershutter_state = Stop, Closing, Limit Switch Open, Limit Switch Close, State Open, State Close, No Limit Switch
+
+mode = Cool, Heat, Powered off
+
+
+
+|Thing type | DateTime lastStatusStored |Number healty|Number value|
 |-- |-- | -- | --|
 |souliss:t51|x|x|x|
 |souliss:t52|x|x|x|
@@ -96,7 +102,7 @@ The following matrix lists the capabilities (channels) for each type:
 |souliss:t57|x|x|x|
 |souliss:t58|x|x|x|
 
-|Thing type | lastStatusStored | healty|value|
+|Thing type |  DateTime lastStatusStored |Number healty|Number value|
 |-- |-- | -- | --|
 |souliss:t61|x|x|x|
 |souliss:t62|x|x|x|

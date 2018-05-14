@@ -112,10 +112,26 @@ The following matrix lists the capabilities (channels) for each type:
 |Thing type | Parameters Name and Default Value| Description|
 |-- |-- |-- |
 |Gateway|GATEWAY_IP_ADDRESS="" |Will be resolved by discovery if auto configured|
-||GATEWAY_PORT_NUMBER=230 ||
-||PREFERRED_LOCAL_PORT_NUMBER=0 |Default port is 0. It means that it is random|
-||PING_INTERVAL=30 |Interval in seconds to check for device presence|
-||SUBSCRIBTION_INTERVAL=2|Interval in minutes to subcribe Souliss Gateway|
+|"|GATEWAY_PORT_NUMBER=230 ||
+|"|PREFERRED_LOCAL_PORT_NUMBER=0 |Default port is 0. It means that it is random|
+|"|PING_INTERVAL=30 |Interval in seconds to check for device presence|
+|"|SUBSCRIBTION_INTERVAL=2|Interval in minutes to subcribe Souliss Gateway|
+|"|HEALTHY_INTERVAL=35|Interval in seconds to send nodes healthy|
+|"|USER_INDEX=70|Generally the default value work good. It must is different from other user interfaces (ex: SoulissApp)|
+|"|NODE_INDEX=120|Generally the default value work good. It must is different from other user interfaces (ex: SoulissApp)|
+|T11|sleep=5|Set sleep timer in cycles|
+|T12|||
+|T13|||
+|T14|||
+|T16|sleep=5|Set sleep timer in cycles|
+|T19|sleep=5|Set sleep timer in cycles|
+|T1A|||
+|T21|||
+|T22|||
+|T31|||
+|T41|||
+|T5x|||
+|T6x|||
 
 
 ## Manual Things Configuration

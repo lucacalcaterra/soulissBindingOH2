@@ -245,9 +245,10 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
         if (++countPING_KO > 3) {
             // if GW do not respond to ping it is setted to OFFLINE
             logger.debug("Gateway do not respond to {} ping packet - setting OFFLINE", countPING_KO);
-
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE, "Gateway "
-                    + bridge.getHandler().getThing().getUID() + " do not respond to " + countPING_KO + " ping");
+            if (bridge.getHandler() != null) {
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE, "Gateway "
+                        + bridge.getHandler().getThing().getUID() + " do not respond to " + countPING_KO + " ping");
+            }
         }
 
     }

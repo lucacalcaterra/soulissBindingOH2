@@ -66,11 +66,17 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
     public SoulissGenericTypical(Thing _thing) {
         super(_thing);
         thing = _thing;
+        int iPosNode_Slot = 2; // if uuid is of type souliss:gateway:[typical]:[node]-[slot] then node/slot is at
+                               // position 2
 
+        if (thing.getUID().getAsString().split(":").length > 3) {
+            iPosNode_Slot = 3; // else, if uuid is of type souliss:gateway:[bridgeID]:[typical]:[node]-[slot] then
+                               // node/slot is at position 3
+        }
         try {
-            iNode = Integer.parseInt(_thing.getUID().toString().split(":")[2]
+            iNode = Integer.parseInt(_thing.getUID().toString().split(":")[iPosNode_Slot]
                     .split(SoulissBindingConstants.UUID_NODE_SLOT_SEPARATOR)[0]);
-            iSlot = Integer.parseInt(_thing.getUID().toString().split(":")[2]
+            iSlot = Integer.parseInt(_thing.getUID().toString().split(":")[iPosNode_Slot]
                     .split(SoulissBindingConstants.UUID_NODE_SLOT_SEPARATOR)[1]);
 
         } catch (Exception e) {

@@ -64,7 +64,6 @@ public class SoulissHandlerFactory extends BaseThingHandlerFactory {
 
     @Override
     protected ThingHandler createHandler(Thing thing) {
-
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
         if (thingTypeUID.toString().equals(GATEWAY_THING_TYPE.getAsString().toLowerCase())) {

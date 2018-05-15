@@ -120,7 +120,7 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
 
         String label = "Souliss Gateway " + id;
         Map<String, Object> properties = new TreeMap<>();
-        properties.put(SoulissBindingConstants.CONFIG_ID, id);
+        // properties.put(SoulissBindingConstants.CONFIG_ID, id);
         properties.put(SoulissBindingConstants.CONFIG_IP_ADDRESS, addr.getHostAddress());
         // SoulissBindingNetworkParameters.IPAddressOnLAN = addr.getHostAddress();
         DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(gatewayUID).withLabel(label)
@@ -177,7 +177,7 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
             String sNodeId = node + SoulissBindingConstants.UUID_NODE_SLOT_SEPARATOR + slot;
             switch (typical) {
                 case SoulissBindingProtocolConstants.Souliss_T11:
-                    thingUID = new ThingUID(SoulissBindingConstants.T11_THING_TYPE, sNodeId);
+                    thingUID = new ThingUID(SoulissBindingConstants.T11_THING_TYPE, gatewayUID, sNodeId);
                     label = "T11: node " + node + ", slot " + slot;
                     break;
                 case SoulissBindingProtocolConstants.Souliss_T12:

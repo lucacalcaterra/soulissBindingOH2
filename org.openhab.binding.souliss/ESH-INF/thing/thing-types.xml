@@ -26,12 +26,7 @@
 				<default>0</default>
 				<advanced>true</advanced>
 			</parameter>
-			<parameter name="ID" type="text" required="false">
-				<label>Bridge ID</label>
-				<description>Free Gateway ID String
-                </description>
-				<advanced>true</advanced>
-			</parameter>
+			
 			<parameter name="PING_INTERVAL" type="integer" min="1" max="300">
 				<label>Ping interval</label>
 				<description>Interval in seconds to check for device presence.</description>
@@ -278,7 +273,7 @@
             <channel id="fan" typeId="fan-channel" />
             <channel id="mode" typeId="mode-channel" />
             <channel id="status" typeId="buttonReadOnly">
-                <label>Power</label>
+                <label>Status</label>
             </channel>
             <channel id="setpoint" typeId="float6n" />
             <channel id="setAsMeasured" typeId="button">

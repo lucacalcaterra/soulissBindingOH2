@@ -85,11 +85,11 @@ The following matrix lists the capabilities (channels) for each type:
 |souliss:t31|x|x|||x|x|x|x|x|x|
 |souliss:t41|x|x|||||||||x|x|x|
 
-rollershutter_state = Stop, Closing, Limit Switch Open, Limit Switch Close, State Open, State Close, No Limit Switch
+rollershutter_state = opening, closing, limSwitch_open , limSwitch_close, state_open, state_close, NoLimSwitch
 
-mode = Cool, Heat, Powered off
+mode = COOLING_MODE, HEATING_MODE, POWEREDOFF_MODE
 
-fan = Auto, High, Medium, Low, Powered off
+fan = AUTO, HIGH, MEDIUM, LOW, FANOFF
 
 
 |Thing type | DateTime lastStatusStored |Number healty|Number value|

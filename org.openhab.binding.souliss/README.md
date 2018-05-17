@@ -173,10 +173,37 @@ Thing <type_id> <thing_id>  [ <parameters> ]
 
 souliss.things:
 ```
-Bridge souliss:gateway:105 "Souliss Gateway - 105" [GATEWAY_IP_ADDRESS="192.168.1.105", GATEWAY_PORT_NUMBER=230, PREFERRED_LOCAL_PORT_NUMBER=0, PING_INTERVAL=30, SUBSCRIBTION_INTERVAL=2, HEALTHY_INTERVAL=33, USER_INDEX=71, NODE_INDEX=20]
+Bridge souliss:gateway:105 "Souliss Gateway - 105" [GATEWAY_IP_ADDRESS="192.168.1.105", GATEWAY_PORT_NUMBER=230, PREFERRED_LOCAL_PORT_NUMBER=0, PING_INTERVAL=30, SUBSCRIBTION_INTERVAL=2, HEALTHY_INTERVAL=38, USER_INDEX=72, NODE_INDEX=38]
 {  
-Thing t11 12-0 [sleep=20]
-Thing t31 6-0
+Thing t14 1-6 "Portoncino"@"Rientro"
+Thing t14 1-7 "Cancello"@"Rientro"
+Thing t57 1-4 "Consumo"@"Soggiorno"
+Thing t57 4-0 "Fotovoltaico"@"Soggiorno"
+Thing t57 4-6 "Pannelli Gruppo 1"@"Soggiorno"
+Thing t57 4-8 "Pannelli Gruppo 2"@"Soggiorno"
+Thing t52 4-10 "Temp.Pannelli Gruppo 1"@"Soggiorno"
+Thing t52 4-12 "Temp.Pannelli Gruppo 2"@"Soggiorno"
+
+Thing t52 3-0 "Temperatura Boiler Solare Termico"
+Thing t52 3-2 "Temperatura Termocamino"
+Thing t11 3-4 "Acqua Termocamino"
+Thing t11 3-6 "Auto: Boiler / Termocamino"	
+Thing t31 3-7  "Acqua Auto: Boiler / Termocamino"	
+
+Thing t31 6-0 "Termostato Soggiorno"@"Soggiorno"
+Thing t53 6-7 "Umidità"@"Soggiorno"
+Thing t19 6-9 "Termostato Soggiorno - Luminosità"@"Soggiorno"
+
+Thing t11 5-0 "Tettoia"@"Giardino"
+
+Thing t11 12-0 "Divano"@"Soggiorno" [sleep=10] 
+
+Thing t16 8-0 "LYT1"
+
+Thing t11 10-0 "Albero di Natale"
+Thing t11 11-0 "Birra"@"Soppalco"
+Thing t52 11-1 "Birra - Temp 1"@"Soppalco"
+Thing t52 11-3 "Birra - Temp 2"@"Soppalco"
 }
 ```
 You have to write your Gateway IP Number and leave all other to default values
@@ -185,50 +212,98 @@ You have to write your Gateway IP Number and leave all other to default values
 default.items:
 
 ```
-Group    Home                     "Tonino"        <house>
-Group    FamilyRoom               "Soggiorno"     <parents_2_4>   (Home)
-Group    Outside         "Esterno"   <garden>   (Home)
-Group    HomePower
-Group Diagnostic
+Group    Home                 "Tonino"        <house>
 
-Switch   tettoia  "Tettoia"  <light>    (Outside)   ["Lighting"]   {channel="souliss:t11:1-0:onoff"}
-Switch   portoncino         "Portoncino"          <light>         (FamilyRoom)         ["Lighting"]   {autoupdate="false",channel="souliss:t14:1-6:pulse"}
-Switch   cancello         "Cancello"          <light>         (FamilyRoom)         ["Lighting"]   {autoupdate="false",channel="souliss:t14:1-7:pulse"}
-Number   Power      "Power [%.1f W]"       <energy>      (FamilyRoom, HomePower)                     {channel="souliss:t57:1-4:value"}
-Number   FamilyRoom_Temperature   "Temperatura [%.1f °C]"   <temperature>  (FamilyRoom)                  {channel="souliss:t31:6-0:measured"}
-Number   FamilyRoom_Humidity      "Umidità [%.1f %%]"       <humidity>      (FamilyRoom)                     {channel="souliss:t53:6-7:value"}
-String	UpdateNode1	"Power update [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (FamilyRoom, Diagnostic)  {channel="souliss:t57:1-4:lastStatusStored"}
+Group    FamilyRoom           "Soggiorno"     <parents_2_4>   (Home)
+Group    Divano               "Divano"        (Home)
+Group    Outside              "Esterno"   <garden>   (Home)
+Group    TV                   "TV"   <television>   (Home)
+Group    Elettricita
+Group    Diagnostic
+Group    TermostatoSoggiorno
+
+Switch   tettoia  "Tettoia"  <light>    (Outside)   ["Lighting"]   {autoupdate="false", channel="souliss:t11:105:5-0:onoff"}
+String	 tettoia_aggiornamento	"Agg [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Outside, Diagnostic)  {channel="souliss:t31:105:5-0:lastStatusStored"}
+
+Switch   portoncino         "Portoncino"          <light>         (FamilyRoom)         ["Lighting"]   {autoupdate="false",channel="souliss:t14:105:1-6:pulse"}
+Switch   cancello         "Cancello"          <light>         (FamilyRoom)         ["Lighting"]   {autoupdate="false",channel="souliss:t14:105:1-7:pulse"}
+
+Number   FamilyRoom_Temperature   "Temperatura [%.1f °C]"   <temperature>  (FamilyRoom)                  {channel="souliss:t31:105:6-0:measured"}
+Number   FamilyRoom_Humidity      "Umidità [%.1f %%]"       <humidity>      (FamilyRoom)                     {channel="souliss:t53:105:6-7:value"}
+String	AggiornamentoNodo6	"Agg [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (FamilyRoom, Diagnostic)  {channel="souliss:t31:105:6-0:lastStatusStored"}
+
+Number   Consumo      "Consumo [%.1f W]"       <energy>      (FamilyRoom, Elettricita)                     {channel="souliss:t57:105:1-4:value"}
+Number   Fotovoltaico      "Fotovoltaico [%.1f W]"       <energy>      (FamilyRoom, Elettricita)                     {channel="souliss:t57:105:4-0:value"}
+String	AggiornamentoNodo1	"Agg.Consumi [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (FamilyRoom, Elettricita, Diagnostic)  {channel="souliss:t57:105:1-4:lastStatusStored"}
+String	AggiornamentoNodo4	"Agg.Fotovoltaico [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (FamilyRoom, Elettricita, Diagnostic)  {channel="souliss:t57:105:4-0:lastStatusStored"}
+                                  
+Switch divano "Divano" <light> (FamilyRoom, Divano ) ["Switchable"] {autoupdate="false", channel="souliss:t11:105:12-0:onoff"}
+String divano_aggiornamento	"Agg. [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (FamilyRoom, Divano, Diagnostic)  {channel="souliss:t57:105:12-0:lastStatusStored"}
+String divano_healty	"Salute"	<keyring> (FamilyRoom, Divano, Diagnostic)  {channel="souliss:t57:105:12-0:healty"}
+
+Number termostatosoggiorno_temperatura  "Temperatura [%.1f °C]" <temperature> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:measured"}
+Number termostatosoggiorno_umidita "Umidità [%.1f %%]" <temperature>   (TermostatoSoggiorno)       {channel="souliss:t53:105:6-7:value" }
+
+Number termostatosoggiorno_setpoint "Setpoint [%.1f °C]"    <temperature> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:setpoint"}
+Switch termostatosoggiorno_setasmeasured "Set temp. attuale" <temperature> (TermostatoSoggiorno) {autoupdate="false", channel="souliss:t31:105:6-0:setAsMeasured"}
+String termostatosoggiorno_modo "Modo" (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:mode"}
+Switch termostatosoggiorno_stato "Status" <light> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:status"}
+
+Dimmer  TermostatoSoggiorno_displayBright   "Lumin.min. display" (TermostatoSoggiorno)      {channel="souliss:t19:105:6-9" }
+String TermostatoSoggiorno_aggiornamento "Agg.[%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" <keyring> (TermostatoSoggiorno, Diagnostic)  {channel="souliss:t31:105:6-0:lastStatusStored"}
+Number TermostatoSoggiorno_healty "Salute" <keyring> (TermostatoSoggiorno, Diagnostic )  {channel="souliss:t31:105:6-0:healty"}
 ```
 
-default.sitemap:
-
+default.sitemaps:
 ```
 sitemap default label="Tonino" {
     Frame {
         Text label="Rientro casa" icon="light" {
-           Switch item=portoncino mappings=[ON="Open"]
-           Switch item=cancello mappings=[ON="Open"]
+           Switch item=portoncino mappings=[ON="Apri"]
+           Switch item=cancello mappings=[ON="Apri"]
         }
-    }     
-     Frame {
+    }        
+         
+ Frame {
         Group item=Outside
     }
-        
+
+Text item=Consumo label="Consumo [%.1f W]"
+Text item=Fotovoltaico label="Fotovoltaico [%.1f W]"
+
 Frame {
-        Text label="Temperature and Humidity" icon="temperature" {
-            Default item=FamilyRoom_Temperature label="Temp."
-            Default item=FamilyRoom_Humidity label="Hum."
-            Default item=AggiornamentoNodo6 icon="icon16x16"
-        }
-        Text item=FamilyRoom_Temperature label="Temp. [%.1f °C]"
-        Text item=FamilyRoom_Humidity label="Hum. [%.1f %%]"
-        
-        Text item=Power label="Hum. [%.1f W]"
-        Text item=UpdateNode1
-    }
-   
+
+        Group item=Elettricita label="Elettricità" icon="energy"
 }
-    
+
+   Frame {  
+       Group item=Divano icon="light"
+   }
+
+   Frame label="Temperature"{	
+
+            Text label="Temperatura e umidità" icon="temperature" {
+            Default item=FamilyRoom_Temperature label="Temperatura"
+            Default item=FamilyRoom_Humidity label="Umidità"
+            Default item=AggiornamentoNodo6 icon="icon16x16"
+        
+}
+
+			Text label="Termostato soggiorno" icon="temperature" {
+            Setpoint item=termostatosoggiorno_setpoint step=0.5 minValue=10 maxValue=30
+            Default item=termostatosoggiorno_temperatura
+            Default item=termostatosoggiorno_umidita
+            Switch item=termostatosoggiorno_setasmeasured mappings=[ON="Set"]
+            Switch item=termostatosoggiorno_modo label="Power On" mappings=[HEATING_MODE="Set"] icon="powerIcon"
+            Switch item=termostatosoggiorno_modo label="Power Off" mappings=[POWEREDOFF_MODE="Set"] icon="powerIcon"
+            Text item=termostatosoggiorno_stato label="Stato" icon="coolingMode"
+			Text item=termostatosoggiorno_aggiornato label="Aggiornato: [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" icon="icon16x16"
+            Slider item=displayBright_TermostatoSoggiorno
+		}	
+}
+
+
+}
 ```
 
 

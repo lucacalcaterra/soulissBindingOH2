@@ -190,6 +190,8 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
         this.nodes = nodes;
     }
 
+    int iPosNode_Slot = 2;
+
     public int getNodes() {
         Thing _thing;
         int maxNode = 0;
@@ -199,8 +201,14 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
             String[] _uuidStrings = _thing.getUID().getAsString()
                     .split(SoulissBindingConstants.UUID_NODE_SLOT_SEPARATOR);
             String[] _uuidNodeNumber = _uuidStrings[0].split(SoulissBindingConstants.UUID_ELEMENTS_SEPARATOR);
-            if (Integer.parseInt(_uuidNodeNumber[2]) > maxNode) {
-                maxNode = Integer.parseInt(_uuidNodeNumber[2]);
+
+            iPosNode_Slot = 2; // if uuid is of type souliss:gateway:[typical]:[node]-[slot] then node/slot is at
+                               // position 2
+            if (_uuidNodeNumber.length > 3) {
+                iPosNode_Slot = 3;
+            }
+            if (Integer.parseInt(_uuidNodeNumber[iPosNode_Slot]) > maxNode) {
+                maxNode = Integer.parseInt(_uuidNodeNumber[iPosNode_Slot]);
             }
             // alla fine la lunghezza della lista sarà uguale al numero di nodi presenti
         }

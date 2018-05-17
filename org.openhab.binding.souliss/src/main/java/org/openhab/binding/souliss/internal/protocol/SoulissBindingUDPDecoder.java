@@ -378,7 +378,6 @@ public class SoulissBindingUDPDecoder {
     }
 
     private void decodeStateRequest(short lastByteGatewayIP, ArrayList<Short> mac) {
-        boolean bDecoded_forLOG = false;
         int tgtnode = mac.get(3);
         SoulissGatewayHandler gateway = null;
         try {

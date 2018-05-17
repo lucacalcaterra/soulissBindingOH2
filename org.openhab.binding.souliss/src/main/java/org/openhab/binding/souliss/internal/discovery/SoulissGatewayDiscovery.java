@@ -12,6 +12,9 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -26,6 +29,7 @@ import org.openhab.binding.souliss.internal.SoulissDatagramSocketFactory;
 import org.openhab.binding.souliss.internal.discovery.SoulissDiscoverThread.DiscoverResult;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingUDPServerThread;
+import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +75,14 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
 
         SoulissBindingNetworkParameters.discoverResult = this;
         // open socket
-        logger.debug("Starting Servers");
+        // Version version = FrameworkUtil.getBundle(getClass()).getVersion();
+        String sSymbolicName = FrameworkUtil.getBundle(getClass()).getSymbolicName();
+        long sLastModified = FrameworkUtil.getBundle(getClass()).getLastModified();
+        Date date = new Date(sLastModified);
+        Format format = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
+
+        logger.info("Starting " + sSymbolicName + " - Version: " + format.format(date));
+        logger.info("Starting Servers");
 
         datagramSocket = SoulissDatagramSocketFactory.getSocketDatagram();
         if (datagramSocket != null) {

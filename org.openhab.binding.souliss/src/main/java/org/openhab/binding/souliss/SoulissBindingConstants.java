@@ -188,4 +188,6 @@ public class SoulissBindingConstants {
     public static final String UUID_NODE_SLOT_SEPARATOR = "-";
 
     public static final String UUID_ELEMENTS_SEPARATOR = ":";
+
+    public static final String CONFIG_SLEEP = "sleep";
 }

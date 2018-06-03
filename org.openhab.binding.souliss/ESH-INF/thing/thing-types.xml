@@ -355,10 +355,10 @@
         <supported-bridge-type-refs>
             <bridge-type-ref id="gateway" />
         </supported-bridge-type-refs>
-        <label>T53</label>
+        <label>T54</label>
         <description>Light Sensor (0, 40) kLux</description>
         <channels>
-            <channel id="value" typeId="voltage"/>
+            <channel id="value" typeId="lux"/>
             <channel id="lastStatusStored" typeId="lastStatusStored" />
             <channel id="healty" typeId="healty" />
         </channels>
@@ -728,7 +728,7 @@
 
 <channel-type id="lux">
         <item-type>Number</item-type>
-        <label>V</label>
+        <label>kLux</label>
         <description>Lux</description>
           <tags>
       <tag>sensors</tag>

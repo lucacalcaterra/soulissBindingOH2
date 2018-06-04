@@ -478,7 +478,7 @@ public class SoulissBindingUDPDecoder {
                                 case SoulissBindingConstants.T21:
                                 case SoulissBindingConstants.T22:
                                     logger.debug("Decoding " + SoulissBindingConstants.T21 + "/"
-                                            + SoulissBindingConstants.T21 + " packet");
+                                            + SoulissBindingConstants.T22 + " packet");
                                     if (sVal == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Open) {
                                         ((SoulissT22Handler) handler).setState(UpDownType.UP);
                                         ((SoulissT22Handler) handler).setState_Message(

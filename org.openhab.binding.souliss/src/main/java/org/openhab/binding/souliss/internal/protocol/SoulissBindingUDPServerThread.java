@@ -78,11 +78,20 @@ public class SoulissBindingUDPServerThread extends Thread {
 
                 } catch (IOException e) {
                     e.printStackTrace();
+                    logger.debug("Error in Class SoulissBindingUDPServerThread");
                     logger.error(e.getMessage());
                 }
+            } else {
+                logger.debug("Socket Closed");
+                bExit = true;
             }
         }
-        logger.debug("UDP Server (port {}) stopped", soulissDatagramSocket.getLocalPort());
+
+        logger.debug("Exit from server cicle");
+        if (bExit) {
+            soulissDatagramSocket.close();
+            logger.debug("UDP Server (port {}) stopped", soulissDatagramSocket.getLocalPort());
+        }
     }
 
     public void stopServer() {

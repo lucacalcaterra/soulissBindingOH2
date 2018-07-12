@@ -6,7 +6,7 @@ Souliss is an open-source and community driven project, you can use the [wiki](h
 
 ## Prerequisites
 
-The binding requires a deployed network.  As a minimum, you need one Souliss node with Ethernet access configured as a [Gateway](https://github.com/souliss/souliss/wiki/Gateway). A Gateway is a special node that is able to communicate with the user interfaces. The binding interacts as a user interface for Souliss.
+The binding requires a deployed network.  As a minimum, you need one Souliss node with Ethernet or WiFi access configured as a [Gateway](https://github.com/souliss/souliss/wiki/Gateway). A Gateway is a special node that is able to communicate with the user interfaces. The binding interacts as a user interface for Souliss.
 
 A starting point is the [Souliss wiki](https://github.com/souliss/souliss/wiki). The best is to start with a single node and connect with SoulissApp. The code for networking activities of this binding is based on [SoulissApp](https://github.com/souliss/souliss/wiki/SoulissApp) code, so once connected with SoulissApp, you can move to openHAB directly.
 

@@ -1,4 +1,4 @@
-For update go to officiale release at [https://github.com/souliss/bindingopenhab2](https://github.com/souliss/bindingopenhab2)
+For updates go to official repository at [https://github.com/souliss/bindingopenhab2](https://github.com/souliss/bindingopenhab2)
 
 # Souliss Binding
 

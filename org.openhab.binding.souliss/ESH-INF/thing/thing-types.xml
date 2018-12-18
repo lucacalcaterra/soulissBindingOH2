@@ -295,7 +295,7 @@
             <channel id="statusAlarm" typeId="buttonReadOnly">
                 <label>Alarm status</label>
             </channel>
-            <channel id="onOffAlarm" typeId="button">
+            <channel id="onOffAlarm" typeId="onoff">
                 <label>Alarm ON/OFF</label>
             </channel>
             <channel id="rearmAlarm" typeId="button">
@@ -619,6 +619,9 @@
 		<description>Light on/off</description>
 		<state readOnly="true" />
 	</channel-type>
+	
+	
+	
 	<channel-type id="stateOpenClose">
         <item-type>Contact</item-type>
         <label>State Open/Closed</label>

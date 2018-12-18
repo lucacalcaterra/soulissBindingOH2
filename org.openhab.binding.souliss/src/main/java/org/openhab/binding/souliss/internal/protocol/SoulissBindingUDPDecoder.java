@@ -155,7 +155,8 @@ public class SoulissBindingUDPDecoder {
                 decodeActionMessages(lastByteGatewayIP, macacoPck);
                 break;
             default:
-                logger.debug("Received functional code: 0x" + Integer.toHexString(functionalCode) + " - unused");
+                logger.debug("Received functional code: 0x" + Integer.toHexString(functionalCode)
+                        + " - unused by OH Binding");
         }
     }
 
@@ -419,7 +420,6 @@ public class SoulissBindingUDPDecoder {
                                     logger.debug("Decoding " + SoulissBindingConstants.T11 + " packet");
                                     typicalState = getOHState_OnOff_FromSoulissVal(sVal);
                                     ((SoulissT11Handler) handler).setState(typicalState);
-                                    // cercare di capire come forzare un update
                                     break;
                                 case SoulissBindingConstants.T12:
                                     logger.debug("Decoding " + SoulissBindingConstants.T12 + " packet");
@@ -443,7 +443,6 @@ public class SoulissBindingUDPDecoder {
                                     typicalState = getOHState_OnOff_FromSoulissVal(sVal);
                                     ((SoulissT13Handler) handler).setState(typicalState);
                                     ((SoulissT13Handler) handler).setState(getOHState_OpenClose_FromSoulissVal(sVal));
-
                                     break;
                                 case SoulissBindingConstants.T14:
                                     logger.debug("Decoding " + SoulissBindingConstants.T14 + " packet");

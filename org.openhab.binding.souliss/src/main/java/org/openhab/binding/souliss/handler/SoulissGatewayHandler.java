@@ -48,7 +48,6 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
 
     public int pingRefreshInterval;
     public int subscriptionRefreshInterval;
-    public int afterThingDetection_subscriptionRefreshInterval = 5000; // millis
     public boolean thereIsAThingDetection = true;
     public int healthRefreshInterval;
     private Bridge bridge;

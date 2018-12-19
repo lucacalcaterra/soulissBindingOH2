@@ -40,6 +40,7 @@ import org.openhab.binding.souliss.handler.SoulissT1AHandler;
 import org.openhab.binding.souliss.handler.SoulissT22Handler;
 import org.openhab.binding.souliss.handler.SoulissT31Handler;
 import org.openhab.binding.souliss.handler.SoulissT41Handler;
+import org.openhab.binding.souliss.handler.SoulissT42Handler;
 import org.openhab.binding.souliss.handler.SoulissT5nHandler;
 import org.openhab.binding.souliss.handler.SoulissT61Handler;
 import org.openhab.binding.souliss.handler.SoulissT62Handler;
@@ -608,16 +609,32 @@ public class SoulissBindingUDPDecoder {
                                         case SoulissBindingProtocolConstants.Souliss_T4n_NoAntitheft:
                                             ((SoulissT41Handler) handler).setState(OnOffType.OFF);
                                             ((SoulissT41Handler) handler).setState(StringType
-                                                    .valueOf(SoulissBindingConstants.T41_ALARMOFF_MESSAGE_CHANNEL));
+                                                    .valueOf(SoulissBindingConstants.T4n_ALARMOFF_MESSAGE_CHANNEL));
                                             break;
                                         case SoulissBindingProtocolConstants.Souliss_T4n_Antitheft:
                                             ((SoulissT41Handler) handler).setState(OnOffType.ON);
                                             ((SoulissT41Handler) handler).setState(StringType
-                                                    .valueOf(SoulissBindingConstants.T41_ALARMOFF_MESSAGE_CHANNEL));
+                                                    .valueOf(SoulissBindingConstants.T4n_ALARMOFF_MESSAGE_CHANNEL));
                                             break;
                                         case SoulissBindingProtocolConstants.Souliss_T4n_InAlarm:
                                             ((SoulissT41Handler) handler).setState(StringType
-                                                    .valueOf(SoulissBindingConstants.T41_ALARMON_MESSAGE_CHANNEL));
+                                                    .valueOf(SoulissBindingConstants.T4n_ALARMON_MESSAGE_CHANNEL));
+                                            break;
+                                        case SoulissBindingProtocolConstants.Souliss_T4n_Armed:
+                                            ((SoulissT41Handler) handler).setState(
+                                                    StringType.valueOf(SoulissBindingConstants.T4n_ONOFFALARM_CHANNEL));
+                                            break;
+                                    }
+                                    break;
+                                case SoulissBindingConstants.T42:
+                                    switch (sVal) {
+                                        case SoulissBindingProtocolConstants.Souliss_T4n_NoAntitheft:
+                                            ((SoulissT42Handler) handler).setState(StringType
+                                                    .valueOf(SoulissBindingConstants.T4n_ALARMOFF_MESSAGE_CHANNEL));
+                                            break;
+                                        case SoulissBindingProtocolConstants.Souliss_T4n_Alarm:
+                                            ((SoulissT42Handler) handler).setState(StringType
+                                                    .valueOf(SoulissBindingConstants.T4n_ALARMON_MESSAGE_CHANNEL));
                                             break;
                                     }
                                     break;

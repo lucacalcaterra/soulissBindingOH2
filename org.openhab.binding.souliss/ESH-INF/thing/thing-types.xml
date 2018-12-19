@@ -301,14 +301,33 @@
             <channel id="rearmAlarm" typeId="button">
                 <label>Rearm</label>
             </channel>
-<!--             <channel id="resetAlarm" typeId="button"> -->
-<!--                 <label>Reset Alarm</label> -->
-<!--             </channel> -->
             <channel id="lastStatusStored" typeId="lastStatusStored" />
             <channel id="healty" typeId="healty" />
             
         </channels>
     </thing-type>
+    
+   <thing-type id="t42">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="gateway"/>
+        </supported-bridge-type-refs>
+        <label>T42</label>
+        <description>Anti-theft integration (Peer)</description>
+        <channels>
+            <channel id="statusAlarm" typeId="buttonReadOnly">
+                <label>Alarm status</label>
+            </channel>
+<channel id="onOffAlarm" typeId="onoff">
+                <label>Alarm ON/OFF</label>
+            </channel>
+              <channel id="rearmAlarm" typeId="button">
+                <label>Rearm</label>
+            </channel>
+            <channel id="lastStatusStored" typeId="lastStatusStored" />
+            <channel id="healty" typeId="healty" />
+        </channels>
+    </thing-type>
+
 
 <thing-type id="t51">
         <supported-bridge-type-refs>

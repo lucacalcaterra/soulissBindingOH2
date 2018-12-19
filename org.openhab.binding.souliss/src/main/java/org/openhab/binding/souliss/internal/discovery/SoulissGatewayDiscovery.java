@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements DiscoverResult {
     private Logger logger = LoggerFactory.getLogger(SoulissGatewayDiscovery.class);
-    private SoulissDiscoverJob soulissDiscoverRunnableClass;
+    private SoulissDiscoverJob soulissDiscoverRunnableClass = null;
     private ThingUID gatewayUID;
     // private ScheduledFuture<?> schedulerFuture;
     private DatagramSocket datagramSocket;
@@ -77,6 +77,7 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
 
             UDPserverJob = scheduler.scheduleAtFixedRate(UDP_Server_RunnableClass, 100,
                     SoulissBindingConstants.SERVER_cicleInMillis, TimeUnit.MILLISECONDS);
+
         } else {
             logger.debug("Error - datagramSocket is null - Server not started");
         }
@@ -233,6 +234,10 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
                 case SoulissBindingProtocolConstants.Souliss_T41_Antitheft_Main:
                     thingUID = new ThingUID(SoulissBindingConstants.T41_THING_TYPE, sNodeId);
                     label = "T41: node " + node + ", slot " + slot;
+                    break;
+                case SoulissBindingProtocolConstants.Souliss_T42_Antitheft_Peer:
+                    thingUID = new ThingUID(SoulissBindingConstants.T42_THING_TYPE, sNodeId);
+                    label = "T42: node " + node + ", slot " + slot;
                     break;
                 case SoulissBindingProtocolConstants.Souliss_T31:
                     thingUID = new ThingUID(SoulissBindingConstants.T31_THING_TYPE, sNodeId);

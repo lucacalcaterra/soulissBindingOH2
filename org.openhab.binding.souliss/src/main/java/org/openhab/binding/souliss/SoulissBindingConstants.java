@@ -25,7 +25,7 @@ public class SoulissBindingConstants {
 
     public static final long DISCOVERY_resendTimeoutInMillis = 5000;
     public static final int DISCOVERY_TimeoutInSeconds = 60;
-    public static final long SERVER_cicleInMillis = 150;
+    public static final long SERVER_cicleInMillis = 10;
     // public static final int PING_resendTimeoutInSeconds = 5;
 
     // List of all Thing Type UIDs
@@ -44,6 +44,7 @@ public class SoulissBindingConstants {
     public final static String T22 = "t22";
     public final static String T31 = "t31";
     public final static String T41 = "t41";
+    public final static String T42 = "t42";
     public final static String T51 = "t51";
     public final static String T52 = "t52";
     public final static String T53 = "t53";
@@ -75,6 +76,7 @@ public class SoulissBindingConstants {
     public final static ThingTypeUID T22_THING_TYPE = new ThingTypeUID(BINDING_ID, T22);
     public final static ThingTypeUID T31_THING_TYPE = new ThingTypeUID(BINDING_ID, T31);
     public final static ThingTypeUID T41_THING_TYPE = new ThingTypeUID(BINDING_ID, T41);
+    public final static ThingTypeUID T42_THING_TYPE = new ThingTypeUID(BINDING_ID, T42);
     public final static ThingTypeUID T51_THING_TYPE = new ThingTypeUID(BINDING_ID, T51);
     public final static ThingTypeUID T52_THING_TYPE = new ThingTypeUID(BINDING_ID, T52);
     public final static ThingTypeUID T53_THING_TYPE = new ThingTypeUID(BINDING_ID, T53);
@@ -96,9 +98,9 @@ public class SoulissBindingConstants {
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Sets.newHashSet(GATEWAY_THING_TYPE,
             T11_THING_TYPE, T12_THING_TYPE, T13_THING_TYPE, T14_THING_TYPE, T16_THING_TYPE, T18_THING_TYPE,
             T19_THING_TYPE, T1A_THING_TYPE, T21_THING_TYPE, T22_THING_TYPE, T31_THING_TYPE, T41_THING_TYPE,
-            T51_THING_TYPE, T52_THING_TYPE, T53_THING_TYPE, T54_THING_TYPE, T55_THING_TYPE, T56_THING_TYPE,
-            T57_THING_TYPE, T58_THING_TYPE, T61_THING_TYPE, T62_THING_TYPE, T63_THING_TYPE, T64_THING_TYPE,
-            T65_THING_TYPE, T66_THING_TYPE, T67_THING_TYPE, T68_THING_TYPE, TOPICS_THING_TYPE);
+            T42_THING_TYPE, T51_THING_TYPE, T52_THING_TYPE, T53_THING_TYPE, T54_THING_TYPE, T55_THING_TYPE,
+            T56_THING_TYPE, T57_THING_TYPE, T58_THING_TYPE, T61_THING_TYPE, T62_THING_TYPE, T63_THING_TYPE,
+            T64_THING_TYPE, T65_THING_TYPE, T66_THING_TYPE, T67_THING_TYPE, T68_THING_TYPE, TOPICS_THING_TYPE);
 
     // List of all Channel ids
     public final static String ONOFF_CHANNEL = "onoff";
@@ -147,14 +149,14 @@ public class SoulissBindingConstants {
     public final static String T31_POWEROFF_MESSAGE_CHANNEL = "POWEROFF";
     public final static String T31_POWERON_MESSAGE_CHANNEL = "POWERON";
 
-    public final static String T41_ONOFFALARM_CHANNEL = "onOffAlarm";
-    public final static String T41_STATUSALARM_CHANNEL = "statusAlarm";
-    public final static String T41_REARMALARM_CHANNEL = "rearmAlarm";
+    public final static String T4n_ONOFFALARM_CHANNEL = "onOffAlarm";
+    public final static String T4n_STATUSALARM_CHANNEL = "statusAlarm";
+    public final static String T4n_REARMALARM_CHANNEL = "rearmAlarm";
     public final static String T41_RESETALARM_CHANNEL = "resetAlarm";
 
-    public final static String T41_ALARMON_MESSAGE_CHANNEL = "ALARMON";
-    public final static String T41_ALARMOFF_MESSAGE_CHANNEL = "ALARMOFF";
-    public final static String T41_REARMOFF_MESSAGE_CHANNEL = "REARMMOFF";
+    public final static String T4n_ALARMON_MESSAGE_CHANNEL = "ALARMON";
+    public final static String T4n_ALARMOFF_MESSAGE_CHANNEL = "ALARMOFF";
+    public final static String T4n_REARMOFF_MESSAGE_CHANNEL = "REARMMOFF";
 
     public static final String WHITE_MODE_CHANNEL = "whitemode";
     public static final String ROLLER_BRIGHTNESS_CHANNEL = "roller_brightness";

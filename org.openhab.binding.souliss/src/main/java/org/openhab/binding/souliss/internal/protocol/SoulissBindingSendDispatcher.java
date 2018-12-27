@@ -38,7 +38,7 @@ public class SoulissBindingSendDispatcher implements Runnable {
         // _iPAddressOnLAN = gw.IPAddressOnLAN;
         // _userIndex = gw.userIndex;
         // _nodeIndex = gw.nodeIndex;
-        set_refreshInterval(gw.healthRefreshInterval);
+        set_refreshInterval(gw.sendRefreshInterval);
     }
 
     public static void put(DatagramSocket socket, DatagramPacket packet) {

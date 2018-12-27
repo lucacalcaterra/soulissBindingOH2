@@ -87,7 +87,7 @@ The following matrix lists the capabilities (channels) for each type:
 |souliss:t22|x|x|x|x|
 |souliss:t31|x|x|||x|x|x|x|x|x|
 |souliss:t41|x|x|||||||||x|x|x|
-|souliss:t42|x|x|||||||||x|x|x|
+|souliss:t42|x|x|||||||||x||x|
 
 rollershutter_state = opening, closing, limSwitch_open , limSwitch_close, state_open, state_close, NoLimSwitch
 

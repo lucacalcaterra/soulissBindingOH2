@@ -255,7 +255,7 @@ Number termostatosoggiorno_setpoint "Regola Set Point [%.1f °c]"    <heating> (
 Switch termostatosoggiorno_setasmeasured "Set temp. attuale" <heating> (TermostatoSoggiorno)  {channel="souliss:t31:105:6-0:setAsMeasured"}
 String termostatosoggiorno_modo "Modo" (TermostatoSoggiorno) {autoupdate="false", channel="souliss:t31:105:6-0:mode"}
 Switch termostatosoggiorno_power "Termostato" <powerIcon> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:system"}
-Switch termostatosoggiorno_fire "Fire" <homeRed> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:fire"}
+Switch termostatosoggiorno_fire "Fire" <fire> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:fire"}
 
 Dimmer  TermostatoSoggiorno_displayBright   "Lumin.min. display" (TermostatoSoggiorno)      {channel="souliss:t19:105:6-9" }
 String TermostatoSoggiorno_aggiornamento "Agg.[%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" <keyring> (TermostatoSoggiorno, Diagnostic)  {channel="souliss:t31:105:6-0:lastStatusStored"}

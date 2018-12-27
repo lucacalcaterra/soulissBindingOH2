@@ -297,7 +297,7 @@ Frame {
         
 }
 
-				Text label="Termostato soggiorno" icon="temperature" {
+	Text label="Termostato soggiorno" icon="temperature" {
             Setpoint item=termostatosoggiorno_setpoint step=0.5 minValue=10 maxValue=30
             Default item=termostatosoggiorno_temperatura
             Default item=termostatosoggiorno_umidita
@@ -305,12 +305,10 @@ Frame {
             Switch item=termostatosoggiorno_modo label="Heating Mode" mappings=[HEATING_MODE="Set"] 
             Switch item=termostatosoggiorno_power label="Power On/Off"
             Default item=termostatosoggiorno_fire label="Fire"
-			Text item=termostatoSoggiorno_aggiornamento label="Aggiornato: [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" icon="icon16x16"
+	    Text item=termostatoSoggiorno_aggiornamento label="Aggiornato: [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" icon="icon16x16"
             Default item=termostatoSoggiorno_healty
-            Text item=termostatoSoggiorno_WIFI_DB 
-            Text item=termostatoSoggiorno_WIFI
-            Slider item=termostatoSoggiorno_displayBright
-		}		
+	    Slider item=termostatoSoggiorno_displayBright
+	}		
 }
 
 

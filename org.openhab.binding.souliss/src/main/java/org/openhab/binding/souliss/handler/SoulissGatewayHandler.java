@@ -25,6 +25,7 @@ import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingUDPConstants;
 import org.openhab.binding.souliss.internal.SoulissDatagramSocketFactory;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
+import org.openhab.binding.souliss.internal.protocol.SoulissBindingSendDispatcher;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingUDPServerJob;
 import org.openhab.binding.souliss.internal.protocol.SoulissCommonCommands;
 import org.slf4j.Logger;
@@ -50,6 +51,7 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
     public int subscriptionRefreshInterval;
     public boolean thereIsAThingDetection = true;
     public int healthRefreshInterval;
+    public int sendRefreshInterval;
     private Bridge bridge;
     public int preferred_local_port;
     public int souliss_gateway_port;
@@ -150,6 +152,12 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
             logger.debug("Get health refresh interval: {}", healthRefreshInterval);
         }
 
+        if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SEND_REFRESH) != null) {
+            healthRefreshInterval = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SEND_REFRESH))
+                    .intValue();
+            logger.debug("Get send refresh interval: {}", sendRefreshInterval);
+        }
+
         // START SERVER ON DEFAULT PORT - Used for topics
         if (UDP_Server_DefaultPort_RunnableClass == null) {
             logger.debug("Starting UDP server on Souliss Default Port for Topics (Publish&Subcribe)");
@@ -175,6 +183,11 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
         SoulissGatewayJobHealty SoulissGatewayJobHealtyRunnable = new SoulissGatewayJobHealty(bridge);
         scheduler.scheduleWithFixedDelay(SoulissGatewayJobHealtyRunnable, 5,
                 SoulissGatewayJobHealtyRunnable.get_healthRefreshInterval(), TimeUnit.SECONDS);
+
+        SoulissBindingSendDispatcher SoulissSendDispatcherRunnable = new SoulissBindingSendDispatcher(bridge);
+        scheduler.scheduleWithFixedDelay(SoulissSendDispatcherRunnable, 5,
+                SoulissSendDispatcherRunnable.get_refreshInterval(), TimeUnit.MILLISECONDS);
+
     }
 
     @Override

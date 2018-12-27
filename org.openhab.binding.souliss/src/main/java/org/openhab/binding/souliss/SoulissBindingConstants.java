@@ -187,7 +187,8 @@ public class SoulissBindingConstants {
     public static final String CONFIG_ID = "ID";
     public static final String CONFIG_PING_REFRESH = "PING_INTERVAL";
     public static final String CONFIG_SUBSCRIPTION_REFRESH = "SUBSCRIBTION_INTERVAL";
-    public static final String CONFIG_HEALTHY_REFRESH = "HEALTHY_INTERVAL";;
+    public static final String CONFIG_HEALTHY_REFRESH = "HEALTHY_INTERVAL";
+    public static final String CONFIG_SEND_REFRESH = "SEND_INTERVAL";
 
     public static final String UUID_NODE_SLOT_SEPARATOR = "-";
 

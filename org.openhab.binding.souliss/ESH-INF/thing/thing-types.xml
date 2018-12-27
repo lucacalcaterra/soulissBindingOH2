@@ -48,6 +48,14 @@
                 <advanced>true</advanced>
             </parameter>
 
+             <parameter name="SEND_INTERVAL" type="integer" min="1" max="60">
+                <label>Send interval</label>
+                <description>Interval in milliseconds to get packet from binding queue and send it to Souliss. First packet is sent immediately. 
+                </description>
+                <default>1000</default>
+                <advanced>true</advanced>
+            </parameter>
+
 			<parameter name="USER_INDEX" type="integer" required="true">
 				<label>User Index</label>
 				<description>Generally the default value work good. It must is different from other user interfaces (ex: SoulissApp)

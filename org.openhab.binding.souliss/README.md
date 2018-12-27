@@ -70,7 +70,7 @@ Typicals match directly with openHAB Thing type.
 ### Channels
 The following matrix lists the capabilities (channels) for each type:
 
-|Thing type |Switch onoff | Switch sleep | DateTime lastStatusStored | Number healty |Switch automode|Contact stateOnOff|Contact stateOpenClose|Switch pulse|Switch whitemode|Rollershutter roller_brightness|Dimmer dimmer_brightness|Color ledcolor|Switch one|Switch two|Switch three|Switch four|Switch five|Switch six|Switch seven|Switch eight|
+|Thing type / Channel |Switch onoff | Switch sleep | DateTime lastStatusStored | Number healty |Switch automode|Contact stateOnOff|Contact stateOpenClose|Switch pulse|Switch whitemode|Rollershutter roller_brightness|Dimmer dimmer_brightness|Color ledcolor|Switch one|Switch two|Switch three|Switch four|Switch five|Switch six|Switch seven|Switch eight|
 |-- |-- | -- | -- | -- |--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|
 |souliss:t11|x|x|x|x||||
 |souliss:t12|x| |x|x|x||||
@@ -81,7 +81,7 @@ The following matrix lists the capabilities (channels) for each type:
 |souliss:t19|x|x|x|x||||||x|x|
 |souliss:t1A|||x|x|||||||||x|x|x|x|x|x|x|x|
 
-|Thing type | DateTime lastStatusStored | Number healty |Rollershutter rollershutter|(see down) rollershutter_state|(see down) mode|(see down) fan|Switch status|Number setpoint|Switch setAsMeasured|Switch measured|Switch statusAlarm|Switch onOffAlarm|Switch rearmAlarm|
+|Thing type / Channel | DateTime lastStatusStored | Number healty |Rollershutter rollershutter|(see down) rollershutter_state|(see down) mode|(see down) fan|Switch status|Number setpoint|Switch setAsMeasured|Switch measured|Switch statusAlarm|Switch onOffAlarm|Switch rearmAlarm|
 |-- |-- | --|- | -- | -- |--|--|--|--|--|--|--|--|
 |souliss:t21|x|x||x|
 |souliss:t22|x|x|x|x|
@@ -96,7 +96,7 @@ mode = COOLING_MODE, HEATING_MODE, POWEREDOFF_MODE
 fan = AUTO, HIGH, MEDIUM, LOW, FANOFF
 
 
-|Thing type | DateTime lastStatusStored |Number healty|Number value|
+|Thing type / Channel| DateTime lastStatusStored |Number healty|Number value|
 |-- |-- | -- | --|
 |souliss:t51|x|x|x|
 |souliss:t52|x|x|x|
@@ -107,7 +107,7 @@ fan = AUTO, HIGH, MEDIUM, LOW, FANOFF
 |souliss:t57|x|x|x|
 |souliss:t58|x|x|x|
 
-|Thing type |  DateTime lastStatusStored |Number healty|Number value|
+|Thing type / Channel|  DateTime lastStatusStored |Number healty|Number value|
 |-- |-- | -- | --|
 |souliss:t61|x|x|x|
 |souliss:t62|x|x|x|
@@ -120,7 +120,7 @@ fan = AUTO, HIGH, MEDIUM, LOW, FANOFF
 |souliss:topic|x||x|
 
 ### Parameters
-|Thing type | Parameters Name and Default Value| Description|
+|Thing type / Channel| Parameters Name and Default Value| Description|
 |-- |-- |-- |
 |Gateway|GATEWAY_IP_ADDRESS="" |Will be resolved by discovery if auto configured|
 |"|GATEWAY_PORT_NUMBER=230 ||

@@ -131,23 +131,26 @@ public class SoulissBindingConstants {
     public final static String T1A_7_CHANNEL = "seven";
     public final static String T1A_8_CHANNEL = "eight";
 
-    public final static String T31_FAN_CHANNEL = "fan";
     public final static String T31_MODE_CHANNEL = "mode";
-    public final static String T31_STATUS_CHANNEL = "status";
+    public final static String T31_SYSTEM_CHANNEL = "system";
+    public final static String T31_FIRE_CHANNEL = "fire";
+    public final static String T31_FAN_CHANNEL = "fan";
     public final static String T31_BUTTON_CHANNEL = "setAsMeasured";
     public final static String T31_VALUE_CHANNEL = "measured";
     public final static String T31_SETPOINT_CHANNEL = "setpoint";
-    public final static String T31_COOLINGMODE_MESSAGE_CHANNEL = "COOLING_MODE";
-    public final static String T31_HEATINGMODE_MESSAGE_CHANNEL = "HEATING_MODE";
-    public final static String T31_POWEREDOFF_MESSAGE_CHANNEL = "POWEREDOFF_MODE";
 
-    public final static String T31_FANAUTO_MESSAGE_CHANNEL = "AUTO";
-    public final static String T31_FANOFF_MESSAGE_CHANNEL = "FANOFF";
-    public final static String T31_FANLOW_MESSAGE_CHANNEL = "LOW";
-    public final static String T31_FANMEDIUM_MESSAGE_CHANNEL = "MEDIUM";
-    public final static String T31_FANHIGH_MESSAGE_CHANNEL = "HIGH";
-    public final static String T31_POWEROFF_MESSAGE_CHANNEL = "POWEROFF";
-    public final static String T31_POWERON_MESSAGE_CHANNEL = "POWERON";
+    public final static String T31_COOLINGMODE_MESSAGE_MODE_CHANNEL = "COOLING_MODE";
+    public final static String T31_HEATINGMODE_MESSAGE_MODE_CHANNEL = "HEATING_MODE";
+    public final static String T31_OFF_MESSAGE_SYSTEM_CHANNEL = "SYSTEM_OFF";
+    public final static String T31_ON_MESSAGE_SYSTEM_CHANNEL = "SYSTEM_ON";
+    public final static String T31_ON_MESSAGE_FIRE_CHANNEL = "FIRE_ON";
+    public final static String T31_OFF_MESSAGE_FIRE_CHANNEL = "FIRE_OFF";
+
+    public final static String T31_FANAUTO_MESSAGE_FAN_CHANNEL = "AUTO";
+    public final static String T31_FANOFF_MESSAGE_FAN_CHANNEL = "FANOFF";
+    public final static String T31_FANLOW_MESSAGE_FAN_CHANNEL = "LOW";
+    public final static String T31_FANMEDIUM_MESSAGE_FAN_CHANNEL = "MEDIUM";
+    public final static String T31_FANHIGH_MESSAGE_FAN_CHANNEL = "HIGH";
 
     public final static String T4n_ONOFFALARM_CHANNEL = "onOffAlarm";
     public final static String T4n_STATUSALARM_CHANNEL = "statusAlarm";

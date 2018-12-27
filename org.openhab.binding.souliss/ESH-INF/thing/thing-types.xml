@@ -271,10 +271,15 @@
         <description>Temperature control with cooling and heating mode</description>
         <channels>
             <channel id="fan" typeId="fan-channel" />
-            <channel id="mode" typeId="mode-channel" />
-            <channel id="status" typeId="buttonReadOnly">
-                <label>Status</label>
-            </channel>
+            <channel id="mode" typeId="mode-channel">
+            <label>Mode: heating/cooling</label>
+             </channel>
+            <channel id="system" typeId="onoff">
+            <label>System</label>
+             </channel>
+            <channel id="fire" typeId="buttonReadOnly">
+            <label>Fire</label>
+             </channel>
             <channel id="setpoint" typeId="float6n" />
             <channel id="setAsMeasured" typeId="button">
                 <label>As measured</label>
@@ -570,7 +575,6 @@
       <options>
         <option value="COOLING_MODE">Cool</option>
         <option value="HEATING_MODE">Heat</option>
-        <option value="POWEREDOFF_MODE">Powered off</option>
       </options>
     </state>
     </channel-type>

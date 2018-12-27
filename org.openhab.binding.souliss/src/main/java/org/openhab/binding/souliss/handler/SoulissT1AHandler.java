@@ -14,7 +14,7 @@ import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
-import org.openhab.binding.souliss.handler.SoulissGenericTypical.typicalCommonMethods;
+import org.openhab.binding.souliss.handler.SoulissGenericHandler.typicalCommonMethods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Luca Remigio - Initial contribution
  */
-public class SoulissT1AHandler extends SoulissGenericTypical implements typicalCommonMethods {
+public class SoulissT1AHandler extends SoulissGenericHandler implements typicalCommonMethods {
     private Logger logger = LoggerFactory.getLogger(SoulissT1AHandler.class);
 
     public SoulissT1AHandler(Thing _thing) {

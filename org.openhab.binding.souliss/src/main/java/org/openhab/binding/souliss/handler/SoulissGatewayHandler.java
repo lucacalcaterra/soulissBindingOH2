@@ -25,7 +25,7 @@ import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingUDPConstants;
 import org.openhab.binding.souliss.internal.SoulissDatagramSocketFactory;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
-import org.openhab.binding.souliss.internal.protocol.SoulissBindingSendDispatcher;
+import org.openhab.binding.souliss.internal.protocol.SoulissBindingSendDispatcherJob;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingUDPServerJob;
 import org.openhab.binding.souliss.internal.protocol.SoulissCommonCommands;
 import org.slf4j.Logger;
@@ -153,7 +153,7 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
         }
 
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SEND_REFRESH) != null) {
-            healthRefreshInterval = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SEND_REFRESH))
+            sendRefreshInterval = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SEND_REFRESH))
                     .intValue();
             logger.debug("Get send refresh interval: {}", sendRefreshInterval);
         }
@@ -184,10 +184,11 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
         scheduler.scheduleWithFixedDelay(SoulissGatewayJobHealtyRunnable, 5,
                 SoulissGatewayJobHealtyRunnable.get_healthRefreshInterval(), TimeUnit.SECONDS);
 
-        SoulissBindingSendDispatcher SoulissSendDispatcherRunnable = new SoulissBindingSendDispatcher(bridge);
-        scheduler.scheduleWithFixedDelay(SoulissSendDispatcherRunnable, 5,
-                SoulissSendDispatcherRunnable.get_refreshInterval(), TimeUnit.MILLISECONDS);
-
+        // il ciclo Send è schedulato con la costante SoulissBindingConstants.SEND_DISPATCHER_MIN_DELAY_cicleInMillis
+        // internamente il ciclo viene rallentato al timer impostato da configurazione (PaperUI o File)
+        SoulissBindingSendDispatcherJob SoulissSendDispatcherRunnable = new SoulissBindingSendDispatcherJob(bridge);
+        scheduler.scheduleWithFixedDelay(SoulissSendDispatcherRunnable, 15,
+                SoulissBindingConstants.SEND_DISPATCHER_MIN_DELAY_cicleInMillis, TimeUnit.MILLISECONDS);
     }
 
     @Override

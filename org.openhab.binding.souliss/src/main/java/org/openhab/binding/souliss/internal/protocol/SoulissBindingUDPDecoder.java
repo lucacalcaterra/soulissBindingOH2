@@ -28,7 +28,7 @@ import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
 import org.openhab.binding.souliss.SoulissBindingUDPConstants;
 import org.openhab.binding.souliss.handler.SoulissGatewayHandler;
-import org.openhab.binding.souliss.handler.SoulissGenericTypical;
+import org.openhab.binding.souliss.handler.SoulissGenericHandler;
 import org.openhab.binding.souliss.handler.SoulissT11Handler;
 import org.openhab.binding.souliss.handler.SoulissT12Handler;
 import org.openhab.binding.souliss.handler.SoulissT13Handler;
@@ -365,8 +365,8 @@ public class SoulissBindingUDPDecoder {
                         handler = thing.getHandler();
                         if (handler != null) {
                             int tgtnode = i - 5;
-                            if (((SoulissGenericTypical) handler).getNode() == tgtnode) {
-                                ((SoulissGenericTypical) handler).setHealty(Short.valueOf(mac.get(i)));
+                            if (((SoulissGenericHandler) handler).getNode() == tgtnode) {
+                                ((SoulissGenericHandler) handler).setHealty(Short.valueOf(mac.get(i)));
                             }
                         } else {
                             logger.debug("decode Healthy Request Warning. Thing handler is null");
@@ -401,17 +401,17 @@ public class SoulissBindingUDPDecoder {
                 if (handler != null) { // execute it only if binding is Souliss and update is for my
                                        // Gateway
                     if (sUID_Array[0].equals(SoulissBindingConstants.BINDING_ID)
-                            && Short.parseShort(((SoulissGenericTypical) handler).getGatewayIP().toString()
+                            && Short.parseShort(((SoulissGenericHandler) handler).getGatewayIP().toString()
                                     .split("\\.")[3]) == lastByteGatewayIP) {
 
-                        if (((SoulissGenericTypical) handler) != null
-                                && ((SoulissGenericTypical) handler).getNode() == tgtnode) { // execute it
+                        if (((SoulissGenericHandler) handler) != null
+                                && ((SoulissGenericHandler) handler).getNode() == tgtnode) { // execute it
                                                                                              // only
                                                                                              // if it is
                                                                                              // node
                                                                                              // to update
                             // ...now check slot
-                            int slot = ((SoulissGenericTypical) handler).getSlot();
+                            int slot = ((SoulissGenericHandler) handler).getSlot();
                             // get typical value
                             short sVal = getByteAtSlot(mac, slot);
                             OnOffType typicalState = null;

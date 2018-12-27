@@ -15,7 +15,7 @@ import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
-import org.openhab.binding.souliss.handler.SoulissGenericTypical.typicalCommonMethods;
+import org.openhab.binding.souliss.handler.SoulissGenericHandler.typicalCommonMethods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Tonino Fazio - Initial contribution
  */
-public class SoulissT13Handler extends SoulissGenericTypical implements typicalCommonMethods {
+public class SoulissT13Handler extends SoulissGenericHandler implements typicalCommonMethods {
 
     private Logger logger = LoggerFactory.getLogger(SoulissT13Handler.class);
     OnOffType T1n_ONOFF_State = OnOffType.OFF;

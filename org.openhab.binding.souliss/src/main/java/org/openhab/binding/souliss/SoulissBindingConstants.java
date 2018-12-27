@@ -26,6 +26,8 @@ public class SoulissBindingConstants {
     public static final long DISCOVERY_resendTimeoutInMillis = 5000;
     public static final int DISCOVERY_TimeoutInSeconds = 60;
     public static final long SERVER_cicleInMillis = 10;
+    public static final long SEND_DISPATCHER_MIN_DELAY_cicleInMillis = 10;
+
     // public static final int PING_resendTimeoutInSeconds = 5;
 
     // List of all Thing Type UIDs

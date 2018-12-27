@@ -19,7 +19,7 @@ import org.eclipse.smarthome.core.types.RefreshType;
 import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
-import org.openhab.binding.souliss.handler.SoulissGenericTypical.typicalCommonMethods;
+import org.openhab.binding.souliss.handler.SoulissGenericHandler.typicalCommonMethods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Tonino Fazio - Initial contribution
  */
-public class SoulissT22Handler extends SoulissGenericTypical implements typicalCommonMethods {
+public class SoulissT22Handler extends SoulissGenericHandler implements typicalCommonMethods {
 
     private Logger logger = LoggerFactory.getLogger(SoulissT22Handler.class);
 

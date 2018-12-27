@@ -8,7 +8,7 @@
 package org.openhab.binding.souliss.handler;
 
 import org.eclipse.smarthome.core.thing.Thing;
-import org.openhab.binding.souliss.handler.SoulissGenericTypical.typicalCommonMethods;
+import org.openhab.binding.souliss.handler.SoulissGenericHandler.typicalCommonMethods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

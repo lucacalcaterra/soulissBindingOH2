@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  * @author Tonino Fazio
  * @since 1.7.0
  */
-public abstract class SoulissGenericTypical extends BaseThingHandler {
+public abstract class SoulissGenericHandler extends BaseThingHandler {
 
     /**
      * Result callback interface.
@@ -61,9 +61,9 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
 
     private int iSlot;
     private int iNode;
-    private static Logger logger = LoggerFactory.getLogger(SoulissGenericTypical.class);
+    private static Logger logger = LoggerFactory.getLogger(SoulissGenericHandler.class);
 
-    public SoulissGenericTypical(Thing _thing) {
+    public SoulissGenericHandler(Thing _thing) {
         super(_thing);
         thing = _thing;
         int iPosNode_Slot = 2; // if uuid is of type souliss:gateway:[typical]:[node]-[slot] then node/slot is at

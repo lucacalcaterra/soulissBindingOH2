@@ -48,7 +48,7 @@
                 <advanced>true</advanced>
             </parameter>
 
-             <parameter name="SEND_INTERVAL" type="integer" min="1" max="60">
+             <parameter name="SEND_INTERVAL" type="integer" min="5" max="5000">
                 <label>Send interval</label>
                 <description>Interval in milliseconds to get packet from binding queue and send it to Souliss. First packet is sent immediately. 
                 </description>

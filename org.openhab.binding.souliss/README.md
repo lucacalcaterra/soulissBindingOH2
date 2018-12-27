@@ -140,7 +140,7 @@ fan = AUTO, HIGH, MEDIUM, LOW, FANOFF
 |T21|||
 |T22|||
 |T31|||
-|T41|||
+|T4x|||
 |T5x|||
 |T6x|||
 

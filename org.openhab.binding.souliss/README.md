@@ -48,6 +48,7 @@ Typicals match directly with openHAB Thing type.
 |Motorized devices with limit switches and middle position|T22|souliss:t22|
 |Temperature control|T31|souliss:t31|
 |Anti-theft integration (Main)|T41|souliss:t41|
+|Anti-theft integration (Peer)|T42|souliss:t42|
 |Analog input, half-precision floating point|T51|souliss:t51|
 |Temperature measure (-20, +50) °C|T52|souliss:t52|
 |Humidity measure (0, 100) %|T53|souliss:t53|
@@ -86,6 +87,7 @@ The following matrix lists the capabilities (channels) for each type:
 |souliss:t22|x|x|x|x|
 |souliss:t31|x|x|||x|x|x|x|x|x|
 |souliss:t41|x|x|||||||||x|x|x|
+|souliss:t42|x|x|||||||||x|x|x|
 
 rollershutter_state = opening, closing, limSwitch_open , limSwitch_close, state_open, state_close, NoLimSwitch
 
@@ -246,10 +248,14 @@ String divano_healty	"Salute"	<keyring> (FamilyRoom, Divano, Diagnostic)  {chann
 Number termostatosoggiorno_temperatura  "Temperatura [%.1f °C]" <temperature> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:measured"}
 Number termostatosoggiorno_umidita "Umidità [%.1f %%]" <temperature>   (TermostatoSoggiorno)       {channel="souliss:t53:105:6-7:value" }
 
-Number termostatosoggiorno_setpoint "Setpoint [%.1f °C]"    <temperature> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:setpoint"}
-Switch termostatosoggiorno_setasmeasured "Set temp. attuale" <temperature> (TermostatoSoggiorno) {autoupdate="false", channel="souliss:t31:105:6-0:setAsMeasured"}
-String termostatosoggiorno_modo "Modo" (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:mode"}
-Switch termostatosoggiorno_stato "Status" <light> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:status"}
+Number termostatosoggiorno_umidita "Umidità" <humidity>   (TermostatoSoggiorno)  {channel="souliss:t53:105:6-7:value" }
+
+Number termostatosoggiorno_temperatura  "Temperatura" <temperature> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:measured"}
+Number termostatosoggiorno_setpoint "Regola Set Point [%.1f °c]"    <heating> (TermostatoSoggiorno) {autoupdate="false", channel="souliss:t31:105:6-0:setpoint"}
+Switch termostatosoggiorno_setasmeasured "Set temp. attuale" <heating> (TermostatoSoggiorno)  {channel="souliss:t31:105:6-0:setAsMeasured"}
+String termostatosoggiorno_modo "Modo" (TermostatoSoggiorno) {autoupdate="false", channel="souliss:t31:105:6-0:mode"}
+Switch termostatosoggiorno_power "Termostato" <powerIcon> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:system"}
+Switch termostatosoggiorno_fire "Fire" <homeRed> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:fire"}
 
 Dimmer  TermostatoSoggiorno_displayBright   "Lumin.min. display" (TermostatoSoggiorno)      {channel="souliss:t19:105:6-9" }
 String TermostatoSoggiorno_aggiornamento "Agg.[%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" <keyring> (TermostatoSoggiorno, Diagnostic)  {channel="souliss:t31:105:6-0:lastStatusStored"}
@@ -291,17 +297,20 @@ Frame {
         
 }
 
-			Text label="Termostato soggiorno" icon="temperature" {
+				Text label="Termostato soggiorno" icon="temperature" {
             Setpoint item=termostatosoggiorno_setpoint step=0.5 minValue=10 maxValue=30
             Default item=termostatosoggiorno_temperatura
             Default item=termostatosoggiorno_umidita
             Switch item=termostatosoggiorno_setasmeasured mappings=[ON="Set"]
-            Switch item=termostatosoggiorno_modo label="Power On" mappings=[HEATING_MODE="Set"] icon="powerIcon"
-            Switch item=termostatosoggiorno_modo label="Power Off" mappings=[POWEREDOFF_MODE="Set"] icon="powerIcon"
-            Text item=termostatosoggiorno_stato label="Stato" icon="coolingMode"
-			Text item=termostatosoggiorno_aggiornato label="Aggiornato: [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" icon="icon16x16"
-            Slider item=displayBright_TermostatoSoggiorno
-		}	
+            Switch item=termostatosoggiorno_modo label="Heating Mode" mappings=[HEATING_MODE="Set"] 
+            Switch item=termostatosoggiorno_power label="Power On/Off"
+            Default item=termostatosoggiorno_fire label="Fire"
+			Text item=termostatoSoggiorno_aggiornamento label="Aggiornato: [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" icon="icon16x16"
+            Default item=termostatoSoggiorno_healty
+            Text item=termostatoSoggiorno_WIFI_DB 
+            Text item=termostatoSoggiorno_WIFI
+            Slider item=termostatoSoggiorno_displayBright
+		}		
 }
 
 

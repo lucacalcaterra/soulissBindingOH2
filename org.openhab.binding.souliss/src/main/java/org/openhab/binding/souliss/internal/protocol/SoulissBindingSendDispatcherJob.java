@@ -12,12 +12,17 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.ScheduledFuture;
 
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Thing;
+import org.eclipse.smarthome.core.thing.binding.ThingHandler;
+import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingUDPConstants;
 import org.openhab.binding.souliss.handler.SoulissGatewayHandler;
 import org.openhab.binding.souliss.handler.SoulissGatewayJobHealty;
+import org.openhab.binding.souliss.handler.SoulissGenericHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,12 +44,13 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
     static boolean bPopSuspend = false;
     public static ArrayList<SoulissBindingSocketAndPacketStruct> packetsList = new ArrayList<SoulissBindingSocketAndPacketStruct>();
     private long start_time = System.currentTimeMillis();
+    static String _iPAddressOnLAN;
     static int iDelay = 0; // equal to 0 if array is empty
     static int SEND_MIN_DELAY = 0;
 
     public SoulissBindingSendDispatcherJob(Bridge bridge) {
         gw = (SoulissGatewayHandler) bridge.getHandler();
-        // _iPAddressOnLAN = gw.IPAddressOnLAN;
+        _iPAddressOnLAN = gw.IPAddressOnLAN;
         // _userIndex = gw.userIndex;
         // _nodeIndex = gw.nodeIndex;
         set_sendMaxDelay(gw.sendRefreshInterval);
@@ -155,7 +161,7 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
                 }
                 // confronta gli stati in memoria con i frame inviati. Se
                 // corrispondono cancella il frame dalla lista inviati
-                // SendDispatcher.safeSendCheck();
+                SoulissBindingSendDispatcherJob.safeSendCheck();
                 resetTime();
             }
         } catch (IOException e) {
@@ -203,100 +209,109 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
      * Confronta gli aggiornamenti ricevuti con i frame inviati. Se corrispondono allora cancella il
      * frame nella lista inviati .
      */
-    // public static void safeSendCheck() {
-    // // short sVal = getByteAtSlot(macacoFrame, slot);
-    // // scansione lista paccetti inviati
-    // for (int i = 0; i < packetsList.size(); i++) {
-    // if (packetsList.get(i).isSent()) {
-    // int node = getNode(packetsList.get(i).packet);
-    // int iSlot = 0;
-    // for (int j = 12; j < packetsList.get(i).packet.getData().length; j++) {
-    // // controllo lo slot solo se il comando è diverso da ZERO
-    // if (packetsList.get(i).packet.getData()[j] != 0) {
-    // // recupero tipico dalla memoria
-    // SoulissGenericHandler = getHandler(node, iSlot, 0);
-    //
-    // // traduce il comando inviato con lo stato previsto e
-    // // poi fa il confronto con lo stato attuale
-    // if (logger.isDebugEnabled() && typ != null) {
-    // String s1 = Integer.toHexString((int) typ.getState());
-    // String sStateMemoria = s1.length() < 2 ? "0x0" + s1.toUpperCase() : "0x" + s1.toUpperCase();
-    //
-    // String sCmd = Integer.toHexString(packetsList.get(i).packet.getData()[j]);
-    // sCmd = sCmd.length() < 2 ? "0x0" + sCmd.toUpperCase() : "0x" + sCmd.toUpperCase();
-    // logger.debug(
-    // "Compare. Node: {} Slot: {} Typical: {} Command: {} EXPECTED: {} - IN MEMORY: {}",
-    // node, iSlot, Integer.toHexString(typ.getType()), sCmd,
-    // expectedState(typ.getType(), packetsList.get(i).packet.getData()[j]),
-    // sStateMemoria);
-    // }
-    //
-    // if (typ != null && checkExpectedState((int) typ.getState(),
-    // expectedState(typ.getType(), packetsList.get(i).packet.getData()[j]))) {
-    // // se il valore del tipico coincide con il valore
-    // // trasmesso allora pongo il byte a zero.
-    // // quando tutti i byte saranno uguale a zero allora
-    // // si
-    // // cancella il frame
-    // packetsList.get(i).packet.getData()[j] = 0;
-    // logger.debug("T{} Node: {} Slot: {} - OK Expected State",
-    // Integer.toHexString(typ.getType()), node, iSlot);
-    // } else if (typ == null) {
-    // // se allo slot j non esiste un tipico allora vuol dire che si tratta di uno slot collegato
-    // // al precedente (es: RGB, T31,...)
-    // // allora se lo slot j-1=0 allora anche j puÃ² essere messo a 0
-    // if (packetsList.get(i).packet.getData()[j - 1] == 0) {
-    // packetsList.get(i).packet.getData()[j] = 0;
-    // }
-    // }
-    // }
-    // iSlot++;
-    // }
-    // if (checkAllsSlotZero(packetsList.get(i).packet)) {
-    // logger.debug("Command packet executed - Removed");
-    // packetsList.remove(i);
-    // } else {
-    // // se il frame non Ã¨ uguale a zero controllo il TIMEOUT e se
-    // // Ã¨ scaduto allora pongo il flag SENT a false
-    // long t = System.currentTimeMillis();
-    // if (SoulissNetworkParameter.SECURE_SEND_TIMEOUT_TO_REQUEUE < t - packetsList.get(i).getTime()) {
-    // if (SoulissNetworkParameter.SECURE_SEND_TIMEOUT_TO_REMOVE_PACKET < t
-    // - packetsList.get(i).getTime()) {
-    // logger.info("Packet Execution timeout - Removed");
-    // packetsList.remove(i);
-    // } else {
-    // logger.info("Packet Execution timeout - Requeued");
-    // packetsList.get(i).setSent(false);
-    // }
-    // }
-    // }
-    // }
-    // }
-    // }
+    public static void safeSendCheck() {
+        // short sVal = getByteAtSlot(macacoFrame, slot);
+        // scansione lista paccetti inviati
+        for (int i = 0; i < packetsList.size(); i++) {
+            if (packetsList.get(i).isSent()) {
+                int node = getNode(packetsList.get(i).packet);
+                int iSlot = 0;
+                for (int j = 12; j < packetsList.get(i).packet.getData().length; j++) {
+                    // controllo lo slot solo se il comando è diverso da ZERO
+                    if (packetsList.get(i).packet.getData()[j] != 0) {
+                        // recupero tipico dalla memoria
+                        SoulissGenericHandler typ = getHandler(_iPAddressOnLAN, node, iSlot);
 
-    // private static Object getHandler(int node, int iSlot, int i) {
-    // //recupero il riferimento al gateway
-    // SoulissGatewayHandler gateway = null;
-    // try {
-    // gateway = (SoulissGatewayHandler) SoulissBindingNetworkParameters.getGateway(lastByteGatewayIP)
-    // .getHandler();
-    // } catch (Exception ex) {
-    // }
-    //
-    // //iterazione sull'insieme dei tipici
-    // Iterator thingsIterator;
-    // if (gateway != null && gateway.IPAddressOnLAN != null
-    // && Short.parseShort(gateway.IPAddressOnLAN.split("\\.")[3]) == lastByteGatewayIP) {
-    // thingsIterator = gateway.getThing().getThings().iterator();
-    // boolean bFound = false;
-    // Thing typ = null;
-    // while (thingsIterator.hasNext() && !bFound) {
-    // typ = (Thing) thingsIterator.next();
-    // String sUID_Array[] = typ.getUID().getAsString().split(":");
-    // ThingHandler handler = typ.getHandler();
-    // if (handler != null) {
-    // return null;
-    // }
+                        // traduce il comando inviato con lo stato previsto e
+                        // poi fa il confronto con lo stato attuale
+                        if (logger.isDebugEnabled() && typ != null) {
+                            String s1 = Integer.toHexString((int) typ.getState());
+                            String sStateMemoria = s1.length() < 2 ? "0x0" + s1.toUpperCase() : "0x" + s1.toUpperCase();
+
+                            String sCmd = Integer.toHexString(packetsList.get(i).packet.getData()[j]);
+                            sCmd = sCmd.length() < 2 ? "0x0" + sCmd.toUpperCase() : "0x" + sCmd.toUpperCase();
+                            logger.debug(
+                                    "Compare. Node: {} Slot: {} Typical: {} Command: {} EXPECTED: {} - IN MEMORY: {}",
+                                    node, iSlot, Integer.toHexString(typ.getType()), sCmd,
+                                    expectedState(typ.getType(), packetsList.get(i).packet.getData()[j]),
+                                    sStateMemoria);
+                        }
+
+                        if (typ != null && checkExpectedState((int) typ.getState(),
+                                expectedState(typ.getType(), packetsList.get(i).packet.getData()[j]))) {
+                            // se il valore del tipico coincide con il valore
+                            // trasmesso allora pongo il byte a zero.
+                            // quando tutti i byte saranno uguale a zero allora
+                            // si
+                            // cancella il frame
+                            packetsList.get(i).packet.getData()[j] = 0;
+                            logger.debug("T{} Node: {} Slot: {} - OK Expected State",
+                                    Integer.toHexString(typ.getType()), node, iSlot);
+                        } else if (typ == null) {
+                            // se allo slot j non esiste un tipico allora vuol dire che si tratta di uno slot collegato
+                            // al precedente (es: RGB, T31,...)
+                            // allora se lo slot j-1=0 allora anche j puÃ² essere messo a 0
+                            if (packetsList.get(i).packet.getData()[j - 1] == 0) {
+                                packetsList.get(i).packet.getData()[j] = 0;
+                            }
+                        }
+                    }
+                    iSlot++;
+                }
+                if (checkAllsSlotZero(packetsList.get(i).packet)) {
+                    logger.debug("Command packet executed - Removed");
+                    packetsList.remove(i);
+                } else {
+                    // se il frame non Ã¨ uguale a zero controllo il TIMEOUT e se
+                    // Ã¨ scaduto allora pongo il flag SENT a false
+                    long t = System.currentTimeMillis();
+                    if (SoulissNetworkParameter.SECURE_SEND_TIMEOUT_TO_REQUEUE < t - packetsList.get(i).getTime()) {
+                        if (SoulissNetworkParameter.SECURE_SEND_TIMEOUT_TO_REMOVE_PACKET < t
+                                - packetsList.get(i).getTime()) {
+                            logger.info("Packet Execution timeout - Removed");
+                            packetsList.remove(i);
+                        } else {
+                            logger.info("Packet Execution timeout - Requeued");
+                            packetsList.get(i).setSent(false);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static Object getHandler(String _iPAddressOnLAN, int node) {
+        // recupero il riferimento al gateway
+        SoulissGatewayHandler gateway = null;
+        short _lastByteGatewayIP = Short.parseShort(_iPAddressOnLAN.split("\\.")[3]);
+
+        Iterator thingsIterator;
+        if (gateway != null && gateway.IPAddressOnLAN != null
+                && Short.parseShort(gateway.IPAddressOnLAN.split("\\.")[3]) == _lastByteGatewayIP) {
+            thingsIterator = gateway.getThing().getThings().iterator();
+            boolean bFound = false;
+            Thing typ = null;
+            while (thingsIterator.hasNext() && !bFound) {
+                typ = (Thing) thingsIterator.next();
+                String sUID_Array[] = typ.getUID().getAsString().split(":");
+                ThingHandler handler = typ.getHandler();
+                if (handler != null) { // execute it only if binding is Souliss and update is for my
+                                       // Gateway
+                    if (sUID_Array[0].equals(SoulissBindingConstants.BINDING_ID)
+                            && Short.parseShort(((SoulissGenericHandler) handler).getGatewayIP().toString()
+                                    .split("\\.")[3]) == _lastByteGatewayIP) {
+
+                        if (((SoulissGenericHandler) handler) != null
+                                && ((SoulissGenericHandler) handler).getNode() == node) {
+
+                            return handler;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
     // private static boolean checkExpectedState(int state, String expectedState) {
     // // if expected state is null than return true. The frame will not requeued

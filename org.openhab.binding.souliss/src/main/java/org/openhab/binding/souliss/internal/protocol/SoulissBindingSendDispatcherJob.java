@@ -17,7 +17,6 @@ import java.util.concurrent.ScheduledFuture;
 
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingUDPConstants;
 import org.openhab.binding.souliss.handler.SoulissGatewayHandler;
@@ -225,7 +224,7 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
                         // traduce il comando inviato con lo stato previsto e
                         // poi fa il confronto con lo stato attuale
                         if (logger.isDebugEnabled() && typ != null) {
-                            String s1 = Integer.toHexString((int) typ.getState());
+                            String s1 = Integer.toHexString((int) typ.getThing().getState());
                             String sStateMemoria = s1.length() < 2 ? "0x0" + s1.toUpperCase() : "0x" + s1.toUpperCase();
 
                             String sCmd = Integer.toHexString(packetsList.get(i).packet.getData()[j]);
@@ -236,54 +235,59 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
                                     expectedState(typ.getType(), packetsList.get(i).packet.getData()[j]),
                                     sStateMemoria);
                         }
-
-                        if (typ != null && checkExpectedState((int) typ.getState(),
-                                expectedState(typ.getType(), packetsList.get(i).packet.getData()[j]))) {
-                            // se il valore del tipico coincide con il valore
-                            // trasmesso allora pongo il byte a zero.
-                            // quando tutti i byte saranno uguale a zero allora
-                            // si
-                            // cancella il frame
-                            packetsList.get(i).packet.getData()[j] = 0;
-                            logger.debug("T{} Node: {} Slot: {} - OK Expected State",
-                                    Integer.toHexString(typ.getType()), node, iSlot);
-                        } else if (typ == null) {
-                            // se allo slot j non esiste un tipico allora vuol dire che si tratta di uno slot collegato
-                            // al precedente (es: RGB, T31,...)
-                            // allora se lo slot j-1=0 allora anche j puÃ² essere messo a 0
-                            if (packetsList.get(i).packet.getData()[j - 1] == 0) {
-                                packetsList.get(i).packet.getData()[j] = 0;
-                            }
-                        }
+                        //
+                        // if (typ != null && checkExpectedState((int) typ.getState(),
+                        // expectedState(typ.getType(), packetsList.get(i).packet.getData()[j]))) {
+                        // // se il valore del tipico coincide con il valore
+                        // // trasmesso allora pongo il byte a zero.
+                        // // quando tutti i byte saranno uguale a zero allora
+                        // // si
+                        // // cancella il frame
+                        // packetsList.get(i).packet.getData()[j] = 0;
+                        // logger.debug("T{} Node: {} Slot: {} - OK Expected State",
+                        // Integer.toHexString(typ.getType()), node, iSlot);
+                        // } else if (typ == null) {
+                        // // se allo slot j non esiste un tipico allora vuol dire che si tratta di uno slot collegato
+                        // // al precedente (es: RGB, T31,...)
+                        // // allora se lo slot j-1=0 allora anche j puÃ² essere messo a 0
+                        // if (packetsList.get(i).packet.getData()[j - 1] == 0) {
+                        // packetsList.get(i).packet.getData()[j] = 0;
+                        // }
+                        // }
                     }
                     iSlot++;
                 }
-                if (checkAllsSlotZero(packetsList.get(i).packet)) {
-                    logger.debug("Command packet executed - Removed");
-                    packetsList.remove(i);
-                } else {
-                    // se il frame non Ã¨ uguale a zero controllo il TIMEOUT e se
-                    // Ã¨ scaduto allora pongo il flag SENT a false
-                    long t = System.currentTimeMillis();
-                    if (SoulissNetworkParameter.SECURE_SEND_TIMEOUT_TO_REQUEUE < t - packetsList.get(i).getTime()) {
-                        if (SoulissNetworkParameter.SECURE_SEND_TIMEOUT_TO_REMOVE_PACKET < t
-                                - packetsList.get(i).getTime()) {
-                            logger.info("Packet Execution timeout - Removed");
-                            packetsList.remove(i);
-                        } else {
-                            logger.info("Packet Execution timeout - Requeued");
-                            packetsList.get(i).setSent(false);
-                        }
-                    }
-                }
+                // if (checkAllsSlotZero(packetsList.get(i).packet)) {
+                // logger.debug("Command packet executed - Removed");
+                // packetsList.remove(i);
+                // } else {
+                // // se il frame non Ã¨ uguale a zero controllo il TIMEOUT e se
+                // // Ã¨ scaduto allora pongo il flag SENT a false
+                // long t = System.currentTimeMillis();
+                // if (SoulissNetworkParameter.SECURE_SEND_TIMEOUT_TO_REQUEUE < t - packetsList.get(i).getTime()) {
+                // if (SoulissNetworkParameter.SECURE_SEND_TIMEOUT_TO_REMOVE_PACKET < t
+                // - packetsList.get(i).getTime()) {
+                // logger.info("Packet Execution timeout - Removed");
+                // packetsList.remove(i);
+                // } else {
+                // logger.info("Packet Execution timeout - Requeued");
+                // packetsList.get(i).setSent(false);
+                // }
+                // }
+                // }
             }
         }
     }
 
-    private static Object getHandler(String _iPAddressOnLAN, int node) {
+    private static SoulissGenericHandler getHandler(String _iPAddressOnLAN, int node, int slot) {
         // recupero il riferimento al gateway
         SoulissGatewayHandler gateway = null;
         short _lastByteGatewayIP = Short.parseShort(_iPAddressOnLAN.split("\\.")[3]);
+        try {
+            gateway = (SoulissGatewayHandler) SoulissBindingNetworkParameters.getGateway(_lastByteGatewayIP)
+                    .getHandler();
+        } catch (Exception ex) {
+        }
 
         Iterator thingsIterator;
         if (gateway != null && gateway.IPAddressOnLAN != null
@@ -294,15 +298,13 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
             while (thingsIterator.hasNext() && !bFound) {
                 typ = (Thing) thingsIterator.next();
                 String sUID_Array[] = typ.getUID().getAsString().split(":");
-                ThingHandler handler = typ.getHandler();
+                SoulissGenericHandler handler = (SoulissGenericHandler) typ.getHandler();
                 if (handler != null) { // execute it only if binding is Souliss and update is for my
                                        // Gateway
-                    if (sUID_Array[0].equals(SoulissBindingConstants.BINDING_ID)
-                            && Short.parseShort(((SoulissGenericHandler) handler).getGatewayIP().toString()
-                                    .split("\\.")[3]) == _lastByteGatewayIP) {
+                    if (sUID_Array[0].equals(SoulissBindingConstants.BINDING_ID) && Short
+                            .parseShort(handler.getGatewayIP().toString().split("\\.")[3]) == _lastByteGatewayIP) {
 
-                        if (((SoulissGenericHandler) handler) != null
-                                && ((SoulissGenericHandler) handler).getNode() == node) {
+                        if ((handler) != null && handler.getNode() == node) {
 
                             return handler;
                         }

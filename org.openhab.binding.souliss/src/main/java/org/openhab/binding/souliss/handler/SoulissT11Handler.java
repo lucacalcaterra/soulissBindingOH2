@@ -97,6 +97,14 @@ public class SoulissT11Handler extends SoulissGenericHandler implements typicalC
         // "Can not access device as username and/or password are invalid");
     }
 
+    fare un
+    metodo getFeedbackState
+    con il
+    quale ogni
+    tipico decide
+    quale valore
+    mostrare come feedback
+
     @Override
     public void setState(PrimitiveType _state) {
         super.setLastStatusStored();

@@ -410,7 +410,6 @@ public class SoulissBindingUDPDecoder {
                                                                                              // if it is
                                                                                              // node
                                                                                              // to update
-                             CONTINUARE DA QUI
                             // ...now check slot
                             int slot = ((SoulissGenericHandler) handler).getSlot();
                             // get typical value

@@ -22,6 +22,7 @@ import org.openhab.binding.souliss.SoulissBindingUDPConstants;
 import org.openhab.binding.souliss.handler.SoulissGatewayHandler;
 import org.openhab.binding.souliss.handler.SoulissGatewayJobHealty;
 import org.openhab.binding.souliss.handler.SoulissGenericHandler;
+import org.openhab.binding.souliss.handler.SoulissT11Handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -224,7 +225,8 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
                         // traduce il comando inviato con lo stato previsto e
                         // poi fa il confronto con lo stato attuale
                         if (logger.isDebugEnabled() && typ != null) {
-                            String s1 = Integer.toHexString((int) typ.getThing().getState());
+                            String s1 = Integer.toHexString(
+                                    (int) ((SoulissT11Handler) typ.getThing().getHandler()).getFeedbackState());
                             String sStateMemoria = s1.length() < 2 ? "0x0" + s1.toUpperCase() : "0x" + s1.toUpperCase();
 
                             String sCmd = Integer.toHexString(packetsList.get(i).packet.getData()[j]);

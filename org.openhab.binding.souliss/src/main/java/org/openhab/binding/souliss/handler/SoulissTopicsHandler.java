@@ -47,4 +47,10 @@ public class SoulissTopicsHandler extends SoulissGenericActionMessage implements
             this.updateState(SoulissBindingConstants.T5n_VALUE_CHANNEL, (DecimalType) _state);
         }
     }
+
+    @Override
+    public PrimitiveType getFeedbackState() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

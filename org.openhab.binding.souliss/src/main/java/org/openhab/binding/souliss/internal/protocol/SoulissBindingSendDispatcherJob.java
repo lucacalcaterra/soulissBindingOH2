@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ScheduledFuture;
 
+import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.openhab.binding.souliss.SoulissBindingConstants;
@@ -22,7 +23,6 @@ import org.openhab.binding.souliss.SoulissBindingUDPConstants;
 import org.openhab.binding.souliss.handler.SoulissGatewayHandler;
 import org.openhab.binding.souliss.handler.SoulissGatewayJobHealty;
 import org.openhab.binding.souliss.handler.SoulissGenericHandler;
-import org.openhab.binding.souliss.handler.SoulissT11Handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -225,17 +225,24 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
                         // traduce il comando inviato con lo stato previsto e
                         // poi fa il confronto con lo stato attuale
                         if (logger.isDebugEnabled() && typ != null) {
-                            String s1 = Integer.toHexString(
-                                    (int) ((SoulissT11Handler) typ.getThing().getHandler()).getFeedbackState());
-                            String sStateMemoria = s1.length() < 2 ? "0x0" + s1.toUpperCase() : "0x" + s1.toUpperCase();
-
+                            String s1 = ((OnOffType) typ.getFeedbackState()).toFullString();
+                            // String s1 = Integer.toHexString(
+                            // (int) ((SoulissT11Handler) typ.getThing().getHandler()).getFeedbackState());
+                            // String sStateMemoria = s1.length() < 2 ? "0x0" + s1.toUpperCase() : "0x" +
+                            // s1.toUpperCase();
+                            //
                             String sCmd = Integer.toHexString(packetsList.get(i).packet.getData()[j]);
                             sCmd = sCmd.length() < 2 ? "0x0" + sCmd.toUpperCase() : "0x" + sCmd.toUpperCase();
                             logger.debug(
                                     "Compare. Node: {} Slot: {} Typical: {} Command: {} EXPECTED: {} - IN MEMORY: {}",
-                                    node, iSlot, Integer.toHexString(typ.getType()), sCmd,
-                                    expectedState(typ.getType(), packetsList.get(i).packet.getData()[j]),
-                                    sStateMemoria);
+                                    node, iSlot, "--", sCmd, "--", typ.getFeedbackState());
+continua da qui
+ogni item deve possedere dei campi expected, in modo da confrontare lo stato atteso in base al comando inviato con lo stato attuale
+                            // logger.debug(
+                            // "Compare. Node: {} Slot: {} Typical: {} Command: {} EXPECTED: {} - IN MEMORY: {}",
+                            // node, iSlot, Integer.toHexString(typ.getType()), sCmd,
+                            // expectedState(typ.getType(), packetsList.get(i).packet.getData()[j]),
+                            // sStateMemoria);
                         }
                         //
                         // if (typ != null && checkExpectedState((int) typ.getState(),

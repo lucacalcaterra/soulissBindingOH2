@@ -27,6 +27,8 @@ import org.openhab.binding.souliss.internal.protocol.SoulissCommonCommands;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 /**
  * This class implements the base Souliss Typical All other Typicals derive from
  * this class
@@ -50,6 +52,7 @@ public abstract class SoulissGenericHandler extends BaseThingHandler {
 
         void setState(PrimitiveType _state);
 
+        PrimitiveType getFeedbackState();
         // PrimitiveType getState();
 
         // DateTimeType getLastUpdateTime();
@@ -186,4 +189,7 @@ public abstract class SoulissGenericHandler extends BaseThingHandler {
         this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, DateTimeType.valueOf(getTimestamp()));
     }
 
+    public PrimitiveType getFeedbackState() {
+        throw new NotImplementedException();
+    }
 }

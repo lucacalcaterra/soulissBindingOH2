@@ -12,6 +12,7 @@ import java.net.DatagramSocket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.eclipse.smarthome.core.library.types.DateTimeType;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.thing.Bridge;
@@ -26,8 +27,6 @@ import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParame
 import org.openhab.binding.souliss.internal.protocol.SoulissCommonCommands;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * This class implements the base Souliss Typical All other Typicals derive from
@@ -52,7 +51,6 @@ public abstract class SoulissGenericHandler extends BaseThingHandler {
 
         void setState(PrimitiveType _state);
 
-        PrimitiveType getFeedbackState();
         // PrimitiveType getState();
 
         // DateTimeType getLastUpdateTime();
@@ -189,7 +187,12 @@ public abstract class SoulissGenericHandler extends BaseThingHandler {
         this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, DateTimeType.valueOf(getTimestamp()));
     }
 
-    public PrimitiveType getFeedbackState() {
+    public Number getExpectedState(byte b) {
         throw new NotImplementedException();
     }
+
+    public PrimitiveType getState() {
+        throw new NotImplementedException();
+    }
+
 }

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ScheduledFuture;
 
-import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.openhab.binding.souliss.SoulissBindingConstants;
@@ -69,7 +68,7 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
         if (node >= 0) {
             logger.debug("Push packet in queue - Node {}", node);
         } else {
-            logger.debug("Push packet in queue");
+            // logger.debug("Push packet in queue");
         }
 
         if (packetsList.size() == 0 || node < 0) {
@@ -136,7 +135,7 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
         }
 
         if (!bPacchettoGestito) {
-            logger.debug("Add frame: " + MaCacoToString(packetToPUT.getData()));
+            logger.debug("Add packet: " + MaCacoToString(packetToPUT.getData()));
             packetsList.add(new SoulissBindingSocketAndPacketStruct(socket, packetToPUT));
         }
         bPopSuspend = false;
@@ -209,60 +208,72 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
      * Confronta gli aggiornamenti ricevuti con i frame inviati. Se corrispondono allora cancella il
      * frame nella lista inviati .
      */
+    static int node;
+    static int iSlot;
+    static SoulissGenericHandler typ;
+    static String sCmd;
+    static byte bExpected;
+    static byte bActualItemState;
+    static String sExpected;
+
     public static void safeSendCheck() {
         // short sVal = getByteAtSlot(macacoFrame, slot);
         // scansione lista paccetti inviati
         for (int i = 0; i < packetsList.size(); i++) {
             if (packetsList.get(i).isSent()) {
-                int node = getNode(packetsList.get(i).packet);
-                int iSlot = 0;
+                node = getNode(packetsList.get(i).packet);
+                iSlot = 0;
                 for (int j = 12; j < packetsList.get(i).packet.getData().length; j++) {
                     // controllo lo slot solo se il comando è diverso da ZERO
                     if (packetsList.get(i).packet.getData()[j] != 0) {
                         // recupero tipico dalla memoria
-                        SoulissGenericHandler typ = getHandler(_iPAddressOnLAN, node, iSlot);
-
+                        typ = getHandler(_iPAddressOnLAN, node, iSlot);
+                        bExpected = typ.getExpectedState(packetsList.get(i).packet.getData()[j]).byteValue();
+                        packetsList.get(i).packet.getData()[j]))
                         // traduce il comando inviato con lo stato previsto e
                         // poi fa il confronto con lo stato attuale
                         if (logger.isDebugEnabled() && typ != null) {
-                            String s1 = ((OnOffType) typ.getFeedbackState()).toFullString();
+                            // String s1 = ((OnOffType) typ.getExpectedState(sCmd)).toFullString();
                             // String s1 = Integer.toHexString(
                             // (int) ((SoulissT11Handler) typ.getThing().getHandler()).getFeedbackState());
                             // String sStateMemoria = s1.length() < 2 ? "0x0" + s1.toUpperCase() : "0x" +
                             // s1.toUpperCase();
                             //
-                            String sCmd = Integer.toHexString(packetsList.get(i).packet.getData()[j]);
+                            sCmd = Integer.toHexString(packetsList.get(i).packet.getData()[j]);
+                            // comando inviato
                             sCmd = sCmd.length() < 2 ? "0x0" + sCmd.toUpperCase() : "0x" + sCmd.toUpperCase();
+                        sExpected = Integer.toHexString(bExpected);
+                            sExpected = sExpected.length() < 2 ? "0x0" + sExpected.toUpperCase()
+                                    : "0x" + sExpected.toUpperCase();
                             logger.debug(
-                                    "Compare. Node: {} Slot: {} Typical: {} Command: {} EXPECTED: {} - IN MEMORY: {}",
-                                    node, iSlot, "--", sCmd, "--", typ.getFeedbackState());
-continua da qui
-ogni item deve possedere dei campi expected, in modo da confrontare lo stato atteso in base al comando inviato con lo stato attuale
+                                    "Compare. Node: {} Slot: {} Typical: {} Command: {} Expected Souliss State: {} - Actual OH item State: {}",
+                                    node, iSlot, "--", sCmd, sExpected, typ.getState().toFullString());
+
                             // logger.debug(
                             // "Compare. Node: {} Slot: {} Typical: {} Command: {} EXPECTED: {} - IN MEMORY: {}",
                             // node, iSlot, Integer.toHexString(typ.getType()), sCmd,
                             // expectedState(typ.getType(), packetsList.get(i).packet.getData()[j]),
                             // sStateMemoria);
                         }
-                        //
-                        // if (typ != null && checkExpectedState((int) typ.getState(),
-                        // expectedState(typ.getType(), packetsList.get(i).packet.getData()[j]))) {
-                        // // se il valore del tipico coincide con il valore
-                        // // trasmesso allora pongo il byte a zero.
-                        // // quando tutti i byte saranno uguale a zero allora
-                        // // si
-                        // // cancella il frame
-                        // packetsList.get(i).packet.getData()[j] = 0;
-                        // logger.debug("T{} Node: {} Slot: {} - OK Expected State",
-                        // Integer.toHexString(typ.getType()), node, iSlot);
-                        // } else if (typ == null) {
-                        // // se allo slot j non esiste un tipico allora vuol dire che si tratta di uno slot collegato
-                        // // al precedente (es: RGB, T31,...)
-                        // // allora se lo slot j-1=0 allora anche j puÃ² essere messo a 0
-                        // if (packetsList.get(i).packet.getData()[j - 1] == 0) {
-                        // packetsList.get(i).packet.getData()[j] = 0;
-                        // }
-                        // }
+
+                        if (typ != null && checkExpectedState(bExpected,
+                                ) {
+                            // se il valore del tipico coincide con il valore
+                            // trasmesso allora pongo il byte a zero.
+                            // quando tutti i byte saranno uguale a zero allora
+                            // si
+                            // cancella il frame
+                            packetsList.get(i).packet.getData()[j] = 0;
+                            logger.debug("T{} Node: {} Slot: {} - OK Expected State",
+                                    Integer.toHexString(typ.getType()), node, iSlot);
+                        } else if (typ == null) {
+                            // se allo slot j non esiste un tipico allora vuol dire che si tratta di uno slot collegato
+                            // al precedente (es: RGB, T31,...)
+                            // allora se lo slot j-1=0 allora anche j puÃ² essere messo a 0
+                            if (packetsList.get(i).packet.getData()[j - 1] == 0) {
+                                packetsList.get(i).packet.getData()[j] = 0;
+                            }
+                        }
                     }
                     iSlot++;
                 }
@@ -324,29 +335,27 @@ ogni item deve possedere dei campi expected, in modo da confrontare lo stato att
         return null;
     }
 
-    // private static boolean checkExpectedState(int state, String expectedState) {
-    // // if expected state is null than return true. The frame will not requeued
-    // if (expectedState == null) {
-    // return true;
-    // }
-    // String s1 = String.valueOf(state);
-    // String sState = s1.length() < 2 ? "0x0" + s1.toUpperCase() : "0x" + s1.toUpperCase();
-    // return sState.equals(expectedState);
-    // }
-    //
-    // private static String expectedState(short soulissType, byte command) {
-    // return StateTraslator.translateCommandsToExpectedStates(soulissType, command);
-    // }
-    //
-    // private static boolean checkAllsSlotZero(DatagramPacket packet) {
-    // boolean bflag = true;
-    // for (int j = 12; j < packet.getData().length; j++) {
-    // if (!(packet.getData()[j] == 0)) {
-    // bflag = false;
-    // }
-    // }
-    // return bflag;
-    // }
+    private static boolean checkExpectedState(byte itemState, byte expectedState) {
+        // if expected state is null than return true. The frame will not requeued
+        if (expectedState <= -1) {
+            return true;
+        }
+        return itemState == expectedState;
+    }
+
+    private static String expectedState(short soulissType, byte command) {
+        return StateTraslator.translateCommandsToExpectedStates(soulissType, command);
+    }
+
+    private static boolean checkAllsSlotZero(DatagramPacket packet) {
+        boolean bflag = true;
+        for (int j = 12; j < packet.getData().length; j++) {
+            if (!(packet.getData()[j] == 0)) {
+                bflag = false;
+            }
+        }
+        return bflag;
+    }
 
     long t, t_prec = 0;
 

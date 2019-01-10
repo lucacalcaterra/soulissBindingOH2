@@ -421,6 +421,7 @@ public class SoulissBindingUDPDecoder {
                                     logger.debug("Decoding " + SoulissBindingConstants.T11 + " packet");
                                     typicalState = getOHState_OnOff_FromSoulissVal(sVal);
                                     ((SoulissT11Handler) handler).setState(typicalState);
+                                    ((SoulissT11Handler) handler).setRawState(sVal);
                                     break;
                                 case SoulissBindingConstants.T12:
                                     logger.debug("Decoding " + SoulissBindingConstants.T12 + " packet");

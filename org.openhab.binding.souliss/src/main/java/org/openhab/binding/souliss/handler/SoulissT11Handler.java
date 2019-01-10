@@ -34,7 +34,7 @@ public class SoulissT11Handler extends SoulissGenericHandler implements typicalC
     private Logger logger = LoggerFactory.getLogger(SoulissT11Handler.class);
     OnOffType T1nState = OnOffType.OFF;
     short xSleepTime = 0;
-    // Thing thing;
+    Number bSecureSend = 0;
 
     public SoulissT11Handler(Thing _thing) {
         super(_thing);
@@ -97,8 +97,25 @@ public class SoulissT11Handler extends SoulissGenericHandler implements typicalC
         // "Can not access device as username and/or password are invalid");
     }
 
-    public PrimitiveType getFeedbackState() {
-        return this.T1nState;
+    @Override
+    public Number getExpectedState(byte bCmd) {
+        bSecureSend = (Number) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND);
+
+        if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OnCmd) {
+            return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+        } else if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OffCmd) {
+            return SoulissBindingProtocolConstants.Souliss_T1n_OffCoil;
+        } else if (bCmd >= SoulissBindingProtocolConstants.Souliss_T1n_Timed) {
+            // SLEEP
+            return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+        }
+
+        return -1;
+    }
+
+    @Override
+    public OnOffType getState() {
+        return T1nState;
     }
 
     @Override
@@ -115,4 +132,5 @@ public class SoulissT11Handler extends SoulissGenericHandler implements typicalC
             }
         }
     }
+
 }

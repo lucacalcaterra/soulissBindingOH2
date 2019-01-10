@@ -48,9 +48,4 @@ public class SoulissTopicsHandler extends SoulissGenericActionMessage implements
         }
     }
 
-    @Override
-    public PrimitiveType getFeedbackState() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }

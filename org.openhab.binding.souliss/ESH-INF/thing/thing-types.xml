@@ -116,6 +116,20 @@
 			<channel id="lastStatusStored" typeId="lastStatusStored" />
 			<channel id="healty" typeId="healty" />
 		</channels>
+		<config-description>
+            <parameter name="sleep" type="integer" min="1" max="1000">
+                <label>Sleep</label>
+                <description>Set sleep timer in cycles</description>
+                <required>false</required>
+                <default>5</default>
+            </parameter>
+             <parameter name="secureSend" type="integer" min="0" max="1">
+                <label>Secure Send</label>
+                <description></description>
+                <required>false</required>
+                <default>1</default>
+            </parameter>
+        </config-description>
 	</thing-type>
 
 	<thing-type id="t13">
@@ -171,6 +185,13 @@
                 <required>false</required>
                 <default>5</default>
             </parameter>
+           
+             <parameter name="secureSend" type="integer" min="0" max="1">
+                <label>Secure Send</label>
+                <description></description>
+                <required>false</required>
+                <default>1</default>
+            </parameter>
         </config-description>
     </thing-type>
     
@@ -186,6 +207,21 @@
             <channel id="lastStatusStored" typeId="lastStatusStored" />
             <channel id="healty" typeId="healty" />
         </channels>
+        <config-description>
+            <parameter name="sleep" type="integer" min="1" max="1000">
+                <label>Sleep</label>
+                <description>Set sleep timer in cycles</description>
+                <required>false</required>
+                <default>5</default>
+            </parameter>
+           
+             <parameter name="secureSend" type="integer" min="0" max="1">
+                <label>Secure Send</label>
+                <description></description>
+                <required>false</required>
+                <default>1</default>
+            </parameter>
+        </config-description>
     </thing-type>
     
     <thing-type id="t19">

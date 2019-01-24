@@ -12,17 +12,18 @@ import java.net.DatagramSocket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.eclipse.smarthome.core.library.types.DateTimeType;
 import org.eclipse.smarthome.core.library.types.DecimalType;
+import org.eclipse.smarthome.core.library.types.OnOffType;
+import org.eclipse.smarthome.core.library.types.OpenClosedType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.ThingStatusInfo;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
-import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
+import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
 import org.openhab.binding.souliss.internal.protocol.SoulissCommonCommands;
 import org.slf4j.Logger;
@@ -49,9 +50,13 @@ public abstract class SoulissGenericHandler extends BaseThingHandler {
      */
     public interface typicalCommonMethods {
 
-        void setState(PrimitiveType _state);
+        // void setState(PrimitiveType _state);
 
-        // PrimitiveType getState();
+        void setRawState(byte _rawState);
+
+        byte getRawState();
+
+        byte getExpectedRawState(byte bCommand);
 
         // DateTimeType getLastUpdateTime();
 
@@ -187,12 +192,25 @@ public abstract class SoulissGenericHandler extends BaseThingHandler {
         this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, DateTimeType.valueOf(getTimestamp()));
     }
 
-    public Number getExpectedState(byte b) {
-        throw new NotImplementedException();
+    protected OnOffType getOHState_OnOff_FromSoulissVal(byte sVal) {
+        if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil) {
+            return OnOffType.ON;
+        } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil) {
+            return OnOffType.OFF;
+        } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnFeedback) {
+            return OnOffType.ON;
+        } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffFeedback) {
+            return OnOffType.OFF;
+        }
+        return null;
     }
 
-    public PrimitiveType getState() {
-        throw new NotImplementedException();
+    protected OpenClosedType getOHState_OpenClose_FromSoulissVal(short sVal) {
+        if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil) {
+            return OpenClosedType.CLOSED;
+        } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil) {
+            return OpenClosedType.OPEN;
+        }
+        return null;
     }
-
 }

@@ -16,8 +16,6 @@ import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
 import org.openhab.binding.souliss.handler.SoulissGenericHandler.typicalCommonMethods;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The {@link SoulissT18Handler} is responsible for handling commands, which are
@@ -27,11 +25,12 @@ import org.slf4j.LoggerFactory;
  */
 public class SoulissT18Handler extends SoulissGenericHandler implements typicalCommonMethods {
 
-    private Logger logger = LoggerFactory.getLogger(SoulissT18Handler.class);
-    OnOffType T1nState = OnOffType.OFF;
+    // private Logger logger = LoggerFactory.getLogger(SoulissT18Handler.class);
+    byte T1nRawState;
 
-    public SoulissT18Handler(Thing thing) {
-        super(thing);
+    public SoulissT18Handler(Thing _thing) {
+        super(_thing);
+        thing = _thing;
     }
 
     @Override
@@ -40,7 +39,7 @@ public class SoulissT18Handler extends SoulissGenericHandler implements typicalC
         if (command instanceof RefreshType) {
             switch (channelUID.getId()) {
                 case SoulissBindingConstants.PULSE_CHANNEL:
-                    updateState(channelUID, T1nState);
+                    updateState(channelUID, getOHState_OnOff_FromSoulissVal(T1nRawState));
                     break;
             }
         } else {
@@ -58,15 +57,40 @@ public class SoulissT18Handler extends SoulissGenericHandler implements typicalC
         }
     }
 
-    @Override
-    public void setState(PrimitiveType _state) {
-        super.setLastStatusStored();
+    void setState(PrimitiveType _state) {
         if (_state != null) {
-            if (((OnOffType) _state) != this.T1nState) {
-                this.updateState(SoulissBindingConstants.ONOFF_CHANNEL, (OnOffType) _state);
-                // this.updateThing(this.thing);
-                this.T1nState = (OnOffType) _state;
-            }
+            updateState(SoulissBindingConstants.SLEEP_CHANNEL, OnOffType.OFF);
+            this.updateState(SoulissBindingConstants.ONOFF_CHANNEL, (OnOffType) _state);
         }
+    }
+
+    @Override
+    public void setRawState(byte _rawState) {
+        T1nRawState = _rawState;
+        // update Last Status stored time
+        super.setLastStatusStored();
+        // update item state only if it is different from previous
+        if (T1nRawState != _rawState) {
+            this.setState(getOHState_OnOff_FromSoulissVal(T1nRawState));
+        }
+    }
+
+    @Override
+    public byte getRawState() {
+        return T1nRawState;
+    }
+
+    @Override
+    public byte getExpectedRawState(byte bCmd) {
+        if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OnCmd) {
+            return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+        } else if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OffCmd) {
+            return SoulissBindingProtocolConstants.Souliss_T1n_OffCoil;
+        } else if (bCmd >= SoulissBindingProtocolConstants.Souliss_T1n_Timed) {
+            // SLEEP
+            return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+        }
+
+        return -1;
     }
 }

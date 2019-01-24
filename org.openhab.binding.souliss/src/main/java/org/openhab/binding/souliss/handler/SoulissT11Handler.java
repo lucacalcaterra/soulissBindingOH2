@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014-2018 by the respective copyright holders.
+ * Copyright (c) 2014-2019 by the respective copyright holders.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,8 +20,6 @@ import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
 import org.openhab.binding.souliss.handler.SoulissGenericHandler.typicalCommonMethods;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The {@link SoulissT11Handler} is responsible for handling commands, which are
@@ -31,15 +29,15 @@ import org.slf4j.LoggerFactory;
  */
 public class SoulissT11Handler extends SoulissGenericHandler implements typicalCommonMethods {
     Configuration gwConfigurationMap;
-    private Logger logger = LoggerFactory.getLogger(SoulissT11Handler.class);
-    OnOffType T1nState = OnOffType.OFF;
-    short xSleepTime = 0;
-    Number bSecureSend = 0;
+    // private Logger logger = LoggerFactory.getLogger(SoulissT11Handler.class);
+    byte T1nRawState;
+    byte xSleepTime = 0;
+
+    Number bSecureSend = -1; // -1 means that Secure Send is disabled
 
     public SoulissT11Handler(Thing _thing) {
         super(_thing);
         thing = _thing;
-
     }
 
     // called on every status change or change request
@@ -49,7 +47,7 @@ public class SoulissT11Handler extends SoulissGenericHandler implements typicalC
         if (command instanceof RefreshType) {
             switch (channelUID.getId()) {
                 case SoulissBindingConstants.ONOFF_CHANNEL:
-                    updateState(channelUID, T1nState);
+                    updateState(channelUID, getOHState_OnOff_FromSoulissVal(T1nRawState));
                     break;
             }
         } else {
@@ -82,25 +80,27 @@ public class SoulissT11Handler extends SoulissGenericHandler implements typicalC
     public void initialize() {
         // TODO: Initialize the thing. If done set status to ONLINE to indicate proper working.
         // Long running initialization should be done asynchronously in background.
-        updateStatus(ThingStatus.ONLINE);
-
-        gwConfigurationMap = thing.getConfiguration();
-        if (gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL) != null) {
-            xSleepTime = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL)).shortValue();
-        }
-
         // Note: When initialization can NOT be done set the status with more details for further
         // analysis. See also class ThingStatusDetail for all available status details.
         // Add a description to give user information to understand why thing does not work
         // as expected. E.g.
         // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
         // "Can not access device as username and/or password are invalid");
+
+        updateStatus(ThingStatus.ONLINE);
+
+        gwConfigurationMap = thing.getConfiguration();
+        if (gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL) != null) {
+            xSleepTime = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL)).byteValue();
+        }
+        if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND) != null) {
+            bSecureSend = (Number) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND);
+        }
+
     }
 
     @Override
-    public Number getExpectedState(byte bCmd) {
-        bSecureSend = (Number) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND);
-
+    public byte getExpectedRawState(byte bCmd) {
         if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OnCmd) {
             return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
         } else if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OffCmd) {
@@ -113,24 +113,26 @@ public class SoulissT11Handler extends SoulissGenericHandler implements typicalC
         return -1;
     }
 
-    @Override
-    public OnOffType getState() {
-        return T1nState;
-    }
-
-    @Override
-    public void setState(PrimitiveType _state) {
-        super.setLastStatusStored();
-
+    void setState(PrimitiveType _state) {
         if (_state != null) {
             updateState(SoulissBindingConstants.SLEEP_CHANNEL, OnOffType.OFF);
-
-            if (((OnOffType) _state) != this.T1nState) {
-                this.updateState(SoulissBindingConstants.ONOFF_CHANNEL, (OnOffType) _state);
-                // this.updateThing(this.thing);
-                this.T1nState = (OnOffType) _state;
-            }
+            this.updateState(SoulissBindingConstants.ONOFF_CHANNEL, (OnOffType) _state);
         }
     }
 
+    @Override
+    public void setRawState(byte _rawState) {
+        T1nRawState = _rawState;
+        // update Last Status stored time
+        super.setLastStatusStored();
+        // update item state only if it is different from previous
+        if (T1nRawState != _rawState) {
+            this.setState(getOHState_OnOff_FromSoulissVal(T1nRawState));
+        }
+    }
+
+    @Override
+    public byte getRawState() {
+        return T1nRawState;
+    }
 }

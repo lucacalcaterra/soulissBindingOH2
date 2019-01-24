@@ -34,9 +34,11 @@ import org.slf4j.LoggerFactory;
 public class SoulissT19Handler extends SoulissGenericHandler implements typicalCommonMethods {
     Configuration gwConfigurationMap;
     private Logger logger = LoggerFactory.getLogger(SoulissT19Handler.class);
-    OnOffType T1nState = OnOffType.OFF;
-    int dimmerValue = 255;
+    byte T1nRawState_byte0;
+    byte T1nRawStateBrigthness_byte1;
+
     short xSleepTime = 0;
+    Number bSecureSend = -1; // -1 means that Secure Send is disabled
 
     public SoulissT19Handler(Thing _thing) {
         super(_thing);
@@ -49,11 +51,11 @@ public class SoulissT19Handler extends SoulissGenericHandler implements typicalC
         if (command instanceof RefreshType) {
             switch (channelUID.getId()) {
                 case SoulissBindingConstants.ONOFF_CHANNEL:
-                    updateState(channelUID, T1nState);
+                    updateState(channelUID, getOHState_OnOff_FromSoulissVal(T1nRawState_byte0));
                     break;
                 case SoulissBindingConstants.DIMMER_BRIGHTNESS_CHANNEL:
                     updateState(SoulissBindingConstants.DIMMER_BRIGHTNESS_CHANNEL,
-                            PercentType.valueOf(String.valueOf((Math.round((dimmerValue / 255) * 100)))));
+                            PercentType.valueOf(String.valueOf((T1nRawStateBrigthness_byte1 / 255) * 100)));
                     break;
             }
         } else {
@@ -71,12 +73,11 @@ public class SoulissT19Handler extends SoulissGenericHandler implements typicalC
 
                 case SoulissBindingConstants.DIMMER_BRIGHTNESS_CHANNEL:
                     if (command instanceof PercentType) {
-                        dimmerValue = ((PercentType) command).intValue();
                         updateState(SoulissBindingConstants.DIMMER_BRIGHTNESS_CHANNEL, (PercentType) command);
                         // updateState(SoulissBindingConstants.DIMMER_BRIGHTNESS_CHANNEL,
                         /// PercentType.valueOf(hsbState.getBrightness().toString()));
                         commandSEND(SoulissBindingProtocolConstants.Souliss_T1n_Set,
-                                (short) (((PercentType) command).shortValue() * 255.00 / 100.00));
+                                (byte) (((PercentType) command).shortValue() * 255.00 / 100.00));
                         // Short.parseShort(String.valueOf(Math.round((dimmerValue / 255.00) * 100)))
                     } else if (command instanceof OnOffType) {
                         if (command.equals(OnOffType.ON)) {
@@ -115,33 +116,66 @@ public class SoulissT19Handler extends SoulissGenericHandler implements typicalC
         if (gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL) != null) {
             xSleepTime = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL)).shortValue();
         }
+        if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND) != null) {
+            bSecureSend = (Number) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND);
+        }
     }
 
-    @Override
     public void setState(PrimitiveType _state) {
         super.setLastStatusStored();
         if (_state != null) {
             updateState(SoulissBindingConstants.SLEEP_CHANNEL, OnOffType.OFF);
-            if (((OnOffType) _state) != this.T1nState) {
-                logger.debug("T19, setting state to {}", _state.toFullString());
-                this.updateState(SoulissBindingConstants.ONOFF_CHANNEL, (OnOffType) _state);
-                // this.updateThing(this.thing);
-                this.T1nState = (OnOffType) _state;
-            }
+            logger.debug("T19, setting state to {}", _state.toFullString());
+            this.updateState(SoulissBindingConstants.ONOFF_CHANNEL, (OnOffType) _state);
         }
     }
 
-    public void setDimmerValue(float _dimmerValue) {
+    public void setRawStateDimmerValue(byte _dimmerValue) {
         try {
-            if (_dimmerValue != dimmerValue) {
+
+            if (_dimmerValue != T1nRawState_byte0) {
                 logger.debug("T19, setting dimmer to {}", _dimmerValue);
                 updateState(SoulissBindingConstants.DIMMER_BRIGHTNESS_CHANNEL,
-                        PercentType.valueOf(String.valueOf(Math.round((_dimmerValue / 255) * 100))));
+                        PercentType.valueOf(String.valueOf(Math.round((T1nRawState_byte0 / 255) * 100))));
 
             }
         } catch (IllegalStateException ex) {
             logger.debug("UUID: " + this.getThing().getUID().getAsString()
                     + " - Update state error (in setDimmerValue): " + ex.getMessage());
         }
+    }
+
+    @Override
+    public void setRawState(byte _rawState) {
+        T1nRawState_byte0 = _rawState;
+        // update Last Status stored time
+        super.setLastStatusStored();
+        // update item state only if it is different from previous
+        if (T1nRawState_byte0 != _rawState) {
+            this.setState(getOHState_OnOff_FromSoulissVal(T1nRawState_byte0));
+        }
+    }
+
+    @Override
+    public byte getRawState() {
+        return T1nRawState_byte0;
+    }
+
+    public byte getRawStateDimmerValue() {
+        return T1nRawStateBrigthness_byte1;
+    }
+
+    @Override
+    public byte getExpectedRawState(byte bCmd) {
+        if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OnCmd) {
+            return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+        } else if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OffCmd) {
+            return SoulissBindingProtocolConstants.Souliss_T1n_OffCoil;
+        } else if (bCmd >= SoulissBindingProtocolConstants.Souliss_T1n_Timed) {
+            // SLEEP
+            return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+        }
+
+        return -1;
     }
 }

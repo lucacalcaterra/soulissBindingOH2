@@ -7,10 +7,12 @@
  */
 package org.openhab.binding.souliss.handler;
 
+import org.eclipse.smarthome.config.core.Configuration;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.OpenClosedType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
+import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.eclipse.smarthome.core.types.RefreshType;
@@ -28,29 +30,29 @@ import org.slf4j.LoggerFactory;
 public class SoulissT13Handler extends SoulissGenericHandler implements typicalCommonMethods {
 
     private Logger logger = LoggerFactory.getLogger(SoulissT13Handler.class);
-    OnOffType T1n_ONOFF_State = OnOffType.OFF;
-    OpenClosedType T1n_OPENCLOSE_State = OpenClosedType.OPEN;
+    Configuration gwConfigurationMap;
+    byte T1nRawState;
 
-    public SoulissT13Handler(Thing thing) {
-        super(thing);
+    public SoulissT13Handler(Thing _thing) {
+        super(_thing);
+        thing = _thing;
     }
 
     @Override
+    public void initialize() {
+        updateStatus(ThingStatus.ONLINE);
+
+    }
+
     public void setState(PrimitiveType _state) {
         super.setLastStatusStored();
         if (_state != null) {
             if (_state instanceof OnOffType) {
-                if (((OnOffType) _state) != this.T1n_ONOFF_State) {
-                    this.updateState(SoulissBindingConstants.STATEONOFF_CHANNEL, (OnOffType) _state);
-                    this.T1n_ONOFF_State = (OnOffType) _state;
-                }
+                this.updateState(SoulissBindingConstants.STATEONOFF_CHANNEL, (OnOffType) _state);
             }
 
             if (_state instanceof OpenClosedType) {
-                if (((OpenClosedType) _state) != this.T1n_OPENCLOSE_State) {
-                    this.updateState(SoulissBindingConstants.STATEOPENCLOSE_CHANNEL, (OpenClosedType) _state);
-                    this.T1n_OPENCLOSE_State = (OpenClosedType) _state;
-                }
+                this.updateState(SoulissBindingConstants.STATEOPENCLOSE_CHANNEL, (OpenClosedType) _state);
             }
         }
     }
@@ -60,13 +62,36 @@ public class SoulissT13Handler extends SoulissGenericHandler implements typicalC
         if (command instanceof RefreshType) {
             switch (channelUID.getId()) {
                 case SoulissBindingConstants.STATEONOFF_CHANNEL:
-                    updateState(channelUID, T1n_ONOFF_State);
+                    updateState(channelUID, getOHState_OnOff_FromSoulissVal(T1nRawState));
                     break;
                 case SoulissBindingConstants.STATEOPENCLOSE_CHANNEL:
-                    updateState(channelUID, T1n_OPENCLOSE_State);
+                    updateState(channelUID, getOHState_OpenClose_FromSoulissVal(T1nRawState));
                     break;
             }
         }
+    }
 
+    @Override
+    public void setRawState(byte _rawState) {
+        T1nRawState = _rawState;
+        // update Last Status stored time
+        super.setLastStatusStored();
+        // update item state only if it is different from previous
+        if (T1nRawState != _rawState) {
+            this.setState(getOHState_OpenClose_FromSoulissVal(T1nRawState));
+            this.setState(getOHState_OnOff_FromSoulissVal(T1nRawState));
+        }
+    }
+
+    @Override
+    public byte getRawState() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public byte getExpectedRawState(byte bCommand) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 }

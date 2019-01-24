@@ -7,17 +7,17 @@
  */
 package org.openhab.binding.souliss.handler;
 
+import org.eclipse.smarthome.config.core.Configuration;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
+import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
 import org.openhab.binding.souliss.handler.SoulissGenericHandler.typicalCommonMethods;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The {@link SoulissT14Handler} is responsible for handling commands, which are
@@ -27,11 +27,22 @@ import org.slf4j.LoggerFactory;
  */
 public class SoulissT14Handler extends SoulissGenericHandler implements typicalCommonMethods {
 
-    private Logger logger = LoggerFactory.getLogger(SoulissT14Handler.class);
-    OnOffType T1nState = OnOffType.OFF;
+    // private Logger logger = LoggerFactory.getLogger(SoulissT14Handler.class);
+    Configuration gwConfigurationMap;
+    // private Logger logger = LoggerFactory.getLogger(SoulissT11Handler.class);
+    byte T1nRawState;
+    byte xSleepTime = 0;
 
-    public SoulissT14Handler(Thing thing) {
-        super(thing);
+    Number bSecureSend = -1; // -1 means that Secure Send is disabled
+
+    public SoulissT14Handler(Thing _thing) {
+        super(_thing);
+        thing = _thing;
+    }
+
+    @Override
+    public void initialize() {
+        updateStatus(ThingStatus.ONLINE);
     }
 
     @Override
@@ -40,7 +51,7 @@ public class SoulissT14Handler extends SoulissGenericHandler implements typicalC
         if (command instanceof RefreshType) {
             switch (channelUID.getId()) {
                 case SoulissBindingConstants.PULSE_CHANNEL:
-                    updateState(channelUID, T1nState);
+                    updateState(channelUID, getOHState_OnOff_FromSoulissVal(T1nRawState));
                     break;
             }
         } else {
@@ -58,15 +69,32 @@ public class SoulissT14Handler extends SoulissGenericHandler implements typicalC
         }
     }
 
-    @Override
     public void setState(PrimitiveType _state) {
         super.setLastStatusStored();
         if (_state != null) {
-            if (((OnOffType) _state) != this.T1nState) {
-                this.updateState(SoulissBindingConstants.PULSE_CHANNEL, (OnOffType) _state);
-                // this.updateThing(this.thing);
-                this.T1nState = (OnOffType) _state;
-            }
+            this.updateState(SoulissBindingConstants.PULSE_CHANNEL, (OnOffType) _state);
         }
+    }
+
+    @Override
+    public void setRawState(byte _rawState) {
+        T1nRawState = _rawState;
+        // update Last Status stored time
+        super.setLastStatusStored();
+        // update item state only if it is different from previous
+        if (T1nRawState != _rawState) {
+            this.setState(getOHState_OnOff_FromSoulissVal(T1nRawState));
+        }
+    }
+
+    @Override
+    public byte getRawState() {
+        return T1nRawState;
+    }
+
+    @Override
+    public byte getExpectedRawState(byte bCommand) {
+        // Secure Send is disabled for T14
+        return -1;
     }
 }

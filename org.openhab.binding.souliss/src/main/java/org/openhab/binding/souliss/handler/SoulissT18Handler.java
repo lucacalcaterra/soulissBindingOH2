@@ -83,12 +83,12 @@ public class SoulissT18Handler extends SoulissGenericHandler implements typicalC
     @Override
     public byte getExpectedRawState(byte bCmd) {
         if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OnCmd) {
-            return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+            return SoulissBindingProtocolConstants.Souliss_T1n_OnFeedback;
         } else if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OffCmd) {
-            return SoulissBindingProtocolConstants.Souliss_T1n_OffCoil;
+            return SoulissBindingProtocolConstants.Souliss_T1n_OffFeedback;
         } else if (bCmd >= SoulissBindingProtocolConstants.Souliss_T1n_Timed) {
             // SLEEP
-            return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+            return SoulissBindingProtocolConstants.Souliss_T1n_OnFeedback;
         }
 
         return -1;

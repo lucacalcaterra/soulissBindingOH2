@@ -20,7 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.StringType;
-import org.eclipse.smarthome.core.library.types.UpDownType;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.openhab.binding.souliss.SoulissBindingConstants;
@@ -452,56 +451,14 @@ public class SoulissBindingUDPDecoder {
 
                                 case SoulissBindingConstants.T1A:
                                     logger.debug("Decoding " + SoulissBindingConstants.T1A + " packet");
-                                    ((SoulissT1AHandler) handler).setState(StringType.valueOf(String.valueOf(sVal)));
+                                    ((SoulissT1AHandler) handler).setRawState(sVal);
                                     break;
                                 case SoulissBindingConstants.T21:
                                 case SoulissBindingConstants.T22:
                                     logger.debug("Decoding " + SoulissBindingConstants.T21 + "/"
                                             + SoulissBindingConstants.T22 + " packet");
-                                    if (sVal == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Open) {
-                                        ((SoulissT22Handler) handler).setState(UpDownType.UP);
-                                        ((SoulissT22Handler) handler).setState_Message(
-                                                SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_OPENING_CHANNEL);
-                                    } else if (sVal == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Close) {
-                                        ((SoulissT22Handler) handler).setState(UpDownType.DOWN);
-                                        ((SoulissT22Handler) handler).setState_Message(
-                                                SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_CLOSING_CHANNEL);
-                                    }
-                                    switch (sVal) {
-                                        case SoulissBindingProtocolConstants.Souliss_T2n_Coil_Stop:
-                                            ((SoulissT22Handler) handler).setState_Message(
-                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_STOP_CHANNEL);
-                                            break;
-                                        case SoulissBindingProtocolConstants.Souliss_T2n_Coil_Off:
-                                            ((SoulissT22Handler) handler).setState_Message(
-                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_OPENING_CHANNEL);
-                                            break;
-                                        case SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Close:
-                                            ((SoulissT22Handler) handler).setState_Message(
-                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_LIMITSWITCH_CLOSE_CHANNEL);
-                                            break;
-                                        case SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Open:
-                                            ((SoulissT22Handler) handler).setState_Message(
-                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_LIMITSWITCH_OPEN_CHANNEL);
-                                            break;
-                                        case SoulissBindingProtocolConstants.Souliss_T2n_NoLimSwitch:
-                                            ((SoulissT22Handler) handler).setState_Message(
-                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_LIMITSWITCH_OPEN_CHANNEL);
-                                            break;
-                                        case SoulissBindingProtocolConstants.Souliss_T2n_Timer_Off:
-                                            ((SoulissT22Handler) handler).setState_Message(
-                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_TIMER_OFF);
-                                            break;
-                                        case SoulissBindingProtocolConstants.Souliss_T2n_State_Open:
-                                            ((SoulissT22Handler) handler).setState_Message(
-                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_STATE_OPEN_CHANNEL);
-                                            break;
-                                        case SoulissBindingProtocolConstants.Souliss_T2n_State_Close:
-                                            ((SoulissT22Handler) handler).setState_Message(
-                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_STATE_CLOSE_CHANNEL);
-                                            break;
-                                        // }
-                                    }
+                                    ((SoulissT22Handler) handler).setRawState(sVal);
+
                                     break;
                                 case SoulissBindingConstants.T31:
                                     logger.debug("Decoding " + SoulissBindingConstants.T31 + "/"
@@ -513,70 +470,9 @@ public class SoulissBindingUDPDecoder {
                                             + " - bit5 (fan3 on-off): " + getBitState(sVal, 5)
                                             + " - bit6 (Manual/automatic fan mode): " + getBitState(sVal, 6)
                                             + " - bit7 (heating/cooling mode): " + getBitState(sVal, 7));
+                                    ((SoulissT31Handler) handler).setRawStateValues(sVal, getByteAtSlot(mac, slot + 1),
+                                            getByteAtSlot(mac, slot + 2));
 
-                                    String sMessage = "";
-                                    switch (getBitState(sVal, 0)) {
-                                        case 0:
-                                            sMessage = SoulissBindingConstants.T31_OFF_MESSAGE_SYSTEM_CHANNEL;
-                                            break;
-                                        case 1:
-                                            sMessage = SoulissBindingConstants.T31_ON_MESSAGE_SYSTEM_CHANNEL;
-                                            break;
-                                    }
-                                    ((SoulissT31Handler) handler).setState(StringType.valueOf(sMessage));
-
-                                    switch (getBitState(sVal, 7)) {
-                                        case 0:
-                                            sMessage = SoulissBindingConstants.T31_HEATINGMODE_MESSAGE_MODE_CHANNEL;
-                                            break;
-                                        case 1:
-                                            sMessage = SoulissBindingConstants.T31_COOLINGMODE_MESSAGE_MODE_CHANNEL;
-                                            break;
-                                    }
-                                    ((SoulissT31Handler) handler).setState(StringType.valueOf(sMessage));
-
-                                    // button indicante se il sistema sta andando o meno
-                                    switch (getBitState(sVal, 1) + getBitState(sVal, 2)) {
-                                        case 0:
-                                            sMessage = SoulissBindingConstants.T31_OFF_MESSAGE_FIRE_CHANNEL;
-                                            break;
-                                        case 1:
-                                            sMessage = SoulissBindingConstants.T31_ON_MESSAGE_FIRE_CHANNEL;
-                                            break;
-                                    }
-                                    ((SoulissT31Handler) handler).setState(StringType.valueOf(sMessage));
-
-                                    // FAN SPEED
-                                    switch (getBitState(sVal, 3) + getBitState(sVal, 4) + getBitState(sVal, 5)) {
-                                        case 0:
-                                            sMessage = SoulissBindingConstants.T31_FANOFF_MESSAGE_FAN_CHANNEL;
-                                            break;
-                                        case 1:
-                                            sMessage = SoulissBindingConstants.T31_FANLOW_MESSAGE_FAN_CHANNEL;
-                                            break;
-                                        case 2:
-                                            sMessage = SoulissBindingConstants.T31_FANMEDIUM_MESSAGE_FAN_CHANNEL;
-                                            break;
-                                        case 3:
-                                            sMessage = SoulissBindingConstants.T31_FANHIGH_MESSAGE_FAN_CHANNEL;
-                                            break;
-                                    }
-
-                                    ((SoulissT31Handler) handler).setState(StringType.valueOf(sMessage));
-
-                                    // SLOT 1-2: Temperature Value
-                                    float val = getFloatAtSlot(mac, slot + 1);
-                                    if (!Float.isNaN(val)) {
-                                        ((SoulissT31Handler) handler)
-                                                .setMeasuredValue(DecimalType.valueOf(String.valueOf(val)));
-                                    }
-
-                                    // SLOT 3-4: Setpoint Value
-                                    val = getFloatAtSlot(mac, slot + 3);
-                                    if (!Float.isNaN(val)) {
-                                        ((SoulissT31Handler) handler)
-                                                .setSetpointValue(DecimalType.valueOf(String.valueOf(val)));
-                                    }
                                     break;
                                 case SoulissBindingConstants.T41:
                                     switch (sVal) {

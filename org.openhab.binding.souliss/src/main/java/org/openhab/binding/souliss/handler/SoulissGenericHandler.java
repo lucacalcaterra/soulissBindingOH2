@@ -201,7 +201,12 @@ public abstract class SoulissGenericHandler extends BaseThingHandler {
             return OnOffType.ON;
         } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffFeedback) {
             return OnOffType.OFF;
+        } else if (sVal == SoulissBindingProtocolConstants.Souliss_T4n_NotArmed) {
+            return OnOffType.OFF;
+        } else if (sVal == SoulissBindingProtocolConstants.Souliss_T4n_Armed) {
+            return OnOffType.ON;
         }
+
         return null;
     }
 

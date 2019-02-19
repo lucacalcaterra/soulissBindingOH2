@@ -37,7 +37,6 @@ public class SoulissT11Handler extends SoulissGenericHandler implements typicalC
 
     public SoulissT11Handler(Thing _thing) {
         super(_thing);
-        thing = _thing;
     }
 
     // called on every status change or change request

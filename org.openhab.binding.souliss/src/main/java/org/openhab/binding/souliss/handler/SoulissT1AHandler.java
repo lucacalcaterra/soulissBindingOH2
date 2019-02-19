@@ -29,7 +29,6 @@ public class SoulissT1AHandler extends SoulissGenericHandler implements typicalC
 
     public SoulissT1AHandler(Thing _thing) {
         super(_thing);
-        thing = _thing;
     }
 
     @Override

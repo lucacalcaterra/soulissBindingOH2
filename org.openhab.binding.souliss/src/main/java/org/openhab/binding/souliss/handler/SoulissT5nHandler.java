@@ -15,8 +15,8 @@ import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.handler.SoulissGenericHandler.typicalCommonMethods;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * The {@link SoulissT5nHandler} is responsible for handling commands, which are
@@ -26,10 +26,11 @@ import org.slf4j.LoggerFactory;
  */
 public class SoulissT5nHandler extends SoulissGenericHandler implements typicalCommonMethods {
 
-    private Logger logger = LoggerFactory.getLogger(SoulissT5nHandler.class);
+    // private Logger logger = LoggerFactory.getLogger(SoulissT5nHandler.class);
+    float fVal;
 
-    public SoulissT5nHandler(Thing thing) {
-        super(thing);
+    public SoulissT5nHandler(Thing _thing) {
+        super(_thing);
     }
 
     @Override
@@ -41,11 +42,36 @@ public class SoulissT5nHandler extends SoulissGenericHandler implements typicalC
         updateStatus(ThingStatus.ONLINE);
     }
 
-    @Override
     public void setState(PrimitiveType state) {
-        super.setLastStatusStored();
         if (state != null) {
             this.updateState(SoulissBindingConstants.T5n_VALUE_CHANNEL, (DecimalType) state);
         }
+    }
+
+    @Override
+    public void setRawState(byte _rawState) {
+        throw new NotImplementedException();
+    }
+
+    public void setFloatValue(float valueOf) {
+        super.setLastStatusStored();
+        if (fVal != valueOf) {
+            this.setState(DecimalType.valueOf(Float.toString(valueOf)));
+            fVal = valueOf;
+        }
+    }
+
+    @Override
+    public byte getRawState() {
+        throw new NotImplementedException();
+    }
+
+    public float getFloatState() {
+        return fVal;
+    }
+
+    @Override
+    public byte getExpectedRawState(byte bCommand) {
+        return -1;
     }
 }

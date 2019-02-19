@@ -49,7 +49,6 @@ public class SoulissT16Handler extends SoulissGenericHandler implements typicalC
 
     public SoulissT16Handler(Thing _thing) {
         super(_thing);
-        thing = _thing;
     }
 
     HSBType _hsbState;

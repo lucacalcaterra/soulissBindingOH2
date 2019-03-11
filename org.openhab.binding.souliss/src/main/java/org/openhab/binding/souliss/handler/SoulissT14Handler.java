@@ -17,7 +17,6 @@ import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
-import org.openhab.binding.souliss.handler.SoulissGenericHandler.typicalCommonMethods;
 
 /**
  * The {@link SoulissT14Handler} is responsible for handling commands, which are
@@ -25,7 +24,7 @@ import org.openhab.binding.souliss.handler.SoulissGenericHandler.typicalCommonMe
  *
  * @author Tonino Fazio - Initial contribution
  */
-public class SoulissT14Handler extends SoulissGenericHandler implements typicalCommonMethods {
+public class SoulissT14Handler extends SoulissGenericHandler {
 
     // private Logger logger = LoggerFactory.getLogger(SoulissT14Handler.class);
     Configuration gwConfigurationMap;

@@ -7,9 +7,8 @@ import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
-import org.openhab.binding.souliss.handler.SoulissGenericHandler.typicalCommonMethods;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * The {@link SoulissTopicsHandler} is responsible for handling commands, which are
@@ -20,8 +19,9 @@ import org.slf4j.LoggerFactory;
 
 public class SoulissTopicsHandler extends SoulissGenericActionMessage implements typicalCommonMethods {
 
-    private Logger logger = LoggerFactory.getLogger(SoulissTopicsHandler.class);
-    private DecimalType _setPointValue = DecimalType.ZERO;
+    // private Logger logger = LoggerFactory.getLogger(SoulissTopicsHandler.class);
+    // private DecimalType _setPointValue = DecimalType.ZERO;
+    private float fSetPointValue;
 
     public SoulissTopicsHandler(Thing _thing) {
         super(_thing);
@@ -39,13 +39,37 @@ public class SoulissTopicsHandler extends SoulissGenericActionMessage implements
         updateStatus(ThingStatus.ONLINE);
     }
 
-    @Override
     public void setState(PrimitiveType _state) {
-        this.setUpdateTimeNow();
         if (_state != null) {
-            this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
             this.updateState(SoulissBindingConstants.T5n_VALUE_CHANNEL, (DecimalType) _state);
         }
     }
 
+    public void setFloatValue(float valueOf) {
+        this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, this.getLastUpdateTime());
+        if (fSetPointValue != valueOf) {
+            this.setState(DecimalType.valueOf(Float.toString(valueOf)));
+            fSetPointValue = valueOf;
+        }
+    }
+
+    public float getFloatState() {
+        return fSetPointValue;
+    }
+
+    @Override
+    public void setRawState(byte _rawState) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public byte getRawState() {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public byte getExpectedRawState(byte bCommand) {
+        // TODO Auto-generated method stub
+        return -1;
+    }
 }

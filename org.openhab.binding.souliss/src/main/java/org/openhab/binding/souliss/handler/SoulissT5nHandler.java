@@ -14,7 +14,6 @@ import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
-import org.openhab.binding.souliss.handler.SoulissGenericHandler.typicalCommonMethods;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -24,7 +23,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  *
  * @author Tonino Fazio - Initial contribution
  */
-public class SoulissT5nHandler extends SoulissGenericHandler implements typicalCommonMethods {
+public class SoulissT5nHandler extends SoulissGenericHandler {
 
     // private Logger logger = LoggerFactory.getLogger(SoulissT5nHandler.class);
     float fVal;

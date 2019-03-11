@@ -43,25 +43,7 @@ import org.slf4j.LoggerFactory;
  * @author Tonino Fazio
  * @since 1.7.0
  */
-public abstract class SoulissGenericHandler extends BaseThingHandler {
-
-    /**
-     * Result callback interface.
-     */
-    public interface typicalCommonMethods {
-
-        // void setState(PrimitiveType _state);
-
-        void setRawState(byte _rawState);
-
-        byte getRawState();
-
-        byte getExpectedRawState(byte bCommand);
-
-        // DateTimeType getLastUpdateTime();
-
-        // void setLastUpdateTime(String string);
-    }
+public abstract class SoulissGenericHandler extends BaseThingHandler implements typicalCommonMethods {
 
     Thing thing;
 
@@ -169,6 +151,10 @@ public abstract class SoulissGenericHandler extends BaseThingHandler {
         }
     }
 
+    public String getLabel() {
+        return thing.getLabel();
+    }
+
     public short getGatewayUserIndex() {
         // return ((SoulissGatewayHandler) thingRegistry.get(thing.getBridgeUID()).getHandler()).userIndex;
         return ((SoulissGatewayHandler) getBridge().getHandler()).userIndex;
@@ -218,4 +204,5 @@ public abstract class SoulissGenericHandler extends BaseThingHandler {
         }
         return null;
     }
+
 }

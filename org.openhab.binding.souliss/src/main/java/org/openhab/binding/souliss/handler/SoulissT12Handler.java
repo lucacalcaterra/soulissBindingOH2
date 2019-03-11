@@ -19,7 +19,6 @@ import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
-import org.openhab.binding.souliss.handler.SoulissGenericHandler.typicalCommonMethods;
 
 /**
  * The {@link SoulissT12Handler} is responsible for handling commands, which are
@@ -27,7 +26,7 @@ import org.openhab.binding.souliss.handler.SoulissGenericHandler.typicalCommonMe
  *
  * @author Tonino Fazio - Initial contribution
  */
-public class SoulissT12Handler extends SoulissGenericHandler implements typicalCommonMethods {
+public class SoulissT12Handler extends SoulissGenericHandler {
     Configuration gwConfigurationMap;
     Number bSecureSend = -1; // -1 means that Secure Send is disabled
     byte T1nRawState;

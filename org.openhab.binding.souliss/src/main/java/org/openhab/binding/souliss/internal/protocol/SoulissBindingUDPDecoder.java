@@ -500,72 +500,62 @@ public class SoulissBindingUDPDecoder {
                                 case SoulissBindingConstants.T58:
                                     logger.debug("Decoding T5n packet");
                                     if (!Float.isNaN(getFloatAtSlot(mac, slot))) {
-                                        ((SoulissT5nHandler) handler).setFloatValue(
-                                                Float.toString(getFloatAtSlot(mac, slot)));
+                                        ((SoulissT5nHandler) handler).setFloatValue(getFloatAtSlot(mac, slot));
                                     }
                                     break;
                                 case SoulissBindingConstants.T61:
                                     logger.debug("Decoding " + SoulissBindingConstants.T61 + " packet");
                                     if (!Float.isNaN(getFloatAtSlot(mac, slot))) {
-                                        ((SoulissT61Handler) handler).setFloatValue(
-                                                DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
+                                        ((SoulissT61Handler) handler).setFloatValue(getFloatAtSlot(mac, slot));
                                     }
                                     break;
                                 case SoulissBindingConstants.T62:
                                     logger.debug("Decoding " + SoulissBindingConstants.T62 + " packet");
                                     if (!Float.isNaN(getFloatAtSlot(mac, slot))) {
-                                        ((SoulissT62Handler) handler).setFloatValue(
-                                                DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot)));
+                                        ((SoulissT62Handler) handler).setFloatValue(getFloatAtSlot(mac, slot));
                                     }
                                     break;
                                 case SoulissBindingConstants.T63:
                                     logger.debug("Decoding " + SoulissBindingConstants.T63 + " packet");
                                     if (!Float.isNaN(getFloatAtSlot(mac, slot))) {
-                                        ((SoulissT63Handler) handler).setFloatValue(
-                                                Float.toString(getFloatAtSlot(mac, slot)));
+                                        ((SoulissT63Handler) handler).setFloatValue(getFloatAtSlot(mac, slot));
                                     }
                                     break;
                                 case SoulissBindingConstants.T64:
                                     logger.debug("Decoding " + SoulissBindingConstants.T64 + " packet");
                                     if (!Float.isNaN(getFloatAtSlot(mac, slot))) {
-                                        ((SoulissT64Handler) handler).setFloatValue(
-                                                Float.toString(getFloatAtSlot(mac, slot)));
+                                        ((SoulissT64Handler) handler).setFloatValue(getFloatAtSlot(mac, slot));
                                     }
                                     break;
                                 case SoulissBindingConstants.T65:
                                     logger.debug("Decoding " + SoulissBindingConstants.T65 + " packet");
                                     if (!Float.isNaN(getFloatAtSlot(mac, slot))) {
-                                        ((SoulissT65Handler) handler).setFloatValue(
-                                                Float.toString(getFloatAtSlot(mac, slot)));
+                                        ((SoulissT65Handler) handler).setFloatValue(getFloatAtSlot(mac, slot));
                                     }
                                     break;
                                 case SoulissBindingConstants.T66:
                                     logger.debug("Decoding " + SoulissBindingConstants.T66 + " packet");
                                     if (!Float.isNaN(getFloatAtSlot(mac, slot))) {
-                                        ((SoulissT66Handler) handler).setFloatValue(
-                                                Float.toString(getFloatAtSlot(mac, slot)));
+                                        ((SoulissT66Handler) handler).setFloatValue(getFloatAtSlot(mac, slot));
                                     }
                                     break;
                                 case SoulissBindingConstants.T67:
                                     logger.debug("Decoding " + SoulissBindingConstants.T67 + " packet");
                                     if (!Float.isNaN(getFloatAtSlot(mac, slot))) {
-                                        ((SoulissT67Handler) handler).setFloatValue(
-                                                Float.toString(getFloatAtSlot(mac, slot)));
+                                        ((SoulissT67Handler) handler).setFloatValue(getFloatAtSlot(mac, slot));
                                     }
                                     break;
                                 case SoulissBindingConstants.T68:
                                     logger.debug("Decoding " + SoulissBindingConstants.T68 + " packet");
                                     if (!Float.isNaN(getFloatAtSlot(mac, slot))) {
-                                        ((SoulissT68Handler) handler).setFloatValue(
-                                                Float.toString(getFloatAtSlot(mac, slot)));
+                                        ((SoulissT68Handler) handler).setFloatValue(getFloatAtSlot(mac, slot));
                                     }
                                     break;
 
                                 case SoulissBindingConstants.TOPICS:
                                     logger.debug("Decoding " + SoulissBindingConstants.TOPICS + " packet");
                                     if (!Float.isNaN(getFloatAtSlot(mac, slot))) {
-                                        ((SoulissTopicsHandler) handler).setState(
-                                                DecimalType.valueOf(Float.toString(getFloatAtSlot(mac, slot))));
+                                        ((SoulissTopicsHandler) handler).setFloatValue(getFloatAtSlot(mac, slot));
                                     }
 
                                     break;

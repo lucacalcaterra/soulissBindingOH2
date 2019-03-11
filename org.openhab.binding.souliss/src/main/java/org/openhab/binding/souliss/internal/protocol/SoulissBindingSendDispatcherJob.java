@@ -228,8 +228,11 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
                     if (packetsList.get(i).packet.getData()[j] != 0) {
                         // recupero tipico dalla memoria
                         typ = getHandler(_iPAddressOnLAN, node, iSlot);
-                        bExpected = typ.getExpectedState(packetsList.get(i).packet.getData()[j]).byteValue();
-                        packetsList.get(i).packet.getData()[j]))
+                        bExpected = typ.getExpectedRawState(packetsList.get(i).packet.getData()[j]);
+                        // bExpected = typ.getExpectedState(packetsList.get(i).packet.getData()[j]).byteValue();
+
+                        //
+
                         // traduce il comando inviato con lo stato previsto e
                         // poi fa il confronto con lo stato attuale
                         if (logger.isDebugEnabled() && typ != null) {
@@ -242,12 +245,12 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
                             sCmd = Integer.toHexString(packetsList.get(i).packet.getData()[j]);
                             // comando inviato
                             sCmd = sCmd.length() < 2 ? "0x0" + sCmd.toUpperCase() : "0x" + sCmd.toUpperCase();
-                        sExpected = Integer.toHexString(bExpected);
+                            sExpected = Integer.toHexString(bExpected);
                             sExpected = sExpected.length() < 2 ? "0x0" + sExpected.toUpperCase()
                                     : "0x" + sExpected.toUpperCase();
                             logger.debug(
                                     "Compare. Node: {} Slot: {} Typical: {} Command: {} Expected Souliss State: {} - Actual OH item State: {}",
-                                    node, iSlot, "--", sCmd, sExpected, typ.getState().toFullString());
+                                    node, iSlot, "--", sCmd, sExpected, typ.getRawState());
 
                             // logger.debug(
                             // "Compare. Node: {} Slot: {} Typical: {} Command: {} EXPECTED: {} - IN MEMORY: {}",
@@ -256,16 +259,14 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
                             // sStateMemoria);
                         }
 
-                        if (typ != null && checkExpectedState(bExpected,
-                                ) {
+                        if (typ != null && checkExpectedState(typ.getRawState(), bExpected)) {
                             // se il valore del tipico coincide con il valore
                             // trasmesso allora pongo il byte a zero.
                             // quando tutti i byte saranno uguale a zero allora
                             // si
                             // cancella il frame
                             packetsList.get(i).packet.getData()[j] = 0;
-                            logger.debug("T{} Node: {} Slot: {} - OK Expected State",
-                                    Integer.toHexString(typ.getType()), node, iSlot);
+                            logger.debug("{} Node: {} Slot: {} - OK Expected State", typ.getLabel(), node, iSlot);
                         } else if (typ == null) {
                             // se allo slot j non esiste un tipico allora vuol dire che si tratta di uno slot collegato
                             // al precedente (es: RGB, T31,...)
@@ -277,24 +278,6 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
                     }
                     iSlot++;
                 }
-                // if (checkAllsSlotZero(packetsList.get(i).packet)) {
-                // logger.debug("Command packet executed - Removed");
-                // packetsList.remove(i);
-                // } else {
-                // // se il frame non Ã¨ uguale a zero controllo il TIMEOUT e se
-                // // Ã¨ scaduto allora pongo il flag SENT a false
-                // long t = System.currentTimeMillis();
-                // if (SoulissNetworkParameter.SECURE_SEND_TIMEOUT_TO_REQUEUE < t - packetsList.get(i).getTime()) {
-                // if (SoulissNetworkParameter.SECURE_SEND_TIMEOUT_TO_REMOVE_PACKET < t
-                // - packetsList.get(i).getTime()) {
-                // logger.info("Packet Execution timeout - Removed");
-                // packetsList.remove(i);
-                // } else {
-                // logger.info("Packet Execution timeout - Requeued");
-                // packetsList.get(i).setSent(false);
-                // }
-                // }
-                // }
             }
         }
     }
@@ -343,9 +326,9 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
         return itemState == expectedState;
     }
 
-    private static String expectedState(short soulissType, byte command) {
-        return StateTraslator.translateCommandsToExpectedStates(soulissType, command);
-    }
+    // private static String expectedState(short soulissType, byte command) {
+    // return StateTraslator.translateCommandsToExpectedStates(soulissType, command);
+    // }
 
     private static boolean checkAllsSlotZero(DatagramPacket packet) {
         boolean bflag = true;

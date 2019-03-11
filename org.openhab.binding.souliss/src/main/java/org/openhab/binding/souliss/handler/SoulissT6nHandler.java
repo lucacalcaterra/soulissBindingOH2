@@ -7,7 +7,6 @@ import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
-import org.openhab.binding.souliss.handler.SoulissGenericHandler.typicalCommonMethods;
 import org.openhab.binding.souliss.internal.HalfFloatUtils;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -22,7 +21,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class SoulissT6nHandler extends SoulissGenericHandler implements typicalCommonMethods {
 
     // private Logger logger = LoggerFactory.getLogger(SoulissT6nHandler.class);
-    float fSetPointValue;
+    private float fSetPointValue;
 
     public SoulissT6nHandler(Thing thing) {
         super(thing);

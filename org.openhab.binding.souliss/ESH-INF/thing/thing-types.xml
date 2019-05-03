@@ -244,6 +244,7 @@
         <channels>
             <channel id="onoff" typeId="onoff" />
             <channel id="rollershutter_state" typeId="rollershutter_state" />
+            <channel id="rollershutter_state_number" typeId="rollershutter_state_number" />
             <channel id="lastStatusStored" typeId="lastStatusStored" />
             <channel id="healty" typeId="healty" />
         </channels>
@@ -258,6 +259,7 @@
         <channels>
             <channel id="rollershutter" typeId="rollershutter" />
             <channel id="rollershutter_state" typeId="rollershutter_state" />
+             <channel id="rollershutter_state_number" typeId="rollershutter_state_number" />
             <channel id="lastStatusStored" typeId="lastStatusStored" />
             <channel id="healty" typeId="healty" />
         </channels>
@@ -662,8 +664,8 @@
 
 <channel-type id="rollershutter_state">
         <item-type>String</item-type>
-        <label>Mode</label>
-        <description>Stato of rollershutter/windows</description>
+        <label>State</label>
+        <description>State of rollershutter/windows</description>
         <state readOnly="true" >
             <options>
                 <option value="opening">Opening</option>
@@ -674,7 +676,24 @@
                 <option value="state_open">State Open</option>
                 <option value="state_close">State Close</option>
                    <option value="NoLimSwitch">No Limit Switch</option>
-                
+            </options>
+        </state>
+    </channel-type>
+
+<channel-type id="rollershutter_state_number">
+        <item-type>Number</item-type>
+        <label>State</label>
+        <description>State of rollershutter/windows</description>
+        <state readOnly="true" >
+            <options>
+                <option value="opening">50</option>
+                <option value="stop">50</option>
+                <option value="closing">50</option>
+                <option value="limSwitch_open">100</option>
+                <option value="limSwitch_close">0</option>
+                <option value="state_open">100</option>
+                <option value="state_close">0</option>
+                <option value="NoLimSwitch"></option>
             </options>
         </state>
     </channel-type>

@@ -206,28 +206,28 @@
         <description>Digital input pass through</description>
 
         <channels>
-            <channel id="one" typeId="buttonReadOnly">
+            <channel id="one" typeId="stateOpenClose">
                 <label>1</label>
             </channel>
-            <channel id="two" typeId="buttonReadOnly">
+            <channel id="two" typeId="stateOpenClose">
                 <label>2</label>
             </channel>
-            <channel id="three" typeId="buttonReadOnly">
+            <channel id="three" typeId="stateOpenClose">
                 <label>3</label>
             </channel>
-            <channel id="four" typeId="buttonReadOnly">
+            <channel id="four" typeId="stateOpenClose">
                 <label>4</label>
             </channel>
-            <channel id="five" typeId="buttonReadOnly">
+            <channel id="five" typeId="stateOpenClose">
                 <label>5</label>
             </channel>
-            <channel id="six" typeId="buttonReadOnly">
+            <channel id="six" typeId="stateOpenClose">
                 <label>6</label>
             </channel>
-            <channel id="seven" typeId="buttonReadOnly">
+            <channel id="seven" typeId="stateOpenClose">
                 <label>7</label>
             </channel>
-            <channel id="eight" typeId="buttonReadOnly">
+            <channel id="eight" typeId="stateOpenClose">
                 <label>8</label>
             </channel>
             <channel id="lastStatusStored" typeId="lastStatusStored" />

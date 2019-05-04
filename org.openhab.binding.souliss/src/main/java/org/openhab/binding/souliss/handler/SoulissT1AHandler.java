@@ -12,7 +12,7 @@
  */
 package org.openhab.binding.souliss.handler;
 
-import org.eclipse.smarthome.core.library.types.OnOffType;
+import org.eclipse.smarthome.core.library.types.OpenClosedType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -62,11 +62,11 @@ public class SoulissT1AHandler extends SoulissGenericTypical implements typicalC
         }
     }
 
-    private OnOffType getTypeFromBool(boolean value) {
+    private OpenClosedType getTypeFromBool(boolean value) {
         if (value == false) {
-            return OnOffType.OFF;
+            return OpenClosedType.CLOSED;
         }
-        return OnOffType.ON;
+        return OpenClosedType.OPEN;
     }
 
     private boolean getBitState(int value, int bit) {

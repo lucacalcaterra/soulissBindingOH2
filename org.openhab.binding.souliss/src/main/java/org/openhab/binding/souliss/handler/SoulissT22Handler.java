@@ -12,7 +12,6 @@
  */
 package org.openhab.binding.souliss.handler;
 
-import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.StopMoveType;
 import org.eclipse.smarthome.core.library.types.StringType;
@@ -86,15 +85,15 @@ public class SoulissT22Handler extends SoulissGenericTypical implements typicalC
         if (_state != null) {
             if (_state instanceof UpDownType) {
                 this.updateState(SoulissBindingConstants.ROLLERSHUTTER_CHANNEL, (UpDownType) _state);
-                this.updateState(SoulissBindingConstants.ROLLERSHUTTER_STATE_NUMBER_CHANNEL_CHANNEL,
-                        (DecimalType) _state);
-                // this.updateThing(this.thing);
             } else if (_state instanceof StopMoveType) {
                 this.updateState(SoulissBindingConstants.ROLLERSHUTTER_CHANNEL, (State) _state);
-                // this.updateThing(this.thing);
             }
         }
-        // this.updateThing(this.thing);
+    }
+
+    public void setState_number(String rollershutteroption) {
+        this.updateState(SoulissBindingConstants.ROLLERSHUTTER_STATE_NUMBER_CHANNEL,
+                StringType.valueOf(rollershutteroption));
     }
 
     public void setState_Message(String rollershutterMessage) {

@@ -117,15 +117,17 @@ public class SoulissBindingConstants {
     public static final String STATEOPENCLOSE_CHANNEL = "stateOpenClose";
     public static final String ROLLERSHUTTER_CHANNEL = "rollershutter";
     public static final String ROLLERSHUTTER_STATE_CHANNEL_CHANNEL = "rollershutter_state";
-    public static final String ROLLERSHUTTER_MESSAGE_OPENING_CHANNEL = "opening";
-    public static final String ROLLERSHUTTER_MESSAGE_CLOSING_CHANNEL = "closing";
-    public static final String ROLLERSHUTTER_MESSAGE_LIMITSWITCH_OPEN_CHANNEL = "limSwitch_open";
-    public static final String ROLLERSHUTTER_MESSAGE_LIMITSWITCH_CLOSE_CHANNEL = "limSwitch_close";
-    public static final String ROLLERSHUTTER_MESSAGE_STATE_OPEN_CHANNEL = "state_open";
-    public static final String ROLLERSHUTTER_MESSAGE_STATE_CLOSE_CHANNEL = "state_close";
-    public static final String ROLLERSHUTTER_MESSAGE_NO_LIMITSWITCH_CHANNEL = "NoLimSwitch";
-    public static final String ROLLERSHUTTER_MESSAGE_STOP_CHANNEL = "stop";
-    public static final String ROLLERSHUTTER_MESSAGE_TIMER_OFF = "timer off";
+    public static final String ROLLERSHUTTER_STATE_NUMBER_CHANNEL = "rollershutter_state_number";
+
+    public static final String ROLLERSHUTTER_OPENING_CHANNEL = "opening";
+    public static final String ROLLERSHUTTER_CLOSING_CHANNEL = "closing";
+    public static final String ROLLERSHUTTER_LIMITSWITCH_OPEN_CHANNEL = "limSwitch_open";
+    public static final String ROLLERSHUTTER_LIMITSWITCH_CLOSE_CHANNEL = "limSwitch_close";
+    public static final String ROLLERSHUTTER_STATE_OPEN_CHANNEL = "state_open";
+    public static final String ROLLERSHUTTER_STATE_CLOSE_CHANNEL = "state_close";
+    public static final String ROLLERSHUTTER_NO_LIMITSWITCH_CHANNEL = "NoLimSwitch";
+    public static final String ROLLERSHUTTER_STOP_CHANNEL = "stop";
+    public static final String ROLLERSHUTTER_TIMER_OFF = "timer off";
 
     public static final String T1A_1_CHANNEL = "one";
     public static final String T1A_2_CHANNEL = "two";

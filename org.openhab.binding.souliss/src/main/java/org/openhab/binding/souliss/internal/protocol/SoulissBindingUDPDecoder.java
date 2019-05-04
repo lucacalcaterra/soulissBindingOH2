@@ -488,45 +488,65 @@ public class SoulissBindingUDPDecoder {
                                             + SoulissBindingConstants.T22 + " packet");
                                     if (sVal == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Open) {
                                         ((SoulissT22Handler) handler).setState(UpDownType.UP);
+                                        ((SoulissT22Handler) handler)
+                                                .setState_number(SoulissBindingConstants.ROLLERSHUTTER_OPENING_CHANNEL);
+
                                         ((SoulissT22Handler) handler).setState_Message(
-                                                SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_OPENING_CHANNEL);
+                                                SoulissBindingConstants.ROLLERSHUTTER_OPENING_CHANNEL);
                                     } else if (sVal == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Close) {
                                         ((SoulissT22Handler) handler).setState(UpDownType.DOWN);
+                                        ((SoulissT22Handler) handler)
+                                                .setState_number(SoulissBindingConstants.ROLLERSHUTTER_CLOSING_CHANNEL);
+
                                         ((SoulissT22Handler) handler).setState_Message(
-                                                SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_CLOSING_CHANNEL);
+                                                SoulissBindingConstants.ROLLERSHUTTER_CLOSING_CHANNEL);
                                     }
                                     switch (sVal) {
                                         case SoulissBindingProtocolConstants.Souliss_T2n_Coil_Stop:
                                             ((SoulissT22Handler) handler).setState_Message(
-                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_STOP_CHANNEL);
+                                                    SoulissBindingConstants.ROLLERSHUTTER_STOP_CHANNEL);
+                                            ((SoulissT22Handler) handler).setState_number(
+                                                    SoulissBindingConstants.ROLLERSHUTTER_STOP_CHANNEL);
                                             break;
                                         case SoulissBindingProtocolConstants.Souliss_T2n_Coil_Off:
                                             ((SoulissT22Handler) handler).setState_Message(
-                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_OPENING_CHANNEL);
+                                                    SoulissBindingConstants.ROLLERSHUTTER_OPENING_CHANNEL);
+                                            ((SoulissT22Handler) handler).setState_number(
+                                                    SoulissBindingConstants.ROLLERSHUTTER_OPENING_CHANNEL);
                                             break;
                                         case SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Close:
                                             ((SoulissT22Handler) handler).setState_Message(
-                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_LIMITSWITCH_CLOSE_CHANNEL);
+                                                    SoulissBindingConstants.ROLLERSHUTTER_LIMITSWITCH_CLOSE_CHANNEL);
+                                            ((SoulissT22Handler) handler).setState_number(
+                                                    SoulissBindingConstants.ROLLERSHUTTER_LIMITSWITCH_CLOSE_CHANNEL);
                                             break;
                                         case SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Open:
                                             ((SoulissT22Handler) handler).setState_Message(
-                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_LIMITSWITCH_OPEN_CHANNEL);
+                                                    SoulissBindingConstants.ROLLERSHUTTER_LIMITSWITCH_OPEN_CHANNEL);
+                                            ((SoulissT22Handler) handler).setState_number(
+                                                    SoulissBindingConstants.ROLLERSHUTTER_LIMITSWITCH_OPEN_CHANNEL);
                                             break;
                                         case SoulissBindingProtocolConstants.Souliss_T2n_NoLimSwitch:
                                             ((SoulissT22Handler) handler).setState_Message(
-                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_LIMITSWITCH_OPEN_CHANNEL);
+                                                    SoulissBindingConstants.ROLLERSHUTTER_LIMITSWITCH_OPEN_CHANNEL);
+                                            ((SoulissT22Handler) handler).setState_number(
+                                                    SoulissBindingConstants.ROLLERSHUTTER_LIMITSWITCH_OPEN_CHANNEL);
                                             break;
                                         case SoulissBindingProtocolConstants.Souliss_T2n_Timer_Off:
-                                            ((SoulissT22Handler) handler).setState_Message(
-                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_TIMER_OFF);
+                                            ((SoulissT22Handler) handler)
+                                                    .setState_Message(SoulissBindingConstants.ROLLERSHUTTER_TIMER_OFF);
                                             break;
                                         case SoulissBindingProtocolConstants.Souliss_T2n_State_Open:
                                             ((SoulissT22Handler) handler).setState_Message(
-                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_STATE_OPEN_CHANNEL);
+                                                    SoulissBindingConstants.ROLLERSHUTTER_STATE_OPEN_CHANNEL);
+                                            ((SoulissT22Handler) handler).setState_number(
+                                                    SoulissBindingConstants.ROLLERSHUTTER_STATE_OPEN_CHANNEL);
                                             break;
                                         case SoulissBindingProtocolConstants.Souliss_T2n_State_Close:
                                             ((SoulissT22Handler) handler).setState_Message(
-                                                    SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_STATE_CLOSE_CHANNEL);
+                                                    SoulissBindingConstants.ROLLERSHUTTER_STATE_CLOSE_CHANNEL);
+                                            ((SoulissT22Handler) handler).setState_number(
+                                                    SoulissBindingConstants.ROLLERSHUTTER_STATE_CLOSE_CHANNEL);
                                             break;
                                         // }
                                     }

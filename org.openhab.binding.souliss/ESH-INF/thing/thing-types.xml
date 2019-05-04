@@ -242,7 +242,7 @@
         <label>T21</label>
         <description>Motorized devices with limit switches</description>
         <channels>
-            <channel id="onoff" typeId="onoff" />
+            <channel id="rollershutter" typeId="rollershutter" />
             <channel id="rollershutter_state" typeId="rollershutter_state" />
             <channel id="rollershutter_state_number" typeId="rollershutter_state_number" />
             <channel id="lastStatusStored" typeId="lastStatusStored" />
@@ -681,19 +681,19 @@
     </channel-type>
 
 <channel-type id="rollershutter_state_number">
-        <item-type>Number</item-type>
+        <item-type>String</item-type>
         <label>State</label>
         <description>State of rollershutter/windows</description>
         <state readOnly="true" >
             <options>
-                <option value="opening">50</option>
+                <option value="opening">0</option>
                 <option value="stop">50</option>
-                <option value="closing">50</option>
-                <option value="limSwitch_open">100</option>
-                <option value="limSwitch_close">0</option>
-                <option value="state_open">100</option>
-                <option value="state_close">0</option>
-                <option value="NoLimSwitch"></option>
+                <option value="closing">100</option>
+                <option value="limSwitch_open">0</option>
+                <option value="limSwitch_close">100</option>
+                <option value="state_open">0</option>
+                <option value="state_close">100</option>
+                <option value="NoLimSwitch">50</option>
             </options>
         </state>
     </channel-type>

@@ -13,6 +13,7 @@
 package org.openhab.binding.souliss.handler;
 
 import org.eclipse.smarthome.core.library.types.OnOffType;
+import org.eclipse.smarthome.core.library.types.PercentType;
 import org.eclipse.smarthome.core.library.types.StopMoveType;
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.library.types.UpDownType;
@@ -21,7 +22,6 @@ import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.eclipse.smarthome.core.types.RefreshType;
-import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
 import org.openhab.binding.souliss.handler.SoulissGenericTypical.typicalCommonMethods;
@@ -83,17 +83,10 @@ public class SoulissT22Handler extends SoulissGenericTypical implements typicalC
 
         super.setLastStatusStored();
         if (_state != null) {
-            if (_state instanceof UpDownType) {
-                this.updateState(SoulissBindingConstants.ROLLERSHUTTER_CHANNEL, (UpDownType) _state);
-            } else if (_state instanceof StopMoveType) {
-                this.updateState(SoulissBindingConstants.ROLLERSHUTTER_CHANNEL, (State) _state);
+            if (_state instanceof PercentType) {
+                this.updateState(SoulissBindingConstants.ROLLERSHUTTER_CHANNEL, (PercentType) _state);
             }
         }
-    }
-
-    public void setState_number(String rollershutteroption) {
-        this.updateState(SoulissBindingConstants.ROLLERSHUTTER_STATE_NUMBER_CHANNEL,
-                StringType.valueOf(rollershutteroption));
     }
 
     public void setState_Message(String rollershutterMessage) {

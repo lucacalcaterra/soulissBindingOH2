@@ -142,26 +142,27 @@ public class SoulissT12Handler extends SoulissGenericHandler {
 
     @Override
     public void setRawState(byte _rawState) {
-        T1nRawState = _rawState;
+
         // update Last Status stored time
         super.setLastStatusStored();
 
         // update item state only if it is different from previous
         if (T1nRawState != _rawState) {
-            if (T1nRawState == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil_Auto) {
+            if (_rawState == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil_Auto) {
                 this.setState(OnOffType.ON);
                 this.setState_Automode(OnOffType.ON);
-            } else if (T1nRawState == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil_Auto) {
+            } else if (_rawState == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil_Auto) {
                 this.setState(OnOffType.OFF);
                 this.setState_Automode(OnOffType.ON);
-            } else if (T1nRawState == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil) {
+            } else if (_rawState == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil) {
                 this.setState(OnOffType.ON);
                 this.setState_Automode(OnOffType.OFF);
-            } else if (T1nRawState == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil) {
+            } else if (_rawState == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil) {
                 this.setState(OnOffType.OFF);
                 this.setState_Automode(OnOffType.OFF);
             }
         }
+        T1nRawState = _rawState;
     }
 
     @Override

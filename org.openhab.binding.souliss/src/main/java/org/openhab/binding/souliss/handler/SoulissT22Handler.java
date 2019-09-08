@@ -102,7 +102,7 @@ public class SoulissT22Handler extends SoulissGenericHandler {
 
     @Override
     public void setRawState(byte _rawState) {
-        T2nRawState = _rawState;
+
         // update Last Status stored time
         super.setLastStatusStored();
         // update item state only if it is different from previous
@@ -114,7 +114,7 @@ public class SoulissT22Handler extends SoulissGenericHandler {
                 this.setState(UpDownType.DOWN);
                 this.setState_Message(SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_CLOSING_CHANNEL);
             }
-            switch (T2nRawState) {
+            switch (_rawState) {
                 case SoulissBindingProtocolConstants.Souliss_T2n_Coil_Stop:
                     this.setState_Message(SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_STOP_CHANNEL);
                     break;
@@ -140,6 +140,7 @@ public class SoulissT22Handler extends SoulissGenericHandler {
                     this.setState_Message(SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_STATE_CLOSE_CHANNEL);
                     break;
             }
+            T2nRawState = _rawState;
         }
 
     }

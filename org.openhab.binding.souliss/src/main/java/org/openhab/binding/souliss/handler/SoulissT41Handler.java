@@ -108,12 +108,12 @@ public class SoulissT41Handler extends SoulissGenericHandler {
 
     @Override
     public void setRawState(byte _rawState) {
-        T4nRawState = _rawState;
+
         // update Last Status stored time
         super.setLastStatusStored();
         // update item state only if it is different from previous
         if (T4nRawState != _rawState) {
-            switch (T4nRawState) {
+            switch (_rawState) {
                 case SoulissBindingProtocolConstants.Souliss_T4n_NoAntitheft:
                     this.setState(OnOffType.OFF);
                     this.setState(StringType.valueOf(SoulissBindingConstants.T4N_ALARMOFF_MESSAGE_CHANNEL));
@@ -130,6 +130,7 @@ public class SoulissT41Handler extends SoulissGenericHandler {
                     break;
             }
         }
+        T4nRawState = _rawState;
     }
 
     @Override

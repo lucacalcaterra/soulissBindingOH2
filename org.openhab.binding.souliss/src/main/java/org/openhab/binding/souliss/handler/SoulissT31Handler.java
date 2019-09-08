@@ -40,7 +40,6 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class SoulissT31Handler extends SoulissGenericHandler {
 
     Configuration gwConfigurationMap;
-    byte T3nRawState;
 
     DecimalType _setPointValue = DecimalType.ZERO;
     StringType _fanStateValue = StringType.EMPTY;

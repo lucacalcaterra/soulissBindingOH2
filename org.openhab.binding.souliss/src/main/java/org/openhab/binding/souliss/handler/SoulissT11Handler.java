@@ -131,13 +131,13 @@ public class SoulissT11Handler extends SoulissGenericHandler {
 
     @Override
     public void setRawState(byte _rawState) {
-        T1nRawState = _rawState;
         // update Last Status stored time
         super.setLastStatusStored();
         // update item state only if it is different from previous
         if (T1nRawState != _rawState) {
-            this.setState(getOHState_OnOff_FromSoulissVal(T1nRawState));
+            this.setState(getOHState_OnOff_FromSoulissVal(_rawState));
         }
+        T1nRawState = _rawState;
     }
 
     @Override

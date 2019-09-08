@@ -80,7 +80,7 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
                     SoulissBindingNetworkParameters.discoverResult);
 
             UDPserverJob = scheduler.scheduleAtFixedRate(UDP_Server_RunnableClass, 100,
-                    SoulissBindingConstants.SERVER_CIRLE_IN_MILLIS, TimeUnit.MILLISECONDS);
+                    SoulissBindingConstants.SERVER_CICLE_IN_MILLIS, TimeUnit.MILLISECONDS);
 
         } else {
             logger.debug("Error - datagramSocket is null - Server not started");

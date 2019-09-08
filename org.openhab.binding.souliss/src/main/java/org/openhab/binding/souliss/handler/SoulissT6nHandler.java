@@ -30,7 +30,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * @author Luca Remigio - Initial contribution
  */
 
-public class SoulissT6nHandler extends SoulissGenericHandler implements typicalCommonMethods {
+public class SoulissT6nHandler extends SoulissGenericHandler {
 
     // private Logger logger = LoggerFactory.getLogger(SoulissT6nHandler.class);
     private float fSetPointValue;
@@ -58,14 +58,7 @@ public class SoulissT6nHandler extends SoulissGenericHandler implements typicalC
 
     public void setState(PrimitiveType _state) {
         if (_state != null) {
-<<<<<<< HEAD
-            if (!_setPointValue.equals(_state)) {
-                this.updateState(SoulissBindingConstants.T6N_VALUE_CHANNEL, (DecimalType) _state);
-                _setPointValue = (DecimalType) _state;
-            }
-=======
-            this.updateState(SoulissBindingConstants.T6n_VALUE_CHANNEL, (DecimalType) _state);
->>>>>>> secureSend
+            this.updateState(SoulissBindingConstants.T6N_VALUE_CHANNEL, (DecimalType) _state);
         }
     }
 

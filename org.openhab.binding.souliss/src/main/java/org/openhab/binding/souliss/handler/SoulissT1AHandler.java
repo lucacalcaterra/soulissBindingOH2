@@ -1,23 +1,14 @@
 /**
- * Copyright (c) 2010-2019 Contributors to the openHAB project
- *
- * See the NOTICE file(s) distributed with this work for additional
- * information.
- *
- * This program and the accompanying materials are made available under the
- * terms of the Eclipse Public License 2.0 which is available at
- * http://www.eclipse.org/legal/epl-2.0
- *
- * SPDX-License-Identifier: EPL-2.0
+ * Copyright (c) 2014-2018 by the respective copyright holders.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  */
 package org.openhab.binding.souliss.handler;
 
-<<<<<<< HEAD
-import org.eclipse.smarthome.core.library.types.OpenClosedType;
-=======
 import org.eclipse.smarthome.config.core.Configuration;
-import org.eclipse.smarthome.core.library.types.OnOffType;
->>>>>>> secureSend
+import org.eclipse.smarthome.core.library.types.OpenClosedType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -41,6 +32,7 @@ public class SoulissT1AHandler extends SoulissGenericHandler {
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
+
     }
 
     @Override
@@ -48,28 +40,7 @@ public class SoulissT1AHandler extends SoulissGenericHandler {
         updateStatus(ThingStatus.ONLINE);
     }
 
-<<<<<<< HEAD
-    @Override
-    public void setState(PrimitiveType _state) {
-        super.setLastStatusStored();
-        if (_state != null) {
-            int valore = Integer.parseInt(_state.toString());
-            this.updateState(SoulissBindingConstants.T1A_1_CHANNEL, getTypeFromBool(getBitState(valore, 0)));
-            this.updateState(SoulissBindingConstants.T1A_2_CHANNEL, getTypeFromBool(getBitState(valore, 1)));
-            this.updateState(SoulissBindingConstants.T1A_3_CHANNEL, getTypeFromBool(getBitState(valore, 2)));
-            this.updateState(SoulissBindingConstants.T1A_4_CHANNEL, getTypeFromBool(getBitState(valore, 3)));
-            this.updateState(SoulissBindingConstants.T1A_5_CHANNEL, getTypeFromBool(getBitState(valore, 4)));
-            this.updateState(SoulissBindingConstants.T1A_6_CHANNEL, getTypeFromBool(getBitState(valore, 5)));
-            this.updateState(SoulissBindingConstants.T1A_7_CHANNEL, getTypeFromBool(getBitState(valore, 6)));
-            this.updateState(SoulissBindingConstants.T1A_8_CHANNEL, getTypeFromBool(getBitState(valore, 7)));
-        }
-    }
-
     private OpenClosedType getTypeFromBool(boolean value) {
-=======
-    private OnOffType getTypeFromBool(boolean value) {
-
->>>>>>> secureSend
         if (value == false) {
             return OpenClosedType.CLOSED;
         }
@@ -77,14 +48,13 @@ public class SoulissT1AHandler extends SoulissGenericHandler {
     }
 
     private boolean getBitState(int value, int bit) {
+
         if ((value & (1L << bit)) == 0) {
             return false;
+        } else {
+            return true;
         }
-        return true;
     }
-<<<<<<< HEAD
-}
-=======
 
     @Override
     public void setRawState(byte _rawState) {
@@ -115,4 +85,3 @@ public class SoulissT1AHandler extends SoulissGenericHandler {
         return -1;
     }
 }
->>>>>>> secureSend

@@ -59,10 +59,6 @@ public class SoulissT42Handler extends SoulissGenericHandler {
 
     @Override
     public void initialize() {
-<<<<<<< HEAD
-        // Long running initialization should be done asynchronously in background.
-        updateStatus(ThingStatus.ONLINE);
-=======
         updateStatus(ThingStatus.ONLINE);
 
         gwConfigurationMap = thing.getConfiguration();
@@ -70,7 +66,6 @@ public class SoulissT42Handler extends SoulissGenericHandler {
             bSecureSend = ((Boolean) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND)).booleanValue();
         }
 
->>>>>>> secureSend
     }
 
     public void setState(PrimitiveType _state) {

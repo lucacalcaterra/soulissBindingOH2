@@ -47,10 +47,6 @@ public class SoulissT11Handler extends SoulissGenericHandler {
 
     public SoulissT11Handler(Thing _thing) {
         super(_thing);
-<<<<<<< HEAD
-        thing = _thing;
-=======
->>>>>>> secureSend
     }
 
     // called on every status change or change request
@@ -106,25 +102,12 @@ public class SoulissT11Handler extends SoulissGenericHandler {
             xSleepTime = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL)).byteValue();
         }
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND) != null) {
-            // bSecureSend = ((BigDecimal)
-            // gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND)).intValue();
             bSecureSend = ((Boolean) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND)).booleanValue();
         }
 
     }
 
     @Override
-<<<<<<< HEAD
-    public void setState(PrimitiveType _state) {
-        super.setLastStatusStored();
-        if (_state != null) {
-            updateState(SoulissBindingConstants.SLEEP_CHANNEL, OnOffType.OFF);
-            if (((OnOffType) _state) != this.T1nState) {
-                this.updateState(SoulissBindingConstants.ONOFF_CHANNEL, (OnOffType) _state);
-                // this.updateThing(this.thing);
-                this.T1nState = (OnOffType) _state;
-            }
-=======
     public byte getExpectedRawState(byte bCmd) {
         if (bSecureSend) {
             if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OnCmd) {
@@ -154,7 +137,6 @@ public class SoulissT11Handler extends SoulissGenericHandler {
         // update item state only if it is different from previous
         if (T1nRawState != _rawState) {
             this.setState(getOHState_OnOff_FromSoulissVal(T1nRawState));
->>>>>>> secureSend
         }
     }
 

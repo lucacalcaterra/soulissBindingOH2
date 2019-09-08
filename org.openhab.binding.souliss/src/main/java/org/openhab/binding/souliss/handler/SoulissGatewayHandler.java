@@ -182,7 +182,7 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
                 UDP_Server_DefaultPort_RunnableClass = new SoulissBindingUDPServerJob(datagramSocket_defaultPort,
                         SoulissBindingNetworkParameters.discoverResult);
                 UDPserverJob_DefaultPort = scheduler.scheduleAtFixedRate(UDP_Server_DefaultPort_RunnableClass, 100,
-                        SoulissBindingConstants.SERVER_CIRLE_IN_MILLIS, TimeUnit.MILLISECONDS);
+                        SoulissBindingConstants.SERVER_CICLE_IN_MILLIS, TimeUnit.MILLISECONDS);
             }
         }
 
@@ -196,21 +196,15 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
         scheduler.scheduleAtFixedRate(soulissGatewayJobSubscriptionRunnable, 0,
                 soulissGatewayJobSubscriptionRunnable.get_subscriptionRefreshInterval(), TimeUnit.MINUTES);
 
-<<<<<<< HEAD
         SoulissGatewayJobHealty soulissGatewayJobHealtyRunnable = new SoulissGatewayJobHealty(bridge);
         scheduler.scheduleAtFixedRate(soulissGatewayJobHealtyRunnable, 5,
                 soulissGatewayJobHealtyRunnable.get_healthRefreshInterval(), TimeUnit.SECONDS);
-=======
-        SoulissGatewayJobHealty SoulissGatewayJobHealtyRunnable = new SoulissGatewayJobHealty(bridge);
-        scheduler.scheduleWithFixedDelay(SoulissGatewayJobHealtyRunnable, 5,
-                SoulissGatewayJobHealtyRunnable.get_healthRefreshInterval(), TimeUnit.SECONDS);
 
         // il ciclo Send è schedulato con la costante SoulissBindingConstants.SEND_DISPATCHER_MIN_DELAY_cicleInMillis
         // internamente il ciclo viene rallentato al timer impostato da configurazione (PaperUI o File)
         SoulissBindingSendDispatcherJob SoulissSendDispatcherRunnable = new SoulissBindingSendDispatcherJob(bridge);
         scheduler.scheduleWithFixedDelay(SoulissSendDispatcherRunnable, 15,
                 SoulissBindingConstants.SEND_DISPATCHER_MIN_DELAY_cicleInMillis, TimeUnit.MILLISECONDS);
->>>>>>> secureSend
     }
 
     @Override

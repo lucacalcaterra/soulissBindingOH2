@@ -160,14 +160,10 @@ public abstract class SoulissGenericHandler extends BaseThingHandler implements 
         return null;
     }
 
-<<<<<<< HEAD:org.openhab.binding.souliss/src/main/java/org/openhab/binding/souliss/handler/SoulissGenericTypical.java
-    @SuppressWarnings("null")
-=======
     public String getLabel() {
         return thing.getLabel();
     }
 
->>>>>>> secureSend:org.openhab.binding.souliss/src/main/java/org/openhab/binding/souliss/handler/SoulissGenericHandler.java
     public short getGatewayUserIndex() {
         if (getBridge() != null) {
             return ((SoulissGatewayHandler) getBridge().getHandler()).userIndex;

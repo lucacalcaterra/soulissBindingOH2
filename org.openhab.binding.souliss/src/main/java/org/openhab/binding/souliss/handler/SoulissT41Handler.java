@@ -76,10 +76,6 @@ public class SoulissT41Handler extends SoulissGenericHandler {
 
     @Override
     public void initialize() {
-<<<<<<< HEAD
-        // Long running initialization should be done asynchronously in background.
-        updateStatus(ThingStatus.ONLINE);
-=======
         updateStatus(ThingStatus.ONLINE);
 
         gwConfigurationMap = thing.getConfiguration();
@@ -87,7 +83,6 @@ public class SoulissT41Handler extends SoulissGenericHandler {
             bSecureSend = ((Boolean) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND)).booleanValue();
         }
 
->>>>>>> secureSend
     }
 
     public void setState(PrimitiveType _state) {
@@ -107,13 +102,9 @@ public class SoulissT41Handler extends SoulissGenericHandler {
                 }
             }
             // // Resetto il tasto di rearm. Questo perchè se premuto non torna da solo in off
-<<<<<<< HEAD
             updateState(SoulissBindingConstants.T4N_REARMALARM_CHANNEL, OnOffType.OFF);
-=======
-            updateState(SoulissBindingConstants.T4n_REARMALARM_CHANNEL, OnOffType.OFF);
         }
     }
->>>>>>> secureSend
 
     @Override
     public void setRawState(byte _rawState) {
@@ -125,17 +116,17 @@ public class SoulissT41Handler extends SoulissGenericHandler {
             switch (T4nRawState) {
                 case SoulissBindingProtocolConstants.Souliss_T4n_NoAntitheft:
                     this.setState(OnOffType.OFF);
-                    this.setState(StringType.valueOf(SoulissBindingConstants.T4n_ALARMOFF_MESSAGE_CHANNEL));
+                    this.setState(StringType.valueOf(SoulissBindingConstants.T4N_ALARMOFF_MESSAGE_CHANNEL));
                     break;
                 case SoulissBindingProtocolConstants.Souliss_T4n_Antitheft:
                     this.setState(OnOffType.ON);
-                    this.setState(StringType.valueOf(SoulissBindingConstants.T4n_ALARMOFF_MESSAGE_CHANNEL));
+                    this.setState(StringType.valueOf(SoulissBindingConstants.T4N_ALARMOFF_MESSAGE_CHANNEL));
                     break;
                 case SoulissBindingProtocolConstants.Souliss_T4n_InAlarm:
-                    this.setState(StringType.valueOf(SoulissBindingConstants.T4n_ALARMON_MESSAGE_CHANNEL));
+                    this.setState(StringType.valueOf(SoulissBindingConstants.T4N_ALARMON_MESSAGE_CHANNEL));
                     break;
                 case SoulissBindingProtocolConstants.Souliss_T4n_Armed:
-                    this.setState(StringType.valueOf(SoulissBindingConstants.T4n_ARMED_MESSAGE_CHANNEL));
+                    this.setState(StringType.valueOf(SoulissBindingConstants.T4N_ARMED_MESSAGE_CHANNEL));
                     break;
             }
         }

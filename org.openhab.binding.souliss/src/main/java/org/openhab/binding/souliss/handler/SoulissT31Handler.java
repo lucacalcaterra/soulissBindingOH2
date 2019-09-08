@@ -37,25 +37,31 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  *
  * @author Luca Remigio - Initial contribution
  */
-public class SoulissT31Handler extends SoulissGenericHandler implements typicalCommonMethods {
+public class SoulissT31Handler extends SoulissGenericHandler {
 
     Configuration gwConfigurationMap;
     byte T3nRawState;
-    float fValTemp;
-    float fValSetPoint;
 
+    DecimalType _setPointValue = DecimalType.ZERO;
+    StringType _fanStateValue = StringType.EMPTY;
+    StringType _powerState = StringType.EMPTY;
+    StringType _fireState = StringType.EMPTY;
+
+    StringType _lastModeState = StringType.EMPTY;
     StringType _modeStateValue = StringType.EMPTY;
-
     private Logger logger = LoggerFactory.getLogger(SoulissT11Handler.class);
+    DecimalType _setMeasuredValue = DecimalType.ZERO;
 
     public SoulissT31Handler(Thing _thing) {
         super(_thing);
+        thing = _thing;
     }
 
     // called on every status change or change request
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
         if (command instanceof RefreshType) {
+
         } else {
             switch (channelUID.getId()) {
                 // FAN
@@ -76,7 +82,6 @@ public class SoulissT31Handler extends SoulissGenericHandler implements typicalC
                     } else {
                         commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_Cooling);
                     }
-<<<<<<< HEAD
                     break;
                 case SoulissBindingConstants.T31_BUTTON_CHANNEL:
                     if (command.equals(OnOffType.ON)) {
@@ -123,49 +128,6 @@ public class SoulissT31Handler extends SoulissGenericHandler implements typicalC
                     }
                     break;
             }
-=======
-                }
-                break;
-            case SoulissBindingConstants.T31_MODE_CHANNEL:
-                if (command.equals(SoulissBindingConstants.T31_HEATINGMODE_MESSAGE_MODE_CHANNEL)) {
-                    commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_Heating);
-                } else {
-                    commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_Cooling);
-                }
-                break;
-            case SoulissBindingConstants.T31_BUTTON_CHANNEL:
-                commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_AsMeasured);
-                break;
-            case SoulissBindingConstants.T31_FAN_CHANNEL:
-                switch (command.toString()) {
-                    case SoulissBindingConstants.T31_FANHIGH_MESSAGE_FAN_CHANNEL:
-                        commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_FanManual);
-                        commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_FanHigh);
-                        break;
-                    case SoulissBindingConstants.T31_FANMEDIUM_MESSAGE_FAN_CHANNEL:
-                        commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_FanManual);
-                        commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_FanMed);
-                        break;
-                    case SoulissBindingConstants.T31_FANLOW_MESSAGE_FAN_CHANNEL:
-                        commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_FanManual);
-                        commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_FanLow);
-                        break;
-                    case SoulissBindingConstants.T31_FANAUTO_MESSAGE_FAN_CHANNEL:
-                        commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_FanAuto);
-                        break;
-                    case SoulissBindingConstants.T31_FANOFF_MESSAGE_FAN_CHANNEL:
-                        commandSEND(SoulissBindingProtocolConstants.Souliss_T3n_FanOff);
-                        break;
-                }
-                break;
-            case SoulissBindingConstants.T31_SETPOINT_CHANNEL:
-                int uu = HalfFloatUtils.fromFloat(((DecimalType) command).floatValue());
-                byte B2 = (byte) (uu >> 8);
-                byte B1 = (byte) uu;
-                // setpoint command
-                commandSEND(SoulissBindingProtocolConstants.Souliss_T31_Use_Of_Slot_SETPOINT_COMMAND, B1, B2);
-                break;
->>>>>>> secureSend
         }
     }
 
@@ -178,6 +140,7 @@ public class SoulissT31Handler extends SoulissGenericHandler implements typicalC
 
         this.updateState(SoulissBindingConstants.T31_BUTTON_CHANNEL, OnOffType.OFF);
 
+        super.setLastStatusStored();
         if (_state != null) {
             if (_state instanceof StringType) {
                 switch (_state.toString()) {
@@ -186,129 +149,148 @@ public class SoulissT31Handler extends SoulissGenericHandler implements typicalC
                     case SoulissBindingConstants.T31_FANHIGH_MESSAGE_FAN_CHANNEL:
                     case SoulissBindingConstants.T31_FANAUTO_MESSAGE_FAN_CHANNEL:
                     case SoulissBindingConstants.T31_FANOFF_MESSAGE_FAN_CHANNEL:
-                        this.updateState(SoulissBindingConstants.T31_FAN_CHANNEL, (StringType) _state);
+                        if (!_fanStateValue.equals(_state)) {
+                            this.updateState(SoulissBindingConstants.T31_FAN_CHANNEL, (StringType) _state);
+                            _fanStateValue = (StringType) _state;
+                        }
                         break;
 
                     case SoulissBindingConstants.T31_HEATINGMODE_MESSAGE_MODE_CHANNEL:
                     case SoulissBindingConstants.T31_COOLINGMODE_MESSAGE_MODE_CHANNEL:
-                        this.updateState(SoulissBindingConstants.T31_MODE_CHANNEL, (StringType) _state);
-                        _modeStateValue = (StringType) _state;
+                        if (!_modeStateValue.equals(_state)) {
+                            this.updateState(SoulissBindingConstants.T31_MODE_CHANNEL, (StringType) _state);
+                            _modeStateValue = (StringType) _state;
+                        }
                         break;
 
                     case SoulissBindingConstants.T31_OFF_MESSAGE_SYSTEM_CHANNEL:
-                        this.updateState(SoulissBindingConstants.T31_SYSTEM_CHANNEL, OnOffType.OFF);
+                        if (!_powerState.equals(_state)) {
+                            this.updateState(SoulissBindingConstants.T31_SYSTEM_CHANNEL, OnOffType.OFF);
+                            _powerState = (StringType) _state;
+                        }
                         break;
                     case SoulissBindingConstants.T31_ON_MESSAGE_SYSTEM_CHANNEL:
-                        this.updateState(SoulissBindingConstants.T31_SYSTEM_CHANNEL, OnOffType.ON);
+                        if (!_powerState.equals(_state)) {
+                            this.updateState(SoulissBindingConstants.T31_SYSTEM_CHANNEL, OnOffType.ON);
+                            _powerState = (StringType) _state;
+                        }
                         break;
 
                     case SoulissBindingConstants.T31_ON_MESSAGE_FIRE_CHANNEL:
-                        this.updateState(SoulissBindingConstants.T31_FIRE_CHANNEL, OnOffType.ON);
+                        if (!_fireState.equals(_state)) {
+                            this.updateState(SoulissBindingConstants.T31_FIRE_CHANNEL, OnOffType.ON);
+                            _powerState = (StringType) _state;
+                        }
                         break;
                     case SoulissBindingConstants.T31_OFF_MESSAGE_FIRE_CHANNEL:
-                        this.updateState(SoulissBindingConstants.T31_FIRE_CHANNEL, OnOffType.OFF);
+                        if (!_fireState.equals(_state)) {
+                            this.updateState(SoulissBindingConstants.T31_FIRE_CHANNEL, OnOffType.OFF);
+                            _powerState = (StringType) _state;
+                        }
                         break;
                 }
+
             }
+
         }
     }
 
     public void setMeasuredValue(DecimalType valueOf) {
         if (valueOf instanceof DecimalType) {
-            this.updateState(SoulissBindingConstants.T31_VALUE_CHANNEL, valueOf);
+            if (!_setMeasuredValue.equals(valueOf)) {
+                this.updateState(SoulissBindingConstants.T31_VALUE_CHANNEL, valueOf);
+                _setMeasuredValue = valueOf;
+            }
         }
+
     }
 
     public void setSetpointValue(DecimalType valueOf) {
         if (valueOf instanceof DecimalType) {
-            this.updateState(SoulissBindingConstants.T31_SETPOINT_CHANNEL, valueOf);
+            if (!_setPointValue.equals(valueOf)) {
+                this.updateState(SoulissBindingConstants.T31_SETPOINT_CHANNEL, valueOf);
+                _setPointValue = valueOf;
+            }
         }
+
     }
 
     String sMessage = "";
 
     public void setRawStateValues(byte _rawState_byte0, float _valTemp, byte _valSetPoint) {
-        super.setLastStatusStored();
-        if (T3nRawState != _rawState_byte0 || fValTemp != _valTemp || fValSetPoint != _valSetPoint) {
-            sMessage = "";
-            switch (getBitState(_rawState_byte0, 0)) {
-                case 0:
-                    sMessage = SoulissBindingConstants.T31_OFF_MESSAGE_SYSTEM_CHANNEL;
-                    break;
-                case 1:
-                    sMessage = SoulissBindingConstants.T31_ON_MESSAGE_SYSTEM_CHANNEL;
-                    break;
-            }
-            this.setState(StringType.valueOf(sMessage));
 
-            switch (getBitState(_rawState_byte0, 7)) {
-                case 0:
-                    sMessage = SoulissBindingConstants.T31_HEATINGMODE_MESSAGE_MODE_CHANNEL;
-                    break;
-                case 1:
-                    sMessage = SoulissBindingConstants.T31_COOLINGMODE_MESSAGE_MODE_CHANNEL;
-                    break;
-            }
-            this.setState(StringType.valueOf(sMessage));
-
-            // button indicante se il sistema sta andando o meno
-            switch (getBitState(_rawState_byte0, 1) + getBitState(_rawState_byte0, 2)) {
-                case 0:
-                    sMessage = SoulissBindingConstants.T31_OFF_MESSAGE_FIRE_CHANNEL;
-                    break;
-                case 1:
-                    sMessage = SoulissBindingConstants.T31_ON_MESSAGE_FIRE_CHANNEL;
-                    break;
-            }
-            this.setState(StringType.valueOf(sMessage));
-
-            // FAN SPEED
-            switch (getBitState(_rawState_byte0, 3) + getBitState(_rawState_byte0, 4)
-                    + getBitState(_rawState_byte0, 5)) {
-                case 0:
-                    sMessage = SoulissBindingConstants.T31_FANOFF_MESSAGE_FAN_CHANNEL;
-                    break;
-                case 1:
-                    sMessage = SoulissBindingConstants.T31_FANLOW_MESSAGE_FAN_CHANNEL;
-                    break;
-                case 2:
-                    sMessage = SoulissBindingConstants.T31_FANMEDIUM_MESSAGE_FAN_CHANNEL;
-                    break;
-                case 3:
-                    sMessage = SoulissBindingConstants.T31_FANHIGH_MESSAGE_FAN_CHANNEL;
-                    break;
-            }
-
-            this.setState(StringType.valueOf(sMessage));
-
-            // SLOT 1-2: Temperature Value
-            if (!Float.isNaN(_valTemp)) {
-                this.setMeasuredValue(DecimalType.valueOf(String.valueOf(_valTemp)));
-            }
-
-            // SLOT 3-4: Setpoint Value
-            if (!Float.isNaN(_valSetPoint)) {
-                this.setSetpointValue(DecimalType.valueOf(String.valueOf(_valSetPoint)));
-            }
+        sMessage = "";
+        switch (getBitState(_rawState_byte0, 0)) {
+            case 0:
+                sMessage = SoulissBindingConstants.T31_OFF_MESSAGE_SYSTEM_CHANNEL;
+                break;
+            case 1:
+                sMessage = SoulissBindingConstants.T31_ON_MESSAGE_SYSTEM_CHANNEL;
+                break;
         }
+        this.setState(StringType.valueOf(sMessage));
+
+        switch (getBitState(_rawState_byte0, 7)) {
+            case 0:
+                sMessage = SoulissBindingConstants.T31_HEATINGMODE_MESSAGE_MODE_CHANNEL;
+                break;
+            case 1:
+                sMessage = SoulissBindingConstants.T31_COOLINGMODE_MESSAGE_MODE_CHANNEL;
+                break;
+        }
+        this.setState(StringType.valueOf(sMessage));
+
+        // button indicante se il sistema sta andando o meno
+        switch (getBitState(_rawState_byte0, 1) + getBitState(_rawState_byte0, 2)) {
+            case 0:
+                sMessage = SoulissBindingConstants.T31_OFF_MESSAGE_FIRE_CHANNEL;
+                break;
+            case 1:
+                sMessage = SoulissBindingConstants.T31_ON_MESSAGE_FIRE_CHANNEL;
+                break;
+        }
+        this.setState(StringType.valueOf(sMessage));
+
+        // FAN SPEED
+        switch (getBitState(_rawState_byte0, 3) + getBitState(_rawState_byte0, 4) + getBitState(_rawState_byte0, 5)) {
+            case 0:
+                sMessage = SoulissBindingConstants.T31_FANOFF_MESSAGE_FAN_CHANNEL;
+                break;
+            case 1:
+                sMessage = SoulissBindingConstants.T31_FANLOW_MESSAGE_FAN_CHANNEL;
+                break;
+            case 2:
+                sMessage = SoulissBindingConstants.T31_FANMEDIUM_MESSAGE_FAN_CHANNEL;
+                break;
+            case 3:
+                sMessage = SoulissBindingConstants.T31_FANHIGH_MESSAGE_FAN_CHANNEL;
+                break;
+        }
+
+        this.setState(StringType.valueOf(sMessage));
+
+        // SLOT 1-2: Temperature Value
+        if (!Float.isNaN(_valTemp)) {
+            this.setMeasuredValue(DecimalType.valueOf(String.valueOf(_valTemp)));
+        }
+
+        // SLOT 3-4: Setpoint Value
+        if (!Float.isNaN(_valSetPoint)) {
+            this.setSetpointValue(DecimalType.valueOf(String.valueOf(_valSetPoint)));
+        }
+
     }
 
     @Override
     public byte getRawState() {
-        throw new NotImplementedException();
-    }
-
-    public byte getRawState_command() {
-        return T3nRawState;
-    }
-
-    public float[] getRawState_values() {
-        return new float[] { fValTemp, fValSetPoint };
+        // TODO Auto-generated method stub
+        return 0;
     }
 
     @Override
-    public byte getExpectedRawState(byte bCmd) {
-        return -1;
+    public byte getExpectedRawState(byte bCommand) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
     public short getBitState(short vRaw, int iBit) {
@@ -325,4 +307,5 @@ public class SoulissT31Handler extends SoulissGenericHandler implements typicalC
     public void setRawState(byte _rawState) {
         throw new NotImplementedException();
     }
+
 }

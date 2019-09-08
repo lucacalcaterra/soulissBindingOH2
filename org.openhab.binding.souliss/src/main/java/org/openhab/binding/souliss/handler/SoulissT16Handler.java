@@ -41,8 +41,6 @@ public class SoulissT16Handler extends SoulissGenericHandler {
     byte T1nRawStateGREEN_byte2;
     byte T1nRawStateBLU_byte3;
 
-    Number bSecureSend = -1; // -1 means that Secure Send is disabled
-
     // HSBType hsbState = HSBType.WHITE;
     short xSleepTime = 0;
 
@@ -155,7 +153,7 @@ public class SoulissT16Handler extends SoulissGenericHandler {
             xSleepTime = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL)).shortValue();
         }
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND) != null) {
-            bSecureSend = (Number) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND);
+            bSecureSend = ((Boolean) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND)).booleanValue();
         }
     }
 
@@ -214,15 +212,16 @@ public class SoulissT16Handler extends SoulissGenericHandler {
 
     @Override
     public byte getExpectedRawState(byte bCmd) {
-        if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OnCmd) {
-            return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
-        } else if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OffCmd) {
-            return SoulissBindingProtocolConstants.Souliss_T1n_OffCoil;
-        } else if (bCmd >= SoulissBindingProtocolConstants.Souliss_T1n_Timed) {
-            // SLEEP
-            return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+        if (bSecureSend) {
+            if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OnCmd) {
+                return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+            } else if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OffCmd) {
+                return SoulissBindingProtocolConstants.Souliss_T1n_OffCoil;
+            } else if (bCmd >= SoulissBindingProtocolConstants.Souliss_T1n_Timed) {
+                // SLEEP
+                return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+            }
         }
-
         return -1;
     }
 

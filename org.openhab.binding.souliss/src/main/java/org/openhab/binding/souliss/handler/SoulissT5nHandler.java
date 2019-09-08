@@ -71,6 +71,7 @@ public class SoulissT5nHandler extends SoulissGenericHandler {
 
     @Override
     public byte getExpectedRawState(byte bCommand) {
+        // Secure Send is disabled
         return -1;
     }
 }

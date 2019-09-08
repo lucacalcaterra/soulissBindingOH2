@@ -32,8 +32,6 @@ public class SoulissT14Handler extends SoulissGenericHandler {
     byte T1nRawState;
     byte xSleepTime = 0;
 
-    Number bSecureSend = -1; // -1 means that Secure Send is disabled
-
     public SoulissT14Handler(Thing _thing) {
         super(_thing);
     }

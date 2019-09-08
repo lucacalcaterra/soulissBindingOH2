@@ -7,9 +7,13 @@
  */
 package org.openhab.binding.souliss.handler;
 
+import java.math.BigDecimal;
+
+import org.eclipse.smarthome.config.core.Configuration;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
+import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.eclipse.smarthome.core.types.RefreshType;
@@ -26,6 +30,24 @@ public class SoulissT18Handler extends SoulissGenericHandler {
 
     // private Logger logger = LoggerFactory.getLogger(SoulissT18Handler.class);
     byte T1nRawState;
+    Configuration gwConfigurationMap;
+    // HSBType hsbState = HSBType.WHITE;
+    short xSleepTime = 0;
+
+    @Override
+    public void initialize() {
+
+        updateStatus(ThingStatus.ONLINE);
+
+        gwConfigurationMap = thing.getConfiguration();
+
+        if (gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL) != null) {
+            xSleepTime = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL)).shortValue();
+        }
+        if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND) != null) {
+            bSecureSend = ((Boolean) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND)).booleanValue();
+        }
+    }
 
     public SoulissT18Handler(Thing _thing) {
         super(_thing);
@@ -80,15 +102,16 @@ public class SoulissT18Handler extends SoulissGenericHandler {
 
     @Override
     public byte getExpectedRawState(byte bCmd) {
-        if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OnCmd) {
-            return SoulissBindingProtocolConstants.Souliss_T1n_OnFeedback;
-        } else if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OffCmd) {
-            return SoulissBindingProtocolConstants.Souliss_T1n_OffFeedback;
-        } else if (bCmd >= SoulissBindingProtocolConstants.Souliss_T1n_Timed) {
-            // SLEEP
-            return SoulissBindingProtocolConstants.Souliss_T1n_OnFeedback;
+        if (bSecureSend) {
+            if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OnCmd) {
+                return SoulissBindingProtocolConstants.Souliss_T1n_OnFeedback;
+            } else if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OffCmd) {
+                return SoulissBindingProtocolConstants.Souliss_T1n_OffFeedback;
+            } else if (bCmd >= SoulissBindingProtocolConstants.Souliss_T1n_Timed) {
+                // SLEEP
+                return SoulissBindingProtocolConstants.Souliss_T1n_OnFeedback;
+            }
         }
-
         return -1;
     }
 }

@@ -28,7 +28,7 @@ import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
  */
 public class SoulissT12Handler extends SoulissGenericHandler {
     Configuration gwConfigurationMap;
-    Number bSecureSend = -1; // -1 means that Secure Send is disabled
+
     byte T1nRawState;
     byte xSleepTime = 0;
 
@@ -54,7 +54,7 @@ public class SoulissT12Handler extends SoulissGenericHandler {
             xSleepTime = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL)).byteValue();
         }
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND) != null) {
-            bSecureSend = (Number) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND);
+            bSecureSend = ((Boolean) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND)).booleanValue();
         }
 
     }
@@ -166,13 +166,15 @@ public class SoulissT12Handler extends SoulissGenericHandler {
 
     @Override
     public byte getExpectedRawState(byte bCommand) {
-        if (bCommand == SoulissBindingProtocolConstants.Souliss_T1n_OnCmd) {
-            return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
-        } else if (bCommand == SoulissBindingProtocolConstants.Souliss_T1n_OffCmd) {
-            return SoulissBindingProtocolConstants.Souliss_T1n_OffCoil;
-        } else if (bCommand >= SoulissBindingProtocolConstants.Souliss_T1n_Timed) {
-            // SLEEP
-            return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+        if (bSecureSend) {
+            if (bCommand == SoulissBindingProtocolConstants.Souliss_T1n_OnCmd) {
+                return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+            } else if (bCommand == SoulissBindingProtocolConstants.Souliss_T1n_OffCmd) {
+                return SoulissBindingProtocolConstants.Souliss_T1n_OffCoil;
+            } else if (bCommand >= SoulissBindingProtocolConstants.Souliss_T1n_Timed) {
+                // SLEEP
+                return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+            }
         }
         return -1;
     }

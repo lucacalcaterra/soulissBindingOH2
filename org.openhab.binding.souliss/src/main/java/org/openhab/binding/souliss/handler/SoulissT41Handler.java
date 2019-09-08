@@ -32,8 +32,6 @@ public class SoulissT41Handler extends SoulissGenericHandler {
     // private Logger logger = LoggerFactory.getLogger(SoulissT11Handler.class);
     byte T4nRawState;
 
-    Number bSecureSend = -1; // -1 means that Secure Send is disabled
-
     public SoulissT41Handler(Thing _thing) {
         super(_thing);
     }
@@ -77,7 +75,7 @@ public class SoulissT41Handler extends SoulissGenericHandler {
 
         gwConfigurationMap = thing.getConfiguration();
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND) != null) {
-            bSecureSend = (Number) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND);
+            bSecureSend = ((Boolean) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND)).booleanValue();
         }
 
     }
@@ -136,13 +134,15 @@ public class SoulissT41Handler extends SoulissGenericHandler {
 
     @Override
     public byte getExpectedRawState(byte bCmd) {
-        // da testare
-        if (bCmd == SoulissBindingProtocolConstants.Souliss_T4n_Armed) {
-            return SoulissBindingProtocolConstants.Souliss_T4n_Antitheft;
-        } else if (bCmd == SoulissBindingProtocolConstants.Souliss_T4n_NotArmed) {
-            return SoulissBindingProtocolConstants.Souliss_T4n_NoAntitheft;
-        } else if (bCmd >= SoulissBindingProtocolConstants.Souliss_T4n_ReArm) {
-            return SoulissBindingProtocolConstants.Souliss_T4n_Antitheft;
+        if (bSecureSend) {
+            // da testare
+            if (bCmd == SoulissBindingProtocolConstants.Souliss_T4n_Armed) {
+                return SoulissBindingProtocolConstants.Souliss_T4n_Antitheft;
+            } else if (bCmd == SoulissBindingProtocolConstants.Souliss_T4n_NotArmed) {
+                return SoulissBindingProtocolConstants.Souliss_T4n_NoAntitheft;
+            } else if (bCmd >= SoulissBindingProtocolConstants.Souliss_T4n_ReArm) {
+                return SoulissBindingProtocolConstants.Souliss_T4n_Antitheft;
+            }
         }
         return -1;
     }

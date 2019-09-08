@@ -55,6 +55,20 @@
                 <default>1000</default>
                 <advanced>true</advanced>
             </parameter>
+            
+              <parameter name="timeoutRequeue" type="integer" min="0" max="10000">
+                <label>Interval in milliseconds to requeue packet in queue if not yet executed</label>
+                <description></description>
+                <required>true</required>
+                <default>5000</default>
+            </parameter>
+            
+             <parameter name="timeoutRemovePacket" type="integer" min="0" max="60000">
+                <label>Interval in milliseconds to remove packet from queue if not yet executed </label>
+                <description></description>
+                <required>true</required>
+                <default>20000</default>
+            </parameter>
 
 			<parameter name="USER_INDEX" type="integer" required="true">
 				<label>User Index</label>
@@ -94,11 +108,11 @@
 				<required>false</required>
 				<default>5</default>
 			</parameter>
-			 <parameter name="secureSend" type="integer" min="0" max="1">
+			 <parameter name="secureSend" type="boolean">
                 <label>Secure Send</label>
                 <description></description>
                 <required>false</required>
-                <default>1</default>
+                <default>true</default>
             </parameter>
 
 		</config-description>
@@ -123,11 +137,11 @@
                 <required>false</required>
                 <default>5</default>
             </parameter>
-             <parameter name="secureSend" type="integer" min="0" max="1">
+             <parameter name="secureSend" type="boolean">
                 <label>Secure Send</label>
                 <description></description>
                 <required>false</required>
-                <default>1</default>
+                <default>true</default>
             </parameter>
         </config-description>
 	</thing-type>
@@ -186,11 +200,11 @@
                 <default>5</default>
             </parameter>
            
-             <parameter name="secureSend" type="integer" min="0" max="1">
+             <parameter name="secureSend" type="boolean">
                 <label>Secure Send</label>
                 <description></description>
                 <required>false</required>
-                <default>1</default>
+                <default>true</default>
             </parameter>
         </config-description>
     </thing-type>
@@ -215,11 +229,11 @@
                 <default>5</default>
             </parameter>
            
-             <parameter name="secureSend" type="integer" min="0" max="1">
+             <parameter name="secureSend" type="boolean">
                 <label>Secure Send</label>
                 <description></description>
                 <required>false</required>
-                <default>1</default>
+                <default>true</default>
             </parameter>
         </config-description>
     </thing-type>
@@ -299,11 +313,11 @@
             <channel id="healty" typeId="healty" />
         </channels>
         <config-description>
-             <parameter name="secureSend" type="integer" min="0" max="1">
+             <parameter name="secureSend" type="boolean">
                 <label>Secure Send</label>
                 <description></description>
                 <required>false</required>
-                <default>1</default>
+                <default>true</default>
             </parameter>
         </config-description>
     </thing-type>
@@ -321,11 +335,11 @@
             <channel id="healty" typeId="healty" />
         </channels>
           <config-description>
-             <parameter name="secureSend" type="integer" min="0" max="1">
+             <parameter name="secureSend" type="boolean">
                 <label>Secure Send</label>
                 <description></description>
                 <required>false</required>
-                <default>1</default>
+                <default>true</default>
             </parameter>
         </config-description>
     </thing-type>
@@ -378,11 +392,11 @@
             
         </channels>
                  <config-description>
-             <parameter name="secureSend" type="integer" min="0" max="1">
+             <parameter name="secureSend" type="boolean">
                 <label>Secure Send</label>
                 <description></description>
                 <required>false</required>
-                <default>1</default>
+                <default>true</default>
             </parameter>
         </config-description>
     </thing-type>
@@ -407,11 +421,11 @@
             <channel id="healty" typeId="healty" />
         </channels>
                  <config-description>
-             <parameter name="secureSend" type="integer" min="0" max="1">
+             <parameter name="secureSend" type="boolean">
                 <label>Secure Send</label>
                 <description></description>
                 <required>false</required>
-                <default>1</default>
+                <default>true</default>
             </parameter>
         </config-description>
     </thing-type>

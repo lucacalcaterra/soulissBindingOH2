@@ -37,7 +37,6 @@ public class SoulissT19Handler extends SoulissGenericHandler {
     byte T1nRawStateBrigthness_byte1;
 
     short xSleepTime = 0;
-    Number bSecureSend = -1; // -1 means that Secure Send is disabled
 
     public SoulissT19Handler(Thing _thing) {
         super(_thing);
@@ -115,7 +114,7 @@ public class SoulissT19Handler extends SoulissGenericHandler {
             xSleepTime = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL)).shortValue();
         }
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND) != null) {
-            bSecureSend = (Number) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND);
+            bSecureSend = ((Boolean) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND)).booleanValue();
         }
     }
 
@@ -165,15 +164,16 @@ public class SoulissT19Handler extends SoulissGenericHandler {
 
     @Override
     public byte getExpectedRawState(byte bCmd) {
-        if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OnCmd) {
-            return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
-        } else if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OffCmd) {
-            return SoulissBindingProtocolConstants.Souliss_T1n_OffCoil;
-        } else if (bCmd >= SoulissBindingProtocolConstants.Souliss_T1n_Timed) {
-            // SLEEP
-            return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+        if (bSecureSend) {
+            if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OnCmd) {
+                return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+            } else if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OffCmd) {
+                return SoulissBindingProtocolConstants.Souliss_T1n_OffCoil;
+            } else if (bCmd >= SoulissBindingProtocolConstants.Souliss_T1n_Timed) {
+                // SLEEP
+                return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+            }
         }
-
         return -1;
     }
 }

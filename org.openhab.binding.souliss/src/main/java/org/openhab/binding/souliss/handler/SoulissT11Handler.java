@@ -32,8 +32,6 @@ public class SoulissT11Handler extends SoulissGenericHandler {
     byte T1nRawState;
     byte xSleepTime = 0;
 
-    Number bSecureSend = -1; // -1 means that Secure Send is disabled
-
     public SoulissT11Handler(Thing _thing) {
         super(_thing);
     }
@@ -92,22 +90,25 @@ public class SoulissT11Handler extends SoulissGenericHandler {
             xSleepTime = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL)).byteValue();
         }
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND) != null) {
-            bSecureSend = (Number) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND);
+            // bSecureSend = ((BigDecimal)
+            // gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND)).intValue();
+            bSecureSend = ((Boolean) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND)).booleanValue();
         }
 
     }
 
     @Override
     public byte getExpectedRawState(byte bCmd) {
-        if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OnCmd) {
-            return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
-        } else if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OffCmd) {
-            return SoulissBindingProtocolConstants.Souliss_T1n_OffCoil;
-        } else if (bCmd >= SoulissBindingProtocolConstants.Souliss_T1n_Timed) {
-            // SLEEP
-            return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+        if (bSecureSend) {
+            if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OnCmd) {
+                return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+            } else if (bCmd == SoulissBindingProtocolConstants.Souliss_T1n_OffCmd) {
+                return SoulissBindingProtocolConstants.Souliss_T1n_OffCoil;
+            } else if (bCmd >= SoulissBindingProtocolConstants.Souliss_T1n_Timed) {
+                // SLEEP
+                return SoulissBindingProtocolConstants.Souliss_T1n_OnCoil;
+            }
         }
-
         return -1;
     }
 

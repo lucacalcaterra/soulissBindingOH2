@@ -32,8 +32,6 @@ public class SoulissT42Handler extends SoulissGenericHandler {
     // private Logger logger = LoggerFactory.getLogger(SoulissT11Handler.class);
     byte T4nRawState;
 
-    Number bSecureSend = -1; // -1 means that Secure Send is disabled
-
     public SoulissT42Handler(Thing _thing) {
         super(_thing);
     }
@@ -61,7 +59,7 @@ public class SoulissT42Handler extends SoulissGenericHandler {
 
         gwConfigurationMap = thing.getConfiguration();
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND) != null) {
-            bSecureSend = (Number) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND);
+            bSecureSend = ((Boolean) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND)).booleanValue();
         }
 
     }
@@ -103,8 +101,10 @@ public class SoulissT42Handler extends SoulissGenericHandler {
 
     @Override
     public byte getExpectedRawState(byte bCmd) {
-        if (bCmd == SoulissBindingProtocolConstants.Souliss_T4n_ReArm) {
-            return SoulissBindingProtocolConstants.Souliss_T4n_Antitheft;
+        if (bSecureSend) {
+            if (bCmd == SoulissBindingProtocolConstants.Souliss_T4n_ReArm) {
+                return SoulissBindingProtocolConstants.Souliss_T4n_Antitheft;
+            }
         }
         return -1;
     }

@@ -52,6 +52,8 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
     public boolean thereIsAThingDetection = true;
     public int healthRefreshInterval;
     public int sendRefreshInterval;
+    public int sendTimeoutToRequeue;
+    public int sendTimeoutToRemovePacket;
     private Bridge bridge;
     public int preferred_local_port;
     public int souliss_gateway_port;
@@ -156,6 +158,18 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
             sendRefreshInterval = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SEND_REFRESH))
                     .intValue();
             logger.debug("Get send refresh interval: {}", sendRefreshInterval);
+        }
+
+        if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_TIMEOUT_TO_REQUEUE) != null) {
+            sendTimeoutToRequeue = ((BigDecimal) gwConfigurationMap
+                    .get(SoulissBindingConstants.CONFIG_TIMEOUT_TO_REQUEUE)).intValue();
+            logger.debug("Get send timeout to requeue: {}", sendTimeoutToRequeue);
+        }
+
+        if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_TIMEOUT_TO_REMOVE_PACKET) != null) {
+            sendTimeoutToRequeue = ((BigDecimal) gwConfigurationMap
+                    .get(SoulissBindingConstants.CONFIG_TIMEOUT_TO_REMOVE_PACKET)).intValue();
+            logger.debug("Get send timeout to requeue: {}", sendTimeoutToRequeue);
         }
 
         // START SERVER ON DEFAULT PORT - Used for topics

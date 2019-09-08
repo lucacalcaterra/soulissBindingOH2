@@ -35,10 +35,7 @@ import org.slf4j.LoggerFactory;
 public class SoulissBindingSendDispatcherJob implements Runnable {
 
     private static Logger logger = LoggerFactory.getLogger(SoulissGatewayJobHealty.class);
-    // private String _iPAddressOnLAN;
-    // private short _userIndex;
-    // private short _nodeIndex;
-    private int _maxDelay;
+
     private SoulissGatewayHandler gw;
     static boolean bPopSuspend = false;
     public static ArrayList<SoulissBindingSocketAndPacketStruct> packetsList = new ArrayList<SoulissBindingSocketAndPacketStruct>();
@@ -50,9 +47,6 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
     public SoulissBindingSendDispatcherJob(Bridge bridge) {
         gw = (SoulissGatewayHandler) bridge.getHandler();
         _iPAddressOnLAN = gw.IPAddressOnLAN;
-        // _userIndex = gw.userIndex;
-        // _nodeIndex = gw.nodeIndex;
-        set_sendMaxDelay(gw.sendRefreshInterval);
     }
 
     /**
@@ -160,7 +154,8 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
                 }
                 // confronta gli stati in memoria con i frame inviati. Se
                 // corrispondono cancella il frame dalla lista inviati
-                SoulissBindingSendDispatcherJob.safeSendCheck();
+                safeSendCheck();
+
                 resetTime();
             }
         } catch (IOException e) {
@@ -169,14 +164,6 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
             logger.warn(e.getMessage());
         }
 
-    }
-
-    public int get_sendMaxDelay() {
-        return _maxDelay;
-    }
-
-    public void set_sendMaxDelay(int _refreshInterval) {
-        this._maxDelay = _refreshInterval;
     }
 
     /**
@@ -216,10 +203,11 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
     static byte bActualItemState;
     static String sExpected;
 
-    public static void safeSendCheck() {
+    public void safeSendCheck() {
         // short sVal = getByteAtSlot(macacoFrame, slot);
         // scansione lista paccetti inviati
         for (int i = 0; i < packetsList.size(); i++) {
+
             if (packetsList.get(i).isSent()) {
                 node = getNode(packetsList.get(i).packet);
                 iSlot = 0;
@@ -229,9 +217,13 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
                         // recupero tipico dalla memoria
                         typ = getHandler(_iPAddressOnLAN, node, iSlot);
                         bExpected = typ.getExpectedRawState(packetsList.get(i).packet.getData()[j]);
-                        // bExpected = typ.getExpectedState(packetsList.get(i).packet.getData()[j]).byteValue();
 
-                        //
+                        // se il valore atteso dal tipico è -1 allora vuol dire che il tipico non supporta la
+                        // funzione
+                        // secureSend
+                        if (bExpected < 0) {
+                            typ = null;
+                        }
 
                         // traduce il comando inviato con lo stato previsto e
                         // poi fa il confronto con lo stato attuale
@@ -249,8 +241,8 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
                             sExpected = sExpected.length() < 2 ? "0x0" + sExpected.toUpperCase()
                                     : "0x" + sExpected.toUpperCase();
                             logger.debug(
-                                    "Compare. Node: {} Slot: {} Typical: {} Command: {} Expected Souliss State: {} - Actual OH item State: {}",
-                                    node, iSlot, "--", sCmd, sExpected, typ.getRawState());
+                                    "Compare. Node: {} Slot: {} Node Name: {} Command: {} Expected Souliss State: {} - Actual OH item State: {}",
+                                    node, iSlot, typ.getLabel(), sCmd, sExpected, typ.getRawState());
 
                             // logger.debug(
                             // "Compare. Node: {} Slot: {} Typical: {} Command: {} EXPECTED: {} - IN MEMORY: {}",
@@ -268,16 +260,46 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
                             packetsList.get(i).packet.getData()[j] = 0;
                             logger.debug("{} Node: {} Slot: {} - OK Expected State", typ.getLabel(), node, iSlot);
                         } else if (typ == null) {
-                            // se allo slot j non esiste un tipico allora vuol dire che si tratta di uno slot collegato
-                            // al precedente (es: RGB, T31,...)
-                            // allora se lo slot j-1=0 allora anche j puÃ² essere messo a 0
-                            if (packetsList.get(i).packet.getData()[j - 1] == 0) {
+                            if (bExpected < 0) {
+                                // se il tipico non viene gestito allora metto a zero il byte del relativo
+                                // slot
                                 packetsList.get(i).packet.getData()[j] = 0;
+                            } else {
+                                // se allo slot j non esiste un tipico allora vuol dire che si tratta di uno slot
+                                // collegato
+                                // al precedente (es: RGB, T31,...)
+                                // allora se lo slot j-1=0 allora anche j puÃ² essere messo a 0
+                                if (packetsList.get(i).packet.getData()[j - 1] == 0) {
+                                    packetsList.get(i).packet.getData()[j] = 0;
+                                }
                             }
                         }
                     }
                     iSlot++;
                 }
+
+                // se il valore di tutti i byte che costituiscono il pacchetto è 0 allora rimuovo il pacchetto dalla
+                // lista
+                // inoltre se è trascorso il timout allora imposto il pacchetto per essere trasmesso nuovamente
+                if (checkAllsSlotZero(packetsList.get(i).packet)) {
+                    logger.debug("Command packet executed - Removed");
+                    packetsList.remove(i);
+                } else {
+                    // se il frame non è uguale a zero controllo il TIMEOUT e se
+                    // è scaduto allora pongo il flag SENT a false
+                    long t = System.currentTimeMillis();
+
+                    if (this.gw.sendTimeoutToRequeue < t - packetsList.get(i).getTime()) {
+                        if (this.gw.sendTimeoutToRemovePacket < t - packetsList.get(i).getTime()) {
+                            logger.info("Packet Execution timeout - Removed");
+                            packetsList.remove(i);
+                        } else {
+                            logger.info("Packet Execution timeout - Requeued");
+                            packetsList.get(i).setSent(false);
+                        }
+                    }
+                }
+
             }
         }
     }
@@ -307,7 +329,7 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
                     if (sUID_Array[0].equals(SoulissBindingConstants.BINDING_ID) && Short
                             .parseShort(handler.getGatewayIP().toString().split("\\.")[3]) == _lastByteGatewayIP) {
 
-                        if ((handler) != null && handler.getNode() == node) {
+                        if ((handler) != null && handler.getNode() == node && handler.getSlot() == slot) {
 
                             return handler;
                         }
@@ -358,7 +380,7 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
                 if (packetsList.size() <= 1) {
                     iDelay = SEND_MIN_DELAY;
                 } else {
-                    iDelay = this.get_sendMaxDelay();
+                    iDelay = this.gw.sendRefreshInterval;
                 }
 
                 int iPacket = 0;
@@ -372,7 +394,7 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
                     }
                 }
 
-                boolean tFlag = (t - t_prec) >= this.get_sendMaxDelay();
+                boolean tFlag = (t - t_prec) >= this.gw.sendRefreshInterval;
                 ;
                 // se siamo arrivati alla fine della lista e quindi tutti i
                 // pacchetti sono già  stati inviati allora pongo anche il tFlag

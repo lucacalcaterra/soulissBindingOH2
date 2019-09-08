@@ -51,6 +51,9 @@ public abstract class SoulissGenericHandler extends BaseThingHandler implements 
     private int iNode;
     private static Logger logger = LoggerFactory.getLogger(SoulissGenericHandler.class);
 
+    boolean bSecureSend = false; // 0 means that Secure Send is disabled
+    boolean bExpectedValueSameAsSet = false; // true means that expected value is setpoint (only for T31, T19 and T6x)
+
     public SoulissGenericHandler(Thing _thing) {
         super(_thing);
         thing = _thing;

@@ -74,7 +74,6 @@ public class SoulissT6nHandler extends SoulissGenericHandler implements typicalC
 
     @Override
     public byte getExpectedRawState(byte bCommand) {
-        // TODO Auto-generated method stub
         return -1;
     }
 }

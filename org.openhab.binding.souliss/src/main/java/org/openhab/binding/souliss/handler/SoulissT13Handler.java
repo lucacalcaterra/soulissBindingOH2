@@ -89,7 +89,7 @@ public class SoulissT13Handler extends SoulissGenericHandler {
 
     @Override
     public byte getExpectedRawState(byte bCommand) {
-        // TODO Auto-generated method stub
-        return 0;
+        // Secure Send is disabled
+        return -1;
     }
 }

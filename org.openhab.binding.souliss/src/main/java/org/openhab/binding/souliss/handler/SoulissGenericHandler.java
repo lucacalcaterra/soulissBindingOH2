@@ -18,14 +18,16 @@ import java.util.Date;
 
 import org.eclipse.smarthome.core.library.types.DateTimeType;
 import org.eclipse.smarthome.core.library.types.DecimalType;
+import org.eclipse.smarthome.core.library.types.OnOffType;
+import org.eclipse.smarthome.core.library.types.OpenClosedType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.ThingStatusInfo;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
-import org.eclipse.smarthome.core.types.PrimitiveType;
 import org.openhab.binding.souliss.SoulissBindingConstants;
+import org.openhab.binding.souliss.SoulissBindingProtocolConstants;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
 import org.openhab.binding.souliss.internal.protocol.SoulissCommonCommands;
 import org.slf4j.Logger;
@@ -45,29 +47,18 @@ import org.slf4j.LoggerFactory;
  * @author Tonino Fazio
  * @since 1.7.0
  */
-public abstract class SoulissGenericTypical extends BaseThingHandler {
-
-    /**
-     * Result callback interface.
-     */
-    public interface typicalCommonMethods {
-
-        void setState(PrimitiveType _state);
-
-        // PrimitiveType getState();
-
-        // DateTimeType getLastUpdateTime();
-
-        // void setLastUpdateTime(String string);
-    }
+public abstract class SoulissGenericHandler extends BaseThingHandler implements typicalCommonMethods {
 
     Thing thing;
 
     private int iSlot;
     private int iNode;
-    private static Logger logger = LoggerFactory.getLogger(SoulissGenericTypical.class);
+    private static Logger logger = LoggerFactory.getLogger(SoulissGenericHandler.class);
 
-    public SoulissGenericTypical(Thing _thing) {
+    boolean bSecureSend = false; // 0 means that Secure Send is disabled
+    boolean bExpectedValueSameAsSet = false; // true means that expected value is setpoint (only for T31, T19 and T6x)
+
+    public SoulissGenericHandler(Thing _thing) {
         super(_thing);
         thing = _thing;
         int iPosNode_Slot = 2; // if uuid is of type souliss:gateway:[typical]:[node]-[slot] then node/slot is at
@@ -169,7 +160,14 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
         return null;
     }
 
+<<<<<<< HEAD:org.openhab.binding.souliss/src/main/java/org/openhab/binding/souliss/handler/SoulissGenericTypical.java
     @SuppressWarnings("null")
+=======
+    public String getLabel() {
+        return thing.getLabel();
+    }
+
+>>>>>>> secureSend:org.openhab.binding.souliss/src/main/java/org/openhab/binding/souliss/handler/SoulissGenericHandler.java
     public short getGatewayUserIndex() {
         if (getBridge() != null) {
             return ((SoulissGatewayHandler) getBridge().getHandler()).userIndex;
@@ -195,6 +193,33 @@ public abstract class SoulissGenericTypical extends BaseThingHandler {
 
     public void setLastStatusStored() {
         this.updateState(SoulissBindingConstants.LASTSTATUSSTORED_CHANNEL, DateTimeType.valueOf(getTimestamp()));
+    }
+
+    protected OnOffType getOHState_OnOff_FromSoulissVal(byte sVal) {
+        if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil) {
+            return OnOffType.ON;
+        } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil) {
+            return OnOffType.OFF;
+        } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnFeedback) {
+            return OnOffType.ON;
+        } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffFeedback) {
+            return OnOffType.OFF;
+        } else if (sVal == SoulissBindingProtocolConstants.Souliss_T4n_NotArmed) {
+            return OnOffType.OFF;
+        } else if (sVal == SoulissBindingProtocolConstants.Souliss_T4n_Armed) {
+            return OnOffType.ON;
+        }
+
+        return null;
+    }
+
+    protected OpenClosedType getOHState_OpenClose_FromSoulissVal(short sVal) {
+        if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil) {
+            return OpenClosedType.CLOSED;
+        } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil) {
+            return OpenClosedType.OPEN;
+        }
+        return null;
     }
 
 }

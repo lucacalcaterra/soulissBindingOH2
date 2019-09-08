@@ -30,6 +30,7 @@ import org.openhab.binding.souliss.SoulissBindingConstants;
 import org.openhab.binding.souliss.SoulissBindingUDPConstants;
 import org.openhab.binding.souliss.internal.SoulissDatagramSocketFactory;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingNetworkParameters;
+import org.openhab.binding.souliss.internal.protocol.SoulissBindingSendDispatcherJob;
 import org.openhab.binding.souliss.internal.protocol.SoulissBindingUDPServerJob;
 import org.openhab.binding.souliss.internal.protocol.SoulissCommonCommands;
 import org.slf4j.Logger;
@@ -55,6 +56,9 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
     public int subscriptionRefreshInterval;
     public boolean thereIsAThingDetection = true;
     public int healthRefreshInterval;
+    public int sendRefreshInterval;
+    public int sendTimeoutToRequeue;
+    public int sendTimeoutToRemovePacket;
     private Bridge bridge;
     public int preferred_local_port;
     public int souliss_gateway_port;
@@ -152,6 +156,24 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
             logger.debug("Get health refresh interval: {}", healthRefreshInterval);
         }
 
+        if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SEND_REFRESH) != null) {
+            sendRefreshInterval = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SEND_REFRESH))
+                    .intValue();
+            logger.debug("Get send refresh interval: {}", sendRefreshInterval);
+        }
+
+        if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_TIMEOUT_TO_REQUEUE) != null) {
+            sendTimeoutToRequeue = ((BigDecimal) gwConfigurationMap
+                    .get(SoulissBindingConstants.CONFIG_TIMEOUT_TO_REQUEUE)).intValue();
+            logger.debug("Get send timeout to requeue: {}", sendTimeoutToRequeue);
+        }
+
+        if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_TIMEOUT_TO_REMOVE_PACKET) != null) {
+            sendTimeoutToRequeue = ((BigDecimal) gwConfigurationMap
+                    .get(SoulissBindingConstants.CONFIG_TIMEOUT_TO_REMOVE_PACKET)).intValue();
+            logger.debug("Get send timeout to requeue: {}", sendTimeoutToRequeue);
+        }
+
         // START SERVER ON DEFAULT PORT - Used for topics
         if (UDP_Server_DefaultPort_RunnableClass == null) {
             logger.debug("Starting UDP server on Souliss Default Port for Topics (Publish&Subcribe)");
@@ -174,9 +196,21 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
         scheduler.scheduleAtFixedRate(soulissGatewayJobSubscriptionRunnable, 0,
                 soulissGatewayJobSubscriptionRunnable.get_subscriptionRefreshInterval(), TimeUnit.MINUTES);
 
+<<<<<<< HEAD
         SoulissGatewayJobHealty soulissGatewayJobHealtyRunnable = new SoulissGatewayJobHealty(bridge);
         scheduler.scheduleAtFixedRate(soulissGatewayJobHealtyRunnable, 5,
                 soulissGatewayJobHealtyRunnable.get_healthRefreshInterval(), TimeUnit.SECONDS);
+=======
+        SoulissGatewayJobHealty SoulissGatewayJobHealtyRunnable = new SoulissGatewayJobHealty(bridge);
+        scheduler.scheduleWithFixedDelay(SoulissGatewayJobHealtyRunnable, 5,
+                SoulissGatewayJobHealtyRunnable.get_healthRefreshInterval(), TimeUnit.SECONDS);
+
+        // il ciclo Send è schedulato con la costante SoulissBindingConstants.SEND_DISPATCHER_MIN_DELAY_cicleInMillis
+        // internamente il ciclo viene rallentato al timer impostato da configurazione (PaperUI o File)
+        SoulissBindingSendDispatcherJob SoulissSendDispatcherRunnable = new SoulissBindingSendDispatcherJob(bridge);
+        scheduler.scheduleWithFixedDelay(SoulissSendDispatcherRunnable, 15,
+                SoulissBindingConstants.SEND_DISPATCHER_MIN_DELAY_cicleInMillis, TimeUnit.MILLISECONDS);
+>>>>>>> secureSend
     }
 
     @Override

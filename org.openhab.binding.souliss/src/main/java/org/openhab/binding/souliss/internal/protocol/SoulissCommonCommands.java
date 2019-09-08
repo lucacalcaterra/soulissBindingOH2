@@ -200,8 +200,8 @@ public class SoulissCommonCommands {
             serverAddr = InetAddress.getByName(sSoulissNodeIPAddressOnLAN);
             DatagramPacket packet = new DatagramPacket(merd, merd.length, serverAddr,
                     SoulissBindingUDPConstants.SOULISS_GATEWAY_DEFAULT_PORT);
-            // SoulissBindingSendDispatcher.put(socket, packet);
-            socket.send(packet);
+            SoulissBindingSendDispatcherJob.put(socket, packet);
+            // socket.send(packet);
         } catch (IOException e) {
             logger.error("Error: ", e);
             logger.error(e.getMessage());

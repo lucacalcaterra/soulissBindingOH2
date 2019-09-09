@@ -100,23 +100,23 @@ public abstract class SoulissGenericHandler extends BaseThingHandler implements 
      *
      * @param command
      */
-    public void commandSEND(short command) {
+    public void commandSEND(byte command) {
 
         SoulissCommonCommands.sendFORCEFrame(getDatagramSocket(), getGatewayIP(), getGatewayNodeIndex(),
                 getGatewayUserIndex(), this.getNode(), this.getSlot(), command);
     }
 
-    public void commandSEND_RGB(short command, short R, short G, short B) {
+    public void commandSEND_RGB(byte command, byte R, byte G, byte B) {
         SoulissCommonCommands.sendFORCEFrame(getDatagramSocket(), getGatewayIP(), getGatewayNodeIndex(),
                 getGatewayUserIndex(), this.getNode(), this.getSlot(), command, R, G, B);
     }
 
-    public void commandSEND(short command, short B1, short B2) {
+    public void commandSEND(byte command, byte B1, byte B2) {
         SoulissCommonCommands.sendFORCEFrameT31SetPoint(getDatagramSocket(), getGatewayIP(), getGatewayNodeIndex(),
                 getGatewayUserIndex(), this.getNode(), this.getSlot(), command, B1, B2);
     }
 
-    public void commandSEND(short B1, short B2) {
+    public void commandSEND(byte B1, byte B2) {
         SoulissCommonCommands.sendFORCEFrameT61SetPoint(getDatagramSocket(), getGatewayIP(), getGatewayNodeIndex(),
                 getGatewayUserIndex(), this.getNode(), this.getSlot(), B1, B2);
     }
@@ -164,7 +164,7 @@ public abstract class SoulissGenericHandler extends BaseThingHandler implements 
         return thing.getLabel();
     }
 
-    public short getGatewayUserIndex() {
+    public byte getGatewayUserIndex() {
         if (getBridge() != null) {
             return ((SoulissGatewayHandler) getBridge().getHandler()).userIndex;
         }
@@ -172,7 +172,7 @@ public abstract class SoulissGenericHandler extends BaseThingHandler implements 
     }
 
     @SuppressWarnings("null")
-    public short getGatewayNodeIndex() {
+    public byte getGatewayNodeIndex() {
         if (getBridge() != null) {
             return ((SoulissGatewayHandler) getBridge().getHandler()).nodeIndex;
         }
@@ -183,8 +183,8 @@ public abstract class SoulissGenericHandler extends BaseThingHandler implements 
         return SoulissBindingNetworkParameters.getDatagramSocket();
     }
 
-    public void setHealty(short _shHealty) {
-        this.updateState(SoulissBindingConstants.HEALTY_CHANNEL, new DecimalType(_shHealty));
+    public void setHealty(byte _shHealty) {
+        this.updateState(SoulissBindingConstants.HEALTY_CHANNEL, new DecimalType(_shHealty & 0xFF));
     }
 
     public void setLastStatusStored() {
@@ -209,7 +209,7 @@ public abstract class SoulissGenericHandler extends BaseThingHandler implements 
         return null;
     }
 
-    protected OpenClosedType getOHState_OpenClose_FromSoulissVal(short sVal) {
+    protected OpenClosedType getOHState_OpenClose_FromSoulissVal(byte sVal) {
         if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OnCoil) {
             return OpenClosedType.CLOSED;
         } else if (sVal == SoulissBindingProtocolConstants.Souliss_T1n_OffCoil) {

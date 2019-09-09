@@ -117,7 +117,7 @@ public class SoulissT12Handler extends SoulissGenericHandler {
                 case SoulissBindingConstants.SLEEP_CHANNEL:
                     if (command instanceof OnOffType) {
                         if (command.equals(OnOffType.ON)) {
-                            commandSEND((short) (SoulissBindingProtocolConstants.Souliss_T1n_Timed + xSleepTime));
+                            commandSEND((byte) (SoulissBindingProtocolConstants.Souliss_T1n_Timed + xSleepTime));
                             // set Off
                             updateState(channelUID, OnOffType.OFF);
                         }

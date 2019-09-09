@@ -292,7 +292,7 @@ public class SoulissT31Handler extends SoulissGenericHandler {
         return 0;
     }
 
-    public short getBitState(short vRaw, int iBit) {
+    public byte getBitState(byte vRaw, int iBit) {
         final int MASK_BIT_1 = 0x1;
 
         if (((vRaw >>> iBit) & MASK_BIT_1) == 0) {

@@ -37,7 +37,7 @@ public class SoulissT18Handler extends SoulissGenericHandler {
     byte T1nRawState;
     Configuration gwConfigurationMap;
     // HSBType hsbState = HSBType.WHITE;
-    short xSleepTime = 0;
+    byte xSleepTime = 0;
 
     @Override
     public void initialize() {
@@ -47,7 +47,7 @@ public class SoulissT18Handler extends SoulissGenericHandler {
         gwConfigurationMap = thing.getConfiguration();
 
         if (gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL) != null) {
-            xSleepTime = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL)).shortValue();
+            xSleepTime = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL)).byteValue();
         }
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND) != null) {
             bSecureSend = ((Boolean) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND)).booleanValue();

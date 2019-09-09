@@ -182,7 +182,7 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
     }
 
     @Override
-    public void thingDetected_Typicals(short lastByteGatewayIP, short typical, short node, short slot) {
+    public void thingDetected_Typicals(byte lastByteGatewayIP, byte typical, byte node, byte slot) {
         ThingUID thingUID = null;
         String label = "";
         DiscoveryResult discoveryResult;
@@ -191,7 +191,7 @@ public class SoulissGatewayDiscovery extends AbstractDiscoveryService implements
         if (gw != null) {
             gatewayUID = gw.getThing().getUID();
 
-            if (lastByteGatewayIP == Short.parseShort(gw.IPAddressOnLAN.split("\\.")[3])) {
+            if (lastByteGatewayIP == Byte.parseByte(gw.IPAddressOnLAN.split("\\.")[3])) {
                 String sNodeId = node + SoulissBindingConstants.UUID_NODE_SLOT_SEPARATOR + slot;
                 switch (typical) {
                     case SoulissBindingProtocolConstants.Souliss_T11:

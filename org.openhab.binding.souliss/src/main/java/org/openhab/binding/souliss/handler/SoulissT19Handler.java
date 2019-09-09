@@ -41,7 +41,7 @@ public class SoulissT19Handler extends SoulissGenericHandler {
     byte T1nRawState_byte0;
     byte T1nRawStateBrigthness_byte1;
 
-    short xSleepTime = 0;
+    byte xSleepTime = 0;
 
     public SoulissT19Handler(Thing _thing) {
         super(_thing);
@@ -102,7 +102,7 @@ public class SoulissT19Handler extends SoulissGenericHandler {
                     break;
                 case SoulissBindingConstants.SLEEP_CHANNEL:
                     if (command instanceof OnOffType) {
-                        commandSEND((short) (SoulissBindingProtocolConstants.Souliss_T1n_Timed + xSleepTime));
+                        commandSEND((byte) (SoulissBindingProtocolConstants.Souliss_T1n_Timed + xSleepTime));
                     }
                     break;
             }
@@ -116,7 +116,7 @@ public class SoulissT19Handler extends SoulissGenericHandler {
         updateStatus(ThingStatus.ONLINE);
         gwConfigurationMap = thing.getConfiguration();
         if (gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL) != null) {
-            xSleepTime = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL)).shortValue();
+            xSleepTime = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.SLEEP_CHANNEL)).byteValue();
         }
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND) != null) {
             bSecureSend = ((Boolean) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_SECURE_SEND)).booleanValue();

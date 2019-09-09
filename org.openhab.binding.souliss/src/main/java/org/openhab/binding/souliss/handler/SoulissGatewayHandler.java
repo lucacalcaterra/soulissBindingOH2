@@ -62,8 +62,8 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
     private Bridge bridge;
     public int preferred_local_port;
     public int souliss_gateway_port;
-    public short userIndex;
-    public short nodeIndex;
+    public byte userIndex;
+    public byte nodeIndex;
     public String IPAddressOnLAN;
     private int nodes;
     private int maxTypicalXnode;
@@ -116,7 +116,7 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_USER_INDEX) != null)
 
         {
-            userIndex = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_USER_INDEX)).shortValue();
+            userIndex = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_USER_INDEX)).byteValue();
             logger.debug("Get User Index: {}", userIndex);
             if (userIndex < 0 && userIndex > 255) {
                 bridge.getConfiguration().put(SoulissBindingConstants.CONFIG_USER_INDEX,
@@ -126,7 +126,7 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
         }
 
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_NODE_INDEX) != null) {
-            nodeIndex = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_NODE_INDEX)).shortValue();
+            nodeIndex = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_NODE_INDEX)).byteValue();
             logger.debug("Get Node Index: {}", nodeIndex);
         }
         if (nodeIndex < 0 && nodeIndex > 255) {
@@ -136,7 +136,7 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
         }
 
         if (gwConfigurationMap.get(SoulissBindingConstants.CONFIG_NODE_INDEX) != null) {
-            nodeIndex = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_NODE_INDEX)).shortValue();
+            nodeIndex = ((BigDecimal) gwConfigurationMap.get(SoulissBindingConstants.CONFIG_NODE_INDEX)).byteValue();
             logger.debug("Get Node Index: {}", nodeIndex);
         }
 
@@ -217,8 +217,8 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
     @Override
     public void thingUpdated(Thing thing) {
         logger.debug("Thing Updated: {}", thing.getThingTypeUID());
-        SoulissBindingNetworkParameters
-                .removeGateway((short) (Short.parseShort(IPAddressOnLAN.split("\\.")[3]) & 0xFF));
+        SoulissBindingNetworkParameters.removeGateway((Byte.parseByte((IPAddressOnLAN.split("\\.")[3]))));
+        // .removeGateway((byte) (Byte.parseByte((IPAddressOnLAN.split("\\.")[3]) & (byte) 0xFF));
         this.thing = thing;
     }
 

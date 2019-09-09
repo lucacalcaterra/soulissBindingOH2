@@ -309,7 +309,6 @@
         <channels>
             <channel id="rollershutter" typeId="rollershutter" />
             <channel id="rollershutter_state" typeId="rollershutter_state" />
-            <channel id="rollershutter_state_number" typeId="rollershutter_state_number" />
             <channel id="lastStatusStored" typeId="lastStatusStored" />
             <channel id="healty" typeId="healty" />
         </channels>
@@ -332,7 +331,6 @@
         <channels>
             <channel id="rollershutter" typeId="rollershutter" />
             <channel id="rollershutter_state" typeId="rollershutter_state" />
-             <channel id="rollershutter_state_number" typeId="rollershutter_state_number" />
             <channel id="lastStatusStored" typeId="lastStatusStored" />
             <channel id="healty" typeId="healty" />
         </channels>
@@ -756,7 +754,6 @@
         <label>Rollershutter</label>
         <description>Rollershutter Up/Down</description>
      <category>Blinds</category>
-       
         <state min="0" max="100" pattern="%d %%"/>
     </channel-type>
 
@@ -771,8 +768,8 @@
                 <option value="closing">Closing</option>
                 <option value="limSwitch_open">Limit Switch Open</option>
                 <option value="limSwitch_close">Limit Switch Close</option>
-                <option value="state_open">State Open</option>
-                <option value="state_close">State Close</option>
+                <option value="state_open">Opened</option>
+                <option value="state_close">Closed</option>
                    <option value="NoLimSwitch">No Limit Switch</option>
             </options>
         </state>

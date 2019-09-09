@@ -107,11 +107,11 @@ public class SoulissT22Handler extends SoulissGenericHandler {
         super.setLastStatusStored();
         // update item state only if it is different from previous
         if (T2nRawState != _rawState) {
-            if (T2nRawState == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Open) {
-                this.setState(UpDownType.UP);
+            this.setState(getOHState_T22_FromSoulissVal(_rawState));
+
+            if (_rawState == SoulissBindingProtocolConstants.Souliss_T2n_OpenCmd) {
                 this.setState_Message(SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_OPENING_CHANNEL);
-            } else if (T2nRawState == SoulissBindingProtocolConstants.Souliss_T2n_Coil_Close) {
-                this.setState(UpDownType.DOWN);
+            } else if (_rawState == SoulissBindingProtocolConstants.Souliss_T2n_CloseCmd) {
                 this.setState_Message(SoulissBindingConstants.ROLLERSHUTTER_MESSAGE_CLOSING_CHANNEL);
             }
             switch (_rawState) {
@@ -143,6 +143,41 @@ public class SoulissT22Handler extends SoulissGenericHandler {
             T2nRawState = _rawState;
         }
 
+    }
+
+    private PercentType getOHState_T22_FromSoulissVal(short sVal) {
+        int iState = 0;
+        switch (sVal) {
+
+            case SoulissBindingProtocolConstants.Souliss_T2n_Coil_Open:
+                iState = 0;
+                break;
+            case SoulissBindingProtocolConstants.Souliss_T2n_Coil_Close:
+                iState = 100;
+                break;
+            case SoulissBindingProtocolConstants.Souliss_T2n_Coil_Stop:
+                iState = 50;
+                break;
+            case SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Close:
+                iState = 100;
+                break;
+            case SoulissBindingProtocolConstants.Souliss_T2n_LimSwitch_Open:
+                iState = 0;
+                break;
+            case SoulissBindingProtocolConstants.Souliss_T2n_NoLimSwitch:
+                iState = 50;
+                break;
+            case SoulissBindingProtocolConstants.Souliss_T2n_Timer_Off:
+                iState = 50;
+                break;
+            case SoulissBindingProtocolConstants.Souliss_T2n_State_Open:
+                iState = 0;
+                break;
+            case SoulissBindingProtocolConstants.Souliss_T2n_State_Close:
+                iState = 100;
+                break;
+        }
+        return PercentType.valueOf(String.valueOf(iState));
     }
 
     @Override

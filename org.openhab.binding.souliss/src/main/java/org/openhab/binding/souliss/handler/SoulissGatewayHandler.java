@@ -181,7 +181,7 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
             if (datagramSocket_defaultPort != null) {
                 UDP_Server_DefaultPort_RunnableClass = new SoulissBindingUDPServerJob(datagramSocket_defaultPort,
                         SoulissBindingNetworkParameters.discoverResult);
-                UDPserverJob_DefaultPort = scheduler.scheduleAtFixedRate(UDP_Server_DefaultPort_RunnableClass, 100,
+                UDPserverJob_DefaultPort = scheduler.scheduleWithFixedDelay(UDP_Server_DefaultPort_RunnableClass, 100,
                         SoulissBindingConstants.SERVER_CICLE_IN_MILLIS, TimeUnit.MILLISECONDS);
             }
         }
@@ -189,15 +189,15 @@ public class SoulissGatewayHandler extends BaseBridgeHandler {
         // START JOB PING
 
         SoulissGatewayJobPing soulissGatewayJobPingRunnable = new SoulissGatewayJobPing(bridge);
-        scheduler.scheduleAtFixedRate(soulissGatewayJobPingRunnable, 2,
+        scheduler.scheduleWithFixedDelay(soulissGatewayJobPingRunnable, 2,
                 soulissGatewayJobPingRunnable.get_pingRefreshInterval(), TimeUnit.SECONDS);
 
         SoulissGatewayJobSubscription soulissGatewayJobSubscriptionRunnable = new SoulissGatewayJobSubscription(bridge);
-        scheduler.scheduleAtFixedRate(soulissGatewayJobSubscriptionRunnable, 0,
+        scheduler.scheduleWithFixedDelay(soulissGatewayJobSubscriptionRunnable, 0,
                 soulissGatewayJobSubscriptionRunnable.get_subscriptionRefreshInterval(), TimeUnit.MINUTES);
 
         SoulissGatewayJobHealty soulissGatewayJobHealtyRunnable = new SoulissGatewayJobHealty(bridge);
-        scheduler.scheduleAtFixedRate(soulissGatewayJobHealtyRunnable, 5,
+        scheduler.scheduleWithFixedDelay(soulissGatewayJobHealtyRunnable, 5,
                 soulissGatewayJobHealtyRunnable.get_healthRefreshInterval(), TimeUnit.SECONDS);
 
         // il ciclo Send è schedulato con la costante SoulissBindingConstants.SEND_DISPATCHER_MIN_DELAY_cicleInMillis

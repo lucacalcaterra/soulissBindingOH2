@@ -14,6 +14,7 @@ package org.openhab.binding.souliss;
 
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 
 import com.google.common.collect.Sets;
@@ -24,6 +25,7 @@ import com.google.common.collect.Sets;
  *
  * @author Tonino Fazio - Initial contribution
  */
+@NonNullByDefault
 public class SoulissBindingConstants {
 
     public static final String BINDING_ID = "souliss";

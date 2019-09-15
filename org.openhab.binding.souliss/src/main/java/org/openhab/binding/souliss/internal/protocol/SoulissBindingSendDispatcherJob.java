@@ -205,8 +205,11 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
     static byte bExpected;
     static byte bActualItemState;
     static String sExpected;
+    long millis = 0;
+    long timeToShowLog = 5000;
 
     public void safeSendCheck() {
+
         // short sVal = getByteAtSlot(macacoFrame, slot);
         // scansione lista paccetti inviati
         for (int i = 0; i < packetsList.size(); i++) {
@@ -243,15 +246,14 @@ public class SoulissBindingSendDispatcherJob implements Runnable {
                             sExpected = Integer.toHexString(bExpected);
                             sExpected = sExpected.length() < 2 ? "0x0" + sExpected.toUpperCase()
                                     : "0x" + sExpected.toUpperCase();
-                            logger.debug(
-                                    "Compare. Node: {} Slot: {} Node Name: {} Command: {} Expected Souliss State: {} - Actual OH item State: {}",
-                                    node, iSlot, typ.getLabel(), sCmd, sExpected, typ.getRawState());
 
-                            // logger.debug(
-                            // "Compare. Node: {} Slot: {} Typical: {} Command: {} EXPECTED: {} - IN MEMORY: {}",
-                            // node, iSlot, Integer.toHexString(typ.getType()), sCmd,
-                            // expectedState(typ.getType(), packetsList.get(i).packet.getData()[j]),
-                            // sStateMemoria);
+                            // Show Log Not More That Every 5 second
+                            if (timeToShowLog < (System.currentTimeMillis() - millis)) {
+                                logger.debug(
+                                        "Compare. Node: {} Slot: {} Node Name: {} Command: {} Expected Souliss State: {} - Actual OH item State: {}",
+                                        node, iSlot, typ.getLabel(), sCmd, sExpected, typ.getRawState());
+                                millis = System.currentTimeMillis();
+                            }
                         }
 
                         if (typ != null && checkExpectedState(typ.getRawState(), bExpected)) {

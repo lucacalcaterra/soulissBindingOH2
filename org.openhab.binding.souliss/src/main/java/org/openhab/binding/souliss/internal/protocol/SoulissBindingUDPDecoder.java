@@ -207,24 +207,28 @@ public class SoulissBindingUDPDecoder {
             byte tgtnode = mac.get(3);
             int numberOf = mac.get(4);
 
-            SoulissGatewayHandler gateway = (SoulissGatewayHandler) SoulissBindingNetworkParameters
-                    .getGateway(lastByteGatewayIP).getHandler();
-            if (gateway != null) {
-                int typXnodo = gateway.getMaxTypicalXnode();
+            SoulissGatewayHandler gateway;
+            if (SoulissBindingNetworkParameters.getGateway(lastByteGatewayIP) != null) {
+                gateway = (SoulissGatewayHandler) SoulissBindingNetworkParameters.getGateway(lastByteGatewayIP)
+                        .getHandler();
+                if (gateway != null) {
+                    int typXnodo = gateway.getMaxTypicalXnode();
 
-                // creates Souliss nodes
-                for (int j = 0; j < numberOf; j++) {
-                    if (mac.get(5 + j) != 0) {// create only not-empty typicals
-                        if (!(mac.get(5 + j) == SoulissBindingProtocolConstants.Souliss_T_related)) {
-                            byte typical = mac.get(5 + j);
-                            byte slot = (byte) (j % typXnodo);
-                            byte node = (byte) (j / typXnodo + tgtnode);
-                            if (discoverResult != null) {
-                                logger.debug("Thing Detected. IP (last byte): {}, Typical: 0x{}, Node: {}, Slot: {} ",
-                                        lastByteGatewayIP, Integer.toHexString(typical), node, slot);
-                                discoverResult.thingDetected_Typicals(lastByteGatewayIP, typical, node, slot);
-                            } else {
-                                logger.debug("decodeTypRequest aborted. 'discoverResult' is null");
+                    // creates Souliss nodes
+                    for (int j = 0; j < numberOf; j++) {
+                        if (mac.get(5 + j) != 0) {// create only not-empty typicals
+                            if (!(mac.get(5 + j) == SoulissBindingProtocolConstants.Souliss_T_related)) {
+                                byte typical = mac.get(5 + j);
+                                byte slot = (byte) (j % typXnodo);
+                                byte node = (byte) (j / typXnodo + tgtnode);
+                                if (discoverResult != null) {
+                                    logger.debug(
+                                            "Thing Detected. IP (last byte): {}, Typical: 0x{}, Node: {}, Slot: {} ",
+                                            lastByteGatewayIP, Integer.toHexString(typical), node, slot);
+                                    discoverResult.thingDetected_Typicals(lastByteGatewayIP, typical, node, slot);
+                                } else {
+                                    logger.debug("decodeTypRequest aborted. 'discoverResult' is null");
+                                }
                             }
                         }
                     }

@@ -292,11 +292,11 @@ Dimmer  TermostatoSoggiorno_displayBright   "Lumin.min. display" (TermostatoSogg
 String TermostatoSoggiorno_aggiornamento "Agg.[%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" <keyring> (TermostatoSoggiorno, Diagnostic)  {channel="souliss:t31:105:6-0:lastStatusStored"}
 Number TermostatoSoggiorno_healty "Salute" <keyring> (TermostatoSoggiorno, Diagnostic )  {channel="souliss:t31:105:6-0:healty"}
 
-Switch	luceRossaCamera	"Piantana Camera" (Camera)	["Switchable"]	{channel="souliss:t16:8-0:onoff", autoupdate="false" }
-Color  luceRossaCamera "Piantana Camera" <slider> (Luci, Camera, Diagnostic)  {channel="souliss:t16:8-0:ledcolor", autoupdate="false"}
-Switch	luceRossaCamera_bianco	"Piantana Camera - bianco" (Camera)	["Switchable"]	{channel="souliss:t16:8-0:whitemode", autoupdate="false"}
+Switch	luceRossaCamera	"Piantana Camera" (Camera)	["Switchable"]	{channel="souliss:t16:105:8-0:onoff", autoupdate="false" }
+Color  luceRossaCamera "Piantana Camera" <slider> (Luci, Camera, Diagnostic)  {channel="souliss:t16:105:8-0:ledcolor", autoupdate="false"}
+Switch	luceRossaCamera_bianco	"Piantana Camera - bianco" (Camera)	["Switchable"]	{channel="souliss:t16:105:8-0:whitemode", autoupdate="false"}
 String luceRossaCamera_aggiornamento	"Agg. [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Camera, Diagnostic)  {channel="souliss:t16:8-0:lastStatusStored"}
-Number luceRossaCamera_healty	"Salute [%1d]"	<keyring> (Camera, Diagnostic)  {channel="souliss:t16:8-0:healty"}
+Number luceRossaCamera_healty	"Salute [%1d]"	<keyring> (Camera, Diagnostic)  {channel="souliss:t16:105:8-0:healty"}
 ```
 
 default.sitemaps:

@@ -209,7 +209,7 @@ public class SoulissBindingConstants {
 
     public static final String CONFIG_SECURE_SEND = "secureSend";
 
-    public static final String CONFIG_TIMEOUT_TO_REQUEUE = "timeoutRequeue";
+    public static final String CONFIG_TIMEOUT_TO_REQUEUE = "TIMEOUT_TO_REQUEUE";
 
-    public static final String CONFIG_TIMEOUT_TO_REMOVE_PACKET = "timeoutRemovePacket";
+    public static final String CONFIG_TIMEOUT_TO_REMOVE_PACKET = "TIMEOUT_TO_REMOVE_PACKET";
 }

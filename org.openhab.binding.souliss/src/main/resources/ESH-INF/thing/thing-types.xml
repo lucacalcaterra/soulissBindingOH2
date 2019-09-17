@@ -56,14 +56,14 @@
                 <advanced>true</advanced>
             </parameter>
             
-              <parameter name="timeoutRequeue" type="integer" min="0" max="10000">
+              <parameter name="TIMEOUT_TO_REQUEUE" type="integer" min="0" max="10000">
                 <label>Interval in milliseconds to requeue packet in queue if not yet executed</label>
                 <description></description>
                 <required>true</required>
                 <default>5000</default>
             </parameter>
             
-             <parameter name="timeoutRemovePacket" type="integer" min="0" max="60000">
+             <parameter name="TIMEOUT_TO_REMOVE_PACKET" type="integer" min="0" max="60000">
                 <label>Interval in milliseconds to remove packet from queue if not yet executed </label>
                 <description></description>
                 <required>true</required>
@@ -104,12 +104,12 @@
 		<config-description>
 			<parameter name="sleep" type="integer" min="1" max="1000">
 				<label>Sleep</label>
-				<description>Set sleep timer in cycles</description>
+				<description>Set sleep timer in cycles (conf.parameter: "sleep")</description>
 				<required>false</required>
 				<default>5</default>
 			</parameter>
 			 <parameter name="secureSend" type="boolean">
-                <label>Secure Send</label>
+                <label>Secure Send (conf.parameter: "secureSend")</label>
                 <description></description>
                 <required>false</required>
                 <default>true</default>

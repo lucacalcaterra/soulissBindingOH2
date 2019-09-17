@@ -130,12 +130,15 @@ fan = AUTO, HIGH, MEDIUM, LOW, FANOFF
 |"|HEALTHY_INTERVAL=35|Interval in seconds to send nodes healthy|
 |"|USER_INDEX=70|Generally the default value work good. It must is different from other user interfaces (ex: SoulissApp)|
 |"|NODE_INDEX=120|Generally the default value work good. It must is different from other user interfaces (ex: SoulissApp)|
-|T11|sleep=5|Set sleep timer in cycles|
+|"|TIMEOUT_TO_REQUEUE=5000 |Interval in milliseconds to requeue packet if it yet executed|
+|"|TIMEOUT_TO_REMOVE_PACKET=20000 |Interval in milliseconds to remove packet from queue if it yet executed|
+|T11|sleep=5, secureSend=true|Set sleep timer in cycles, Secure Send is true by default|
 |T12|||
 |T13|||
 |T14|||
-|T16|sleep=5|Set sleep timer in cycles|
-|T19|sleep=5|Set sleep timer in cycles|
+|T16|sleep=5, secureSend=true|Set sleep timer in cycles, Secure Send is true by default|
+|T18|sleep=5, secureSend=true|Set sleep timer in cycles, Secure Send is true by default|
+|T19|sleep=5, secureSend=true|Set sleep timer in cycles, Secure Send is true by default|
 |T1A|||
 |T21|||
 |T22|||
@@ -177,7 +180,7 @@ Thing <type_id> <thing_id>  [ <parameters> ]
 
 souliss.things:
 ```
-Bridge souliss:gateway:105 "Souliss Gateway - 105" [GATEWAY_IP_ADDRESS="192.168.1.105", GATEWAY_PORT_NUMBER=230, PREFERRED_LOCAL_PORT_NUMBER=0, PING_INTERVAL=30, SUBSCRIBTION_INTERVAL=2, HEALTHY_INTERVAL=38, USER_INDEX=72, NODE_INDEX=38]
+Bridge souliss:gateway:105 "Souliss Gateway - 105" [GATEWAY_IP_ADDRESS="192.168.1.105", GATEWAY_PORT_NUMBER=230, PREFERRED_LOCAL_PORT_NUMBER=0, PING_INTERVAL=30, SUBSCRIBTION_INTERVAL=2, HEALTHY_INTERVAL=38, USER_INDEX=72, NODE_INDEX=38, TIMEOUT_TO_REQUEUE=5000, TIMEOUT_TO_REMOVE_PACKET=20000]
 {  
 Thing t14 1-6 "Portoncino"@"Rientro"
 Thing t14 1-7 "Cancello"@"Rientro"
@@ -210,8 +213,35 @@ Thing t52 11-1 "Birra - Temp 1"@"Soppalco"
 Thing t52 11-3 "Birra - Temp 2"@"Soppalco"
 }
 ```
-You have to write your Gateway IP Number and leave all other to default values
+You can write your Gateway IP Number and leave all other to default values
 
+Secure Send
+Secure Send requeue packet after TIMEOUT_TO_REQUEUE if it isn't executed.
+After TIMEOUT_TO_REMOVE_PACKET packet is removed if not yet executed.
+To disable function add parameter secureSend=false to item.
+ex:
+```
+Thing t11 12-0 "Divano"@"Soggiorno" [sleep=10, secureSend=false] 
+```
+
+Secure send is enabled for that thing type:
+
+|Thing type| Enabled (true for default)|
+|-- |-- |
+|T11|X|
+|T12|X|
+|T13|-|
+|T14|-|
+|T16|X (only for state on/off)|
+|T18|X|
+|T19|X (only for state on/off)|
+|T1A|-|
+|T21|X|
+|T22|X|
+|T31|-|
+|T4x|X|
+|T5x|-|
+|T6x|-|
 
 default.items:
 

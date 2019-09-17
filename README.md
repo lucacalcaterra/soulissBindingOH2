@@ -205,7 +205,7 @@ Thing t11 5-0 "Tettoia"@"Giardino"
 
 Thing t11 12-0 "Divano"@"Soggiorno" [sleep=10] 
 
-Thing t16 8-0 "LYT1"
+Thing t16 8-1 "LYT_night@Camera"
 
 Thing t11 10-0 "Albero di Natale"
 Thing t11 11-0 "Birra"@"Soppalco"
@@ -250,6 +250,7 @@ Group    Home                 "Tonino"        <house>
 
 Group    FamilyRoom           "Soggiorno"     <parents_2_4>   (Home)
 Group    Divano               "Divano"        (Home)
+Group    Camera               "Camera"        (Home)
 Group    Outside              "Esterno"   <garden>   (Home)
 Group    TV                   "TV"   <television>   (Home)
 Group    Elettricita
@@ -290,6 +291,11 @@ Switch termostatosoggiorno_fire "Fire" <fire> (TermostatoSoggiorno) {channel="so
 Dimmer  TermostatoSoggiorno_displayBright   "Lumin.min. display" (TermostatoSoggiorno)      {channel="souliss:t19:105:6-9" }
 String TermostatoSoggiorno_aggiornamento "Agg.[%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" <keyring> (TermostatoSoggiorno, Diagnostic)  {channel="souliss:t31:105:6-0:lastStatusStored"}
 Number TermostatoSoggiorno_healty "Salute" <keyring> (TermostatoSoggiorno, Diagnostic )  {channel="souliss:t31:105:6-0:healty"}
+
+Color  luceRossaCamera "Piantana Camera" <slider> (Luci, Camera, Diagnostic)  {channel="souliss:t16:8-0:ledcolor", autoupdate="false"}
+Switch	luceRossaCamera_bianco	"Piantana Camera - bianco" (Camera)	["Switchable"]	{channel="souliss:t16:8-0:whitemode", autoupdate="false"}
+String luceRossaCamera_aggiornamento	"Agg. [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Camera, Diagnostic)  {channel="souliss:t16:8-0:lastStatusStored"}
+Number luceRossaCamera_healty	"Salute [%1d]"	<keyring> (Camera, Diagnostic)  {channel="souliss:t16:8-0:healty"}
 ```
 
 default.sitemaps:
@@ -310,12 +316,15 @@ Text item=Consumo label="Consumo [%.1f W]"
 Text item=Fotovoltaico label="Fotovoltaico [%.1f W]"
 
 Frame {
-
         Group item=Elettricita label="Elettricità" icon="energy"
 }
 
 Frame {  
        Group item=Divano icon="light"
+}
+
+Frame {  
+    Group item=Camera icon="bedroom"
 }
 
 Frame label="Temperature"{	

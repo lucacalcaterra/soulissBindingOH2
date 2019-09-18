@@ -481,7 +481,7 @@ public class SoulissBindingUDPDecoder {
                                             + " - bit5 (fan3 on-off): " + getBitState(sVal, 5)
                                             + " - bit6 (Manual/automatic fan mode): " + getBitState(sVal, 6)
                                             + " - bit7 (heating/cooling mode): " + getBitState(sVal, 7));
-                                    ((SoulissT31Handler) handler).setRawStateValues(sVal, getByteAtSlot(mac, slot + 1),
+                                    ((SoulissT31Handler) handler).setRawStateValues(sVal, getFloatAtSlot(mac, slot + 1),
                                             getByteAtSlot(mac, slot + 2));
 
                                     break;
